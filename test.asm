@@ -2,9 +2,9 @@
 .model Small
 .stack 64
 .data
-Filename db 'grid.bin', 0h;
+Filename db 'grid20.bin', 0h;
 filehandle dw ?
-chessData db  9c40h dup(?);
+chessData db  6400h dup(?);
 
 Filename2 db 'wRookE.bin', 0h;
 filehandle2 dw ?
@@ -33,11 +33,11 @@ mov al ,[Bx] ;
 int 10h;
 inc cx;
 inc bx;
-cmp cx ,0f8h;
+cmp cx ,0D0h;
 JNE drawingloop ;
 mov cx , 30h ;
 inc dx ;
-cmp dx, 0c8h;
+cmp dx, 0A0h;
 JNE drawingloop;
 
 ;mov ah , 0h ;
@@ -93,7 +93,7 @@ OpenFile ENDP ;
 ReadData proc
 mov ah , 3fh ;
 mov bx , [filehandle];
-mov cx ,9c40h;
+mov cx ,6400h;
 LEA dx ,chessData;
 int 21h;
 ;mov ah , 3fh;
