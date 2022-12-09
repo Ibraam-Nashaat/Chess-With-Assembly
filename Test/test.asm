@@ -1,8 +1,5 @@
-.model huge                     ;Using Small Model Arc
-;extrn grid:byte
-;extrn wKnight:byte
-
-;include "assets.inc"
+.model huge   
+.stack 64                
 .data
 grid DB 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30
  DB 30, 30, 30, 30, 30, 30, 30, 30, 30, 29, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 30, 30, 30, 30, 30   
@@ -1211,70 +1208,22 @@ wRook DB 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58,
  DB 178, 178, 178, 178, 178, 178, 178, 178, 178, 178, 5, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58 
  DB 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58
 .code
+include assets.inc
 main PROC far
-mov ax , @data ;
-mov ds , ax ;
+    mov ax , @data ;
+    mov ds , ax ;
 
-;Open the graphics mode
-mov ah,0;
-mov al,13h;
-int 10h;
+    ;Open the graphics mode
+    mov ah,0;
+    mov al,13h;
+    int 10h;
 
+    call Draw
 
-
-;get the grid data in bx 
-MOV bx , OFFSET grid
-mov cx , 0h ;the column to start drawing at
-mov dx , 0h ;the row to start drawing at
-mov ah ,0ch ;set the draw pixel interrupt mode
-
-
-; loop over the grid pixels colors and put the color in al each  time to draw it
-drawingloop :
-mov si,[bx]
-mov al ,[Bx] ;
-int 10h;
-inc cx;
-inc bx;
-cmp cx ,0c8h;
-JNE drawingloop ;
-mov cx , 0h ;
-inc dx ;
-cmp dx, 0c8h; 0c8h represent 200D  pixel
-JNE drawingloop;
+    mov ah , 4ch ;
+    int 21h;
 
 
 
-;get the piece data in bx
-MOV bx , OFFSET wPawn
-mov cx , 0h ;the column to start drawing at
-mov dx , 0h ;the row to start drawing at
-mov ah ,0ch 
-
-
-; loop over the piece pixels colors and put the color in al each  time to draw it
-drawingloop2 :
-mov al ,[Bx] ;
-cmp al,58d
-je t
-int 10h;
-t:inc cx;
-inc bx;
-cmp cx ,19h;
-JNE drawingloop2 ;
-mov cx , 0h ;
-inc dx ;
-cmp dx, 19h;
-JNE drawingloop2;
-
-mov ah , 0h ;
-int 16h ;
-
-
-mov ah , 4ch ;
-int 21h;
-
-
-hlt
 main ENDP
 End main
