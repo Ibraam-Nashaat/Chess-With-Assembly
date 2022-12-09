@@ -1,3 +1,4 @@
+.286
 .model huge   
 .stack 64                
 .data
@@ -1226,6 +1227,16 @@ wPawnEnc equ 10
 wQueenEnc equ 11
 wRookEnc equ 12
 
+initialGrid db   6,3,1,5,2,1,3,6
+            db   4,4,4,4,4,4,4,4
+            db   0,0,0,0,0,0,0,0
+            db   0,0,0,0,0,0,0,0
+            db   0,0,0,0,0,0,0,0
+            db   0,0,0,0,0,0,0,0
+            db   10,10,10,10,10,10,10,10
+            db   12,9,7,11,8,7,9,12
+
+startDrawX dw ?
 
 .code
 include assets.inc
