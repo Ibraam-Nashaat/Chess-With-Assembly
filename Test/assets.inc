@@ -1,6 +1,16 @@
 Draw proc far
-    ;get the grid data in bx 
-    MOV bx , OFFSET grid
+
+    call drawGrid
+    MOV bx , OFFSET wPawn
+    call drawPiece
+
+    mov ah , 0h ;
+    int 16h ;
+    ret
+Draw ENDP
+
+drawGrid proc 
+;get the grid data in bx 
     mov cx , 0h ;the column to start drawing at
     mov dx , 0h ;the row to start drawing at
     mov ah ,0ch ;set the draw pixel interrupt mode
@@ -20,10 +30,11 @@ Draw proc far
     cmp dx, 0c8h; 0c8h represent 200D  pixel
     JNE drawingloop;
 
+    ret
+drawGrid ENDP
 
-
-    ;get the piece data in bx
-    MOV bx , OFFSET wPawn
+drawPiece proc
+     ;get the piece data in bx
     mov cx , 0h ;the column to start drawing at
     mov dx , 0h ;the row to start drawing at
     mov ah ,0ch 
@@ -44,7 +55,8 @@ Draw proc far
     cmp dx, 19h;
     JNE drawingloop2;
 
-    mov ah , 0h ;
-    int 16h ;
     ret
-Draw ENDP
+
+drawPiece ENDP
+
+
