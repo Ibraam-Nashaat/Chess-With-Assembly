@@ -1207,6 +1207,26 @@ wRook DB 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58,
  DB 132, 58, 58, 58, 58, 58, 58, 58, 58, 132, 16, 200, 20, 20, 220, 220, 220, 220, 220, 220, 20, 220, 20, 200, 16, 132, 58, 58, 58, 58, 58, 58, 58, 58, 5, 178, 178, 178, 178, 178 
  DB 178, 178, 178, 178, 178, 178, 178, 178, 178, 178, 5, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58 
  DB 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58
+
+emptyEnc equ 0
+
+;Black Pieces Encoding
+bBishopEnc equ 1
+bKingEnc equ 2
+bKnightEnc equ 3
+bPawnEnc equ 4
+bQueenEnc equ 5
+bRookEnc equ 6
+
+;White pieces Encoding
+wBishopEnc equ 7
+wKingEnc equ 8
+wKnightEnc equ 9
+wPawnEnc equ 10
+wQueenEnc equ 11
+wRookEnc equ 12
+
+
 .code
 include assets.inc
 main PROC far
