@@ -1,5 +1,5 @@
 from PIL import Image
-filename = 'gridG.png'
+filename = 'UsedPics/bking.bmp'
 im = Image.open(filename).convert('RGBA')
 pixels = list(im.getdata())
 px = pixels
