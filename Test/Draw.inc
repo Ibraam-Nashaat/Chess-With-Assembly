@@ -10,9 +10,6 @@ Draw proc far
     call loopGrid
    
 
-   ;wait for char from user
-   ;if you removed the following lines, the program will close directly after drawing
-   
     ret
 Draw ENDP
 
