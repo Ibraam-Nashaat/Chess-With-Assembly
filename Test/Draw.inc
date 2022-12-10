@@ -12,8 +12,7 @@ Draw proc far
 
    ;wait for char from user
    ;if you removed the following lines, the program will close directly after drawing
-    mov ah , 0h ;
-    int 16h ;
+   
     ret
 Draw ENDP
 

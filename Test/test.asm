@@ -243,22 +243,24 @@ whiteEnc   db 1
 greyEnc    db 0
 blueEnc    db 2 ;To be changed later
 
-initGrid   db 2,1,0,1,0,1,0,1
+initGrid   db 0,1,0,1,0,1,0,1
            db 1,0,1,0,1,0,1,0
            db 0,1,0,1,0,1,0,1
            db 1,0,1,0,1,0,1,0
            db 0,1,0,1,0,1,0,1
            db 1,0,1,0,1,0,1,0
            db 0,1,0,1,0,1,0,1
-           db 1,0,1,0,1,0,1,0
+           db 2,0,1,0,1,0,1,0
 
 wColor     db 31
 gColor     db 27
 bColor     db 53  ;To be changed later
 
+arrowPointer dw 7d,0d ;r,c
 
 .code
 include Draw.inc
+include Move.inc
 main PROC far
     mov ax , @data ;
     mov ds , ax ;
@@ -271,6 +273,10 @@ main PROC far
     ;call the drawing module
     call Draw
 
+    infiniteLoop: 
+                call moveArrow
+                 jmp infiniteLoop
+
 
     ;finish the execution and halting the program
     mov ah , 4ch ;
@@ -279,4 +285,5 @@ main PROC far
 
 
 main ENDP
+
 End main
