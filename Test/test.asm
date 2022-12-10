@@ -1239,6 +1239,26 @@ initialGrid db   6,3,1,5,2,1,3,6
 
 startDrawX dw ?
 
+DrawMode   db ? ;0 for grid, 1 for pieces
+
+whiteEnc   db 1
+greyEnc    db 0
+blueEnc    db ? ;To be changed later
+
+initGrid   db 0,1,0,1,0,1,0,1
+           db 1,0,1,0,1,0,1,0
+           db 0,1,0,1,0,1,0,1
+           db 1,0,1,0,1,0,1,0
+           db 0,1,0,1,0,1,0,1
+           db 1,0,1,0,1,0,1,0
+           db 0,1,0,1,0,1,0,1
+           db 1,0,1,0,1,0,1,0
+
+wColor     db 31
+gColor     db 27
+bColor     db ?
+
+
 .code
 include Draw.inc
 main PROC far

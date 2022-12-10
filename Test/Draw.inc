@@ -1,6 +1,12 @@
 Draw proc far
 
-    call drawGrid 
+    ;call drawGrid
+    lea bx,initGrid 
+    Mov DrawMode,0
+    call loopGrid
+
+    lea bx,initialGrid
+    mov DrawMode,1
     call loopGrid
    
 
@@ -76,7 +82,7 @@ drawPiece ENDP
 ;Loop over the 2D-matrix of pieces which is 8*8 to draw their initial positions
 loopGrid proc
 
-    lea bx,initialGrid ;store the starting position in bx
+     ;store the starting position in bx
     mov cl,0   ;set the starting X-position of the 8*8 2D-Matrix of pieces
     mov dl,0   ;set the starting Y-postion of the 8*8 2D-Matrix of pieces
 
@@ -87,8 +93,13 @@ loopGrid proc
 
         row: mov al,[bx]    ;st
             pusha
+            mov ah,DrawMode
+            cmp ah,0
+            je gridlabel
             call determinePiece
-            popa
+            jmp  Next
+        gridlabel:call determineCubeColor
+        Next:popa
             add si,25 ;add 25 to si to jump to the next starting X-position of drawing that would be passed later to drawPiece
             inc bx
             inc cl
@@ -197,4 +208,51 @@ determinePiece proc
 
     ret
 determinePiece ENDP
+
+determineCubeColor proc
+    cmp al,whiteEnc
+    je whiteCube
+
+    cmp al,greyEnc
+    je greyCube
+
+    blueCube:mov al,bColor
+             call drawCube
+
+    ret
+    whiteCube:mov al,wColor
+              call drawCube
+              ret
+
+    greyCube:mov al,gColor
+             call drawCube
+             ret
+
+    ret
+determineCubeColor Endp
+
+
+drawCube proc
+    mov cx , si;the column to start drawing at
+    mov dx , di ;the row to start drawing at
+    mov ah ,0ch ;set the draw pixel interrupt mode
+
+    mov startDrawX,si ;store the start x-position of drawing in startDrawX 
+    add si,25    ;store the end X-position of drawing the cube in si
+    add di,25    ;store the end Y-positon of drawing the cube in di
+
+
+    ; loop over the piece pixels colors and put the color in al each  time to draw it
+    drawingloop3 :
+        int 10h;
+        inc cx;
+        cmp cx ,si;
+        JNE drawingloop3 ;
+    mov cx , startDrawX ;
+    inc dx ;
+    cmp dx, di;
+    JNE drawingloop3;
+
+    ret
+drawCube Endp
 
