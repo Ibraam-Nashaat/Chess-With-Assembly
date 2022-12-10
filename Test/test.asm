@@ -1227,6 +1227,7 @@ wPawnEnc equ 10
 wQueenEnc equ 11
 wRookEnc equ 12
 
+;initial position of each piece in the 2D-Grid
 initialGrid db   6,3,1,5,2,1,3,6
             db   4,4,4,4,4,4,4,4
             db   0,0,0,0,0,0,0,0
@@ -1239,7 +1240,7 @@ initialGrid db   6,3,1,5,2,1,3,6
 startDrawX dw ?
 
 .code
-include assets.inc
+include Draw.inc
 main PROC far
     mov ax , @data ;
     mov ds , ax ;
@@ -1249,8 +1250,11 @@ main PROC far
     mov al,13h;
     int 10h;
 
+    ;call the drawing module
     call Draw
 
+
+    ;finish the execution and halting the program
     mov ah , 4ch ;
     int 21h;
 
