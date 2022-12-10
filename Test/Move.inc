@@ -25,9 +25,7 @@ moveArrow proc
            pusha
            call checkGridBorders
            cmp ch,0
-           je j
-           mov ax,arrowPointer
-           mov bx,arrowPointer+2
+           je return
            call recolorOldArrowPos
            popa
            mov arrowPointer,ax
@@ -40,14 +38,11 @@ moveArrow proc
              call checkGridBorders
              cmp ch,0
              je return
-             mov ax,arrowPointer
-             mov bx,arrowPointer+2
              call recolorOldArrowPos
              popa
              mov arrowPointer,ax
              jmp updateGrid
 
-        j:ret
 
     moveRight: 
                mov ax,arrowPointer+2
@@ -56,8 +51,6 @@ moveArrow proc
                call checkGridBorders
                cmp ch,0
                je return
-               mov ax,arrowPointer+2
-               mov bx,arrowPointer
                call recolorOldArrowPos
                popa
                mov arrowPointer+2,ax
@@ -70,8 +63,6 @@ moveArrow proc
                call checkGridBorders
                cmp ch,0
                je return
-               mov ax,arrowPointer+2
-               mov bx,arrowPointer
                call recolorOldArrowPos
                popa
                mov arrowPointer+2,ax
@@ -108,45 +99,22 @@ checkGridBorders Endp
 
 
 recolorOldArrowPos proc
-    mov ch,2d
-    div ch
-    cmp ah,0
-    je nextGreyValid
-
-    mov ax,bx
-    mov ch,2d
-    div ch
-    cmp ah,0
-    jne recolorToGrey
-
-    recolorToWhite:mov ax,arrowPointer
-                 mov di,arrowPointer+2
-                 lea bx,initGrid
-                 mov si,8
-                 mul si
-                 add bx,ax
-                 add bx,di 
-                 mov ah,whiteEnc
-                 mov [bx],ah
-                 ret
-
-
-
-
-    nextGreyValid:mov ax,bx
-                  mov ch,2d
-                  div ch
-                  cmp ah,0
-                  je recolorToGrey
-
-    recolorToGrey:mov ax,arrowPointer
-                 mov di,arrowPointer+2
-                 lea bx,initGrid
-                 mov si,8
-                 mul si
-                 add bx,ax
-                 add bx,di 
-                 mov ah,greyEnc
-                 mov [bx],ah
+        mov ax,arrowPointer
+        mov di,arrowPointer+2
+        lea bx,DefGrid
+        mov si,8
+        mul si
+        add bx,ax
+        add bx,di 
+        mov ch,[bx]
+        
+        mov ax,arrowPointer
+        mov di,arrowPointer+2
+        lea bx,initGrid
+        mov si,8
+        mul si
+        add bx,ax
+        add bx,di 
+        mov [bx],ch
     ret
 recolorOldArrowPos endp 
