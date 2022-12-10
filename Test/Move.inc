@@ -22,24 +22,24 @@ moveArrow proc
     moveUp:
            mov ax,arrowPointer
            dec ax
-           pusha
+           mov tempNewArrowptr,ax
            call checkGridBorders
            cmp ch,0
            je return
            call recolorOldArrowPos
-           popa
+           mov ax,tempNewArrowptr
            mov arrowPointer,ax
            jmp updateGrid
 
     moveDown:
              mov ax,arrowPointer
              inc ax
-             pusha
+             mov tempNewArrowptr,ax
              call checkGridBorders
              cmp ch,0
              je return
              call recolorOldArrowPos
-             popa
+             mov ax,tempNewArrowptr
              mov arrowPointer,ax
              jmp updateGrid
 
@@ -47,24 +47,24 @@ moveArrow proc
     moveRight: 
                mov ax,arrowPointer+2
                inc ax
-               pusha
+               mov tempNewArrowptr,ax
                call checkGridBorders
                cmp ch,0
                je return
                call recolorOldArrowPos
-               popa
+               mov ax,tempNewArrowptr
                mov arrowPointer+2,ax
                jmp updateGrid
 
     moveLeft: 
                mov ax,arrowPointer+2
                dec ax
-               pusha
+               mov tempNewArrowptr,ax
                call checkGridBorders
                cmp ch,0
                je return
                call recolorOldArrowPos
-               popa
+               mov ax,tempNewArrowptr
                mov arrowPointer+2,ax
                jmp updateGrid
 
@@ -75,7 +75,7 @@ moveArrow proc
                 mul si
                 add bx,ax
                 add bx,di 
-                mov ah,2
+                mov ah,greenEnc
                 mov [bx],ah
                 call Draw
 

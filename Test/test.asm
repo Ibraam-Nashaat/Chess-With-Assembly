@@ -242,6 +242,7 @@ DrawMode   db ? ;0 for grid, 1 for pieces
 whiteEnc   db 1
 greyEnc    db 0
 blueEnc    db 2 ;To be changed later
+greenEnc   db 3
 
 defGrid    db 0,1,0,1,0,1,0,1
            db 1,0,1,0,1,0,1,0
@@ -259,13 +260,16 @@ initGrid   db 0,1,0,1,0,1,0,1
            db 0,1,0,1,0,1,0,1
            db 1,0,1,0,1,0,1,0
            db 0,1,0,1,0,1,0,1
-           db 2,0,1,0,1,0,1,0
+           db 3,0,1,0,1,0,1,0
 
-wColor     db 31
-gColor     db 27
-bColor     db 53  ;To be changed later
+whiteColor    db 31
+greyColor     db 27
+blueColor     db 53  ;To be changed later
+greenColor    db 51
 
 arrowPointer dw 7d,0d ;r,c
+
+tempNewArrowptr dw ?
 
 .code
 include Draw.inc

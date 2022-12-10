@@ -186,17 +186,24 @@ determineCubeColor proc
     cmp al,greyEnc
     je greyCube
 
-    blueCube:mov al,bColor
+    cmp al,greenEnc
+    je greenSquare
+
+    blueCube:mov al,blueColor
              call drawCube
 
     ret
-    whiteCube:mov al,wColor
+    whiteCube:mov al,whiteColor
               call drawCube
               ret
 
-    greyCube:mov al,gColor
+    greyCube:mov al,greyColor
              call drawCube
              ret
+
+    greenSquare:mov al,greenColor
+                call drawCube
+                ret
 
     ret
 determineCubeColor Endp
