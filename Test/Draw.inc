@@ -5,7 +5,7 @@ Draw proc far
     Mov DrawMode,0
     call loopGrid
 
-    lea bx,initialGrid
+    lea bx,initPiecePos
     mov DrawMode,1
     call loopGrid
    
@@ -16,32 +16,6 @@ Draw proc far
     int 16h ;
     ret
 Draw ENDP
-
-
-
-;Draw the 2D-Grid without any pieces
-drawGrid proc 
-    lea bx, grid;get the grid data in bx 
-    mov cx , 0h ;the column to start drawing at
-    mov dx , 0h ;the row to start drawing at
-    mov ah ,0ch ;set the draw pixel interrupt mode
-
-
-    ; loop over the grid pixels colors and put the color in al each  time to draw it
-    drawingloop :
-        mov al ,[Bx] ;
-        int 10h;
-        inc cx;
-        inc bx;
-        cmp cx ,200d;
-        JNE drawingloop ;
-    mov cx , 0h ;
-    inc dx ;
-    cmp dx, 200d
-    JNE drawingloop;
-
-    ret
-drawGrid ENDP
 
 
 ;Draw a specific piece that is passed to it in bx
@@ -79,7 +53,7 @@ drawPiece ENDP
 
 
 
-;Loop over the 2D-matrix of pieces which is 8*8 to draw their initial positions
+;Loop over the 2D-matrix which is 8*8 to draw their initial positions
 loopGrid proc
 
      ;store the starting position in bx
@@ -242,7 +216,7 @@ drawCube proc
     add di,25    ;store the end Y-positon of drawing the cube in di
 
 
-    ; loop over the piece pixels colors and put the color in al each  time to draw it
+    ; loop over the cube pixels colors 
     drawingloop3 :
         int 10h;
         inc cx;
