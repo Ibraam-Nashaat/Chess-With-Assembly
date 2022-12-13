@@ -91,6 +91,17 @@ updateGridProc proc
     mov [bx],ah      
    ; call Draw       ;reDrawing the grid after the update
     ;reDrawing the grid after the update
+      mov ax,arrowPointer ;storing the row number
+        mov di,arrowPointer+2 ;storing the column number
+        lea bx,initPiecePos
+        mov si,8
+        mul si
+        add bx,ax
+        add bx,di 
+        mov cl,[bx] ;store the piece that we want
+
+
+
     mov ax,arrowPointer
     mov dx,25d
     mul dx
@@ -104,9 +115,8 @@ updateGridProc proc
     pusha
     call drawCube
     popa
-    lea bx,initPiecePos
-    mov DrawMode,1
-    call loopGrid
+    mov al,cl
+    call determinePiece
     ret
 updateGridProc endp
 
@@ -152,7 +162,16 @@ recolorOldArrowPos proc
         mov [bx],ch ;replace the current color of old arrowPosition with its original default color stored in ch
                     ;that we got from DefGrid
 
-        mov ax,arrowPointer
+    mov ax,arrowPointer ;storing the row number
+        mov di,arrowPointer+2 ;storing the column number
+        lea bx,initPiecePos
+        mov si,8
+        mul si
+        add bx,ax
+        add bx,di 
+        mov cl,[bx] ;store the piece that we want
+
+    mov ax,arrowPointer
     mov dx,25d
     mul dx
     mov di,ax
@@ -165,8 +184,11 @@ recolorOldArrowPos proc
     pusha
     call determineCubeColor
     popa
-    lea bx,initPiecePos
-    mov DrawMode,1
-    call loopGrid
+    mov al,cl
+    call determinePiece
+    
+
+
+     
     ret
 recolorOldArrowPos endp 
