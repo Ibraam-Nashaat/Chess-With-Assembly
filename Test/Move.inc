@@ -89,7 +89,24 @@ updateGridProc proc
     add bx,di       ;then adding it to the column index to get the exact starting index of arrowPointer
     mov ah,greenEnc  ;setting the color of that position to green
     mov [bx],ah      
-    call Draw       ;reDrawing the grid after the update
+   ; call Draw       ;reDrawing the grid after the update
+    ;reDrawing the grid after the update
+    mov ax,arrowPointer
+    mov dx,25d
+    mul dx
+    mov di,ax
+
+    mov ax,arrowPointer+2
+    mov dx,25d
+    mul dx
+    mov si,ax
+    mov al,greenColor
+    pusha
+    call drawCube
+    popa
+    lea bx,initPiecePos
+    mov DrawMode,1
+    call loopGrid
     ret
 updateGridProc endp
 
@@ -134,5 +151,22 @@ recolorOldArrowPos proc
         add bx,di 
         mov [bx],ch ;replace the current color of old arrowPosition with its original default color stored in ch
                     ;that we got from DefGrid
+
+        mov ax,arrowPointer
+    mov dx,25d
+    mul dx
+    mov di,ax
+
+    mov ax,arrowPointer+2
+    mov dx,25d
+    mul dx
+    mov si,ax
+    mov al,ch
+    pusha
+    call determineCubeColor
+    popa
+    lea bx,initPiecePos
+    mov DrawMode,1
+    call loopGrid
     ret
 recolorOldArrowPos endp 
