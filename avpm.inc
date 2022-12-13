@@ -1,12 +1,14 @@
 ;Available piece moves
-bishopAvMoves proc
+bishopAvMoves proc far
     
     mov al,blueEnc  ;setting the color of that position to green
     mov tempColor,al ;storing the new color in tempColor to be passed to the next proc
     mov ax,arrowPointer ;row
     mov di,arrowPointer+2;column
     lea bx,initGrid
-    northEast:sub ax,1
+    
+    northEast:
+              sub ax,1
               add di,1
               mov tempRow,ax
               mov tempColumn,di
@@ -14,18 +16,20 @@ bishopAvMoves proc
               call checkGridBorders2
               cmp ch,1
               jne return1
-              call setSquareColor 
-              popa
+              call setSquareColor
+              popa 
               jmp northEast
               
 
               
+  
 
-
-   return1: ret
+   return1: popa
+            ret
+   ret
 bishopAvMoves ENDP
 
-getClickedPiece proc
+getClickedPiece proc far
     mov ax,arrowPointer ;row
     mov di,arrowPointer+2;column
     mov tempRow,ax

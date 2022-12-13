@@ -1,4 +1,4 @@
-moveArrow proc
+moveArrow proc far
     ;check loop is for getting the key pressed without waiting for it
     CHECK:  
             mov ah,1 
