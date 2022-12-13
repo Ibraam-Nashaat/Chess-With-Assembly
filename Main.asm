@@ -262,6 +262,15 @@ initGrid   db 0,1,0,1,0,1,0,1
            db 0,1,0,1,0,1,0,1
            db 3,0,1,0,1,0,1,0
 
+stdGrid    db 0,1,0,1,0,1,0,1
+           db 1,0,1,0,1,0,1,0
+           db 0,1,0,1,0,1,0,1
+           db 1,0,1,0,1,0,1,0
+           db 0,1,0,1,0,1,0,1
+           db 1,0,1,0,1,0,1,0
+           db 0,1,0,1,0,1,0,1
+           db 1,0,1,0,1,0,1,0
+
 whiteColor    db 31
 greyColor     db 27
 blueColor     db 53  ;To be changed later
@@ -274,6 +283,8 @@ tempNewArrowptr dw ?
 tempColor db ?
 tempRow dw ?
 tempColumn dw ?
+
+clickCount db 0
 
 .code
 include Draw.inc

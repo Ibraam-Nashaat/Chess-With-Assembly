@@ -74,7 +74,7 @@ moveArrow proc far
                mov arrowPointer+2,ax
                jmp updateGrid
     
-    click:call getClickedPiece
+    click:call checkClickCount
           ret
 
     updateGrid: call redrawNewArrowPos
@@ -228,3 +228,51 @@ setDefaultGridAfterClick proc
     mov [bx],al     ;update the grid background matrix with the new color encoding
     ret
 setDefaultGridAfterClick endp
+
+resetDefGridAfter2ndClick proc
+    lea bx,defGrid
+    lea si,stdGrid
+    mov cx,0
+
+        loopDefGrid:        mov dl,[bx]
+                            pusha
+                            cmp dl,[si]
+                            jne changeColor
+        contLoopDefGrid :   popa
+                            add si,1
+                            add bx,1
+                            inc cx
+                            cmp cx,64d
+                            jne loopDefGrid
+    ret
+
+    changeColor:mov al,[si]
+                mov [bx],al
+                mov ax,cx
+                mov cx,8d
+                div cx
+                mov tempRow,ax
+                mov tempColumn,dx
+                mov di,dx
+                mov bl,[si]
+                mov tempColor,bl
+                lea bx,defGrid
+                call updateSquareBackgroundAndPiece
+                jmp contLoopDefGrid
+    ret
+resetDefGridAfter2ndClick endp
+
+checkClickCount proc
+    mov al,clickCount
+    cmp al,0
+    je click1
+
+    mov al,0
+    mov clickCount,al
+    call resetDefGridAfter2ndClick
+    ret
+    click1:inc al
+           mov clickCount,al
+           call getClickedPiece
+    ret
+checkClickCount endp
