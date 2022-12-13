@@ -84,6 +84,8 @@ redrawNewArrowPos proc
     mov tempColor,al ;storing the new color in tempColor to be passed to the next proc
     mov ax,arrowPointer ;get the row index of the arrowPointer
     mov di,arrowPointer+2 ;get the column index  of the arrowPointer
+    mov tempRow,ax ;storing the row number
+    mov tempColumn,di
     lea bx,initGrid ;store the address of initGrid
     call setSquareColor
     ret
@@ -123,6 +125,8 @@ redrawOldArrowPos proc
     ;initGrid+(row*8+column)
     mov ax,arrowPointer
     mov di,arrowPointer+2
+    mov tempRow,ax ;storing the row number
+    mov tempColumn,di
     lea bx,initGrid
     mov si,8
     mul si
@@ -130,6 +134,8 @@ redrawOldArrowPos proc
     add bx,di 
     mov [bx],ch ;replace the current color of old arrowPosition with its original default color stored in ch
                 ;that we got from DefGrid
+
+    
     mov tempColor,ch
     call updateSquareBackgroundAndPiece
 
@@ -141,8 +147,8 @@ redrawOldArrowPos endp
 ;get the piece pos that we want to redraw
 getPiecePosToDraw proc
     ;pieceToRedraw= initPiecePos*row+column
-    mov ax,arrowPointer ;storing the row number
-    mov di,arrowPointer+2 ;storing the column number
+    mov ax,tempRow ;storing the row number
+    mov di,tempColumn;storing the column number
     lea bx,initPiecePos
     mov si,8
     mul si
@@ -156,12 +162,12 @@ getPiecePosToDraw endp
 getPixelStartPosToDraw proc
     ;startPixelRow= arrowPointerRow*25
     ;startPixelColumn= arrowPointerColumn*25
-    mov ax,arrowPointer
+    mov ax,tempRow
     mov dx,25d
     mul dx
     mov di,ax ;storing the row in di as the drawing proc require
 
-    mov ax,arrowPointer+2
+    mov ax,tempColumn
     mov dx,25d
     mul dx
     mov si,ax ;storing the column in si as the drawing proc require
