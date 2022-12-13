@@ -203,8 +203,28 @@ setSquareColor proc
     add bx,ax       ;then adding it to initGrid starting position
     add bx,di       ;then adding it to the column index to get the exact starting index of arrowPointer
     mov al,tempColor
-    mov [bx],al     ;update the grid background matrix with the new color encoding(green)
+    mov [bx],al     ;update the grid background matrix with the new color encoding
+    cmp al,blueEnc
+    jne notBlue
+
+    call setDefaultGridAfterClick
+
     ;reDrawing the grid after the update
-    call updateSquareBackgroundAndPiece
+    notBlue:call updateSquareBackgroundAndPiece
+    ret
+
     ret
 setSquareColor endp
+
+setDefaultGridAfterClick proc
+    mov ax,tempRow
+    mov di,tempColumn
+    lea bx,defGrid
+    mov si,8        
+    mul si          ;multiply ax by 8
+    add bx,ax       ;then adding it to initGrid starting position
+    add bx,di       ;then adding it to the column index to get the exact starting index of arrowPointer
+    mov al,tempColor
+    mov [bx],al     ;update the grid background matrix with the new color encoding
+    ret
+setDefaultGridAfterClick endp
