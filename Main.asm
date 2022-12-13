@@ -272,10 +272,13 @@ arrowPointer dw 7d,0d ;r,c
 tempNewArrowptr dw ?
 
 tempColor db ?
+tempRow dw ?
+tempColumn dw ?
 
 .code
 include Draw.inc
 include Move.inc
+include avpm.inc
 main PROC far
     mov ax , @data ;
     mov ds , ax ;

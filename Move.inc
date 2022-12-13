@@ -80,18 +80,12 @@ moveArrow ENDP
 ;The following proc aims at getting the position of the arrowPointer in initGrid matrix
 ;by this equation  initGrid+(row*8+column)
 redrawNewArrowPos proc
+    mov al,greenEnc  ;setting the color of that position to green
+    mov tempColor,al ;storing the new color in tempColor to be passed to the next proc
     mov ax,arrowPointer ;get the row index of the arrowPointer
     mov di,arrowPointer+2 ;get the column index  of the arrowPointer
     lea bx,initGrid ;store the address of initGrid
-    mov si,8        
-    mul si          ;multiply ax by 8
-    add bx,ax       ;then adding it to initGrid starting position
-    add bx,di       ;then adding it to the column index to get the exact starting index of arrowPointer
-    mov al,greenEnc  ;setting the color of that position to green
-    mov [bx],al     ;update the grid background matrix with the new color encoding(green)
-    ;reDrawing the grid after the update
-    mov tempColor,al ;storing the new color in tempColor to be passed to the next proc
-    call updateSquareBackgroundAndPiece
+    call setSquareColor
     ret
 redrawNewArrowPos endp
 
@@ -190,3 +184,15 @@ updateSquareBackgroundAndPiece proc
 
     ret
 updateSquareBackgroundAndPiece endp
+
+setSquareColor proc
+    mov si,8        
+    mul si          ;multiply ax by 8
+    add bx,ax       ;then adding it to initGrid starting position
+    add bx,di       ;then adding it to the column index to get the exact starting index of arrowPointer
+    mov al,tempColor
+    mov [bx],al     ;update the grid background matrix with the new color encoding(green)
+    ;reDrawing the grid after the update
+    call updateSquareBackgroundAndPiece
+    ret
+setSquareColor endp
