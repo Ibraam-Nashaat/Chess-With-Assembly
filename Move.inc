@@ -21,6 +21,9 @@ moveArrow proc
     cmp ah,1eh ;compare the scancode of the the key that we got to that of the A-key
     je moveLeft
 
+    cmp ah,10h
+    je click
+
     ret
     moveUp:
            mov ax,arrowPointer 
@@ -70,6 +73,9 @@ moveArrow proc
                mov ax,tempNewArrowptr
                mov arrowPointer+2,ax
                jmp updateGrid
+    
+    click:call getClickedPiece
+          ret
 
     updateGrid: call redrawNewArrowPos
  return:   ret
