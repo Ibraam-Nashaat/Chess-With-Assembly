@@ -271,6 +271,8 @@ arrowPointer dw 7d,0d ;r,c
 
 tempNewArrowptr dw ?
 
+tempColor db ?
+
 .code
 include Draw.inc
 include Move.inc

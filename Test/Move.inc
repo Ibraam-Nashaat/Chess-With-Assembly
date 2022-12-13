@@ -29,7 +29,7 @@ moveArrow proc
            call checkGridBorders ;check that the new position of arrowPointer is within the grid range
            cmp ch,0              
            je return            ;if the new arrowPosition is out of range we won't do anything so we would return
-           call recolorOldArrowPos;To recolor the old ArrowPosition with its default color in the grid
+           call redrawOldArrowPos;To redraw the old ArrowPosition with its default color in the grid
            mov ax,tempNewArrowptr
            mov arrowPointer,ax  ;update the arrowPointer position with the new position
            jmp updateGrid      ;jmp to updateGrid reDraw the grid and the pieces
@@ -41,7 +41,7 @@ moveArrow proc
              call checkGridBorders
              cmp ch,0
              je return
-             call recolorOldArrowPos
+             call redrawOldArrowPos
              mov ax,tempNewArrowptr
              mov arrowPointer,ax
              jmp updateGrid
@@ -54,7 +54,7 @@ moveArrow proc
                call checkGridBorders
                cmp ch,0
                je return
-               call recolorOldArrowPos
+               call redrawOldArrowPos
                mov ax,tempNewArrowptr
                mov arrowPointer+2,ax
                jmp updateGrid
@@ -66,12 +66,12 @@ moveArrow proc
                call checkGridBorders
                cmp ch,0
                je return
-               call recolorOldArrowPos
+               call redrawOldArrowPos
                mov ax,tempNewArrowptr
                mov arrowPointer+2,ax
                jmp updateGrid
 
-    updateGrid: call updateGridProc
+    updateGrid: call redrawNewArrowPos
  return:   ret
 moveArrow ENDP
 
@@ -79,7 +79,7 @@ moveArrow ENDP
 ;with the color of the arrowPointer at the new position
 ;The following proc aims at getting the position of the arrowPointer in initGrid matrix
 ;by this equation  initGrid+(row*8+column)
-updateGridProc proc
+redrawNewArrowPos proc
     mov ax,arrowPointer ;get the row index of the arrowPointer
     mov di,arrowPointer+2 ;get the column index  of the arrowPointer
     lea bx,initGrid ;store the address of initGrid
@@ -87,38 +87,13 @@ updateGridProc proc
     mul si          ;multiply ax by 8
     add bx,ax       ;then adding it to initGrid starting position
     add bx,di       ;then adding it to the column index to get the exact starting index of arrowPointer
-    mov ah,greenEnc  ;setting the color of that position to green
-    mov [bx],ah      
-   ; call Draw       ;reDrawing the grid after the update
+    mov al,greenEnc  ;setting the color of that position to green
+    mov [bx],al     
     ;reDrawing the grid after the update
-      mov ax,arrowPointer ;storing the row number
-        mov di,arrowPointer+2 ;storing the column number
-        lea bx,initPiecePos
-        mov si,8
-        mul si
-        add bx,ax
-        add bx,di 
-        mov cl,[bx] ;store the piece that we want
-
-
-
-    mov ax,arrowPointer
-    mov dx,25d
-    mul dx
-    mov di,ax
-
-    mov ax,arrowPointer+2
-    mov dx,25d
-    mul dx
-    mov si,ax
-    mov al,greenColor
-    pusha
-    call drawCube
-    popa
-    mov al,cl
-    call determinePiece
+    mov tempColor,al
+    call updateSquareBackgroundAndPiece
     ret
-updateGridProc endp
+redrawNewArrowPos endp
 
 
 ;check that the new ArrowPosition is within the Grid Range
@@ -139,38 +114,50 @@ checkGridBorders Endp
 ;recoloring old Arrow position with the original color of the backgroud (grey and white)
 ;by comparing DefGrid (which contains the exact color of each square in grey and white)
 ;with initGrid (which contains the colors of the background that we draw)
-recolorOldArrowPos proc
-        ;get the aimed position that we want to compare 
-        ;by DefGrid+(row*8+column)
-        mov ax,arrowPointer ;storing the row number
-        mov di,arrowPointer+2 ;storing the column number
-        lea bx,DefGrid
-        mov si,8
-        mul si
-        add bx,ax
-        add bx,di 
-        mov ch,[bx] ;store the color that we want
-        
-        ;initGrid+(row*8+column)
-        mov ax,arrowPointer
-        mov di,arrowPointer+2
-        lea bx,initGrid
-        mov si,8
-        mul si
-        add bx,ax
-        add bx,di 
-        mov [bx],ch ;replace the current color of old arrowPosition with its original default color stored in ch
-                    ;that we got from DefGrid
-
+redrawOldArrowPos proc
+    ;get the aimed position that we want to compare 
+    ;by DefGrid+(row*8+column)
     mov ax,arrowPointer ;storing the row number
-        mov di,arrowPointer+2 ;storing the column number
-        lea bx,initPiecePos
-        mov si,8
-        mul si
-        add bx,ax
-        add bx,di 
-        mov cl,[bx] ;store the piece that we want
+    mov di,arrowPointer+2 ;storing the column number
+    lea bx,DefGrid
+    mov si,8
+    mul si
+    add bx,ax
+    add bx,di 
+    mov ch,[bx] ;store the color that we want
+    
+    ;initGrid+(row*8+column)
+    mov ax,arrowPointer
+    mov di,arrowPointer+2
+    lea bx,initGrid
+    mov si,8
+    mul si
+    add bx,ax
+    add bx,di 
+    mov [bx],ch ;replace the current color of old arrowPosition with its original default color stored in ch
+                ;that we got from DefGrid
+    mov tempColor,ch
+    call updateSquareBackgroundAndPiece
 
+
+    
+    ret
+redrawOldArrowPos endp 
+
+getPiecePosToDraw proc
+    mov ax,arrowPointer ;storing the row number
+    mov di,arrowPointer+2 ;storing the column number
+    lea bx,initPiecePos
+    mov si,8
+    mul si
+    add bx,ax
+    add bx,di 
+    mov cl,[bx] ;store the piece that we want
+    ret
+getPiecePosToDraw endp
+
+
+getSquareBackgroundStartPosToDraw proc
     mov ax,arrowPointer
     mov dx,25d
     mul dx
@@ -180,15 +167,20 @@ recolorOldArrowPos proc
     mov dx,25d
     mul dx
     mov si,ax
-    mov al,ch
+    
+    ret
+getSquareBackgroundStartPosToDraw endp
+
+updateSquareBackgroundAndPiece proc
+    
+    call getPiecePosToDraw
+    call getSquareBackgroundStartPosToDraw
+    mov al,tempColor
     pusha
     call determineCubeColor
     popa
     mov al,cl
     call determinePiece
-    
 
-
-     
     ret
-recolorOldArrowPos endp 
+updateSquareBackgroundAndPiece endp
