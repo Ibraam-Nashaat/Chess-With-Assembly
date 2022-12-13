@@ -88,9 +88,9 @@ redrawNewArrowPos proc
     add bx,ax       ;then adding it to initGrid starting position
     add bx,di       ;then adding it to the column index to get the exact starting index of arrowPointer
     mov al,greenEnc  ;setting the color of that position to green
-    mov [bx],al     
+    mov [bx],al     ;update the grid background matrix with the new color encoding(green)
     ;reDrawing the grid after the update
-    mov tempColor,al
+    mov tempColor,al ;storing the new color in tempColor to be passed to the next proc
     call updateSquareBackgroundAndPiece
     ret
 redrawNewArrowPos endp
@@ -144,7 +144,9 @@ redrawOldArrowPos proc
     ret
 redrawOldArrowPos endp 
 
+;get the piece pos that we want to redraw
 getPiecePosToDraw proc
+    ;pieceToRedraw= initPiecePos*row+column
     mov ax,arrowPointer ;storing the row number
     mov di,arrowPointer+2 ;storing the column number
     lea bx,initPiecePos
@@ -152,34 +154,38 @@ getPiecePosToDraw proc
     mul si
     add bx,ax
     add bx,di 
-    mov cl,[bx] ;store the piece that we want
+    mov cl,[bx] ;store the piece that we want in cl to be used in updateSquareBackgroundAndPiece proc
     ret
 getPiecePosToDraw endp
 
-
-getSquareBackgroundStartPosToDraw proc
+;get the starting pixel position of redrawing 
+getPixelStartPosToDraw proc
+    ;startPixelRow= arrowPointerRow*25
+    ;startPixelColumn= arrowPointerColumn*25
     mov ax,arrowPointer
     mov dx,25d
     mul dx
-    mov di,ax
+    mov di,ax ;storing the row in di as the drawing proc require
 
     mov ax,arrowPointer+2
     mov dx,25d
     mul dx
-    mov si,ax
+    mov si,ax ;storing the column in si as the drawing proc require
     
     ret
-getSquareBackgroundStartPosToDraw endp
+getPixelStartPosToDraw endp
 
+;getting the exact pos of the new piece and the exact starting position of pixel redrawing
+;then calling the drawing procedures to draw them
 updateSquareBackgroundAndPiece proc
     
-    call getPiecePosToDraw
-    call getSquareBackgroundStartPosToDraw
-    mov al,tempColor
+    call getPiecePosToDraw 
+    call getPixelStartPosToDraw
+    mov al,tempColor ;storing the background color encoding in al so that the next procedure can use the suitable interrupt to draw it
     pusha
     call determineCubeColor
     popa
-    mov al,cl
+    mov al,cl   ;mov the piece that we stored in cl to al (stored earlier in getPiecePosToDraw proc)
     call determinePiece
 
     ret
