@@ -15,10 +15,59 @@ bishopAvMoves proc far
               pusha
               call checkGridBorders2
               cmp ch,1
-              jne return1
+              jne initNorthWest
               call setSquareColor
               popa 
               jmp northEast
+
+    initNorthWest: popa
+                   mov ax,arrowPointer ;row
+                   mov di,arrowPointer+2;column
+    northWest:sub ax,1
+              sub di,1
+              mov tempRow,ax
+              mov tempColumn,di
+              pusha
+              call checkGridBorders2
+              cmp ch,1
+              jne initSouthEast
+              call setSquareColor
+              popa 
+              jmp northWest
+
+
+    initSouthEast: popa
+                   mov ax,arrowPointer ;row
+                   mov di,arrowPointer+2;column
+    southEast:
+              add ax,1
+              add di,1
+              mov tempRow,ax
+              mov tempColumn,di
+              pusha
+              call checkGridBorders2
+              cmp ch,1
+              jne initSouthWest
+              call setSquareColor
+              popa 
+              jmp southEast
+
+     initSouthWest:popa
+                   mov ax,arrowPointer ;row
+                   mov di,arrowPointer+2;column
+
+    southWest:
+              add ax,1
+              sub di,1
+              mov tempRow,ax
+              mov tempColumn,di
+              pusha
+              call checkGridBorders2
+              cmp ch,1
+              jne return1
+              call setSquareColor
+              popa 
+              jmp southWest
               
 
               
