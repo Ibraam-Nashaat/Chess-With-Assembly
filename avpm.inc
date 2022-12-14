@@ -174,6 +174,12 @@ getClickedPiece proc far
 
     cmp cl,bQueenEnc
     je queenAvailableMovesLabel
+
+    cmp cl,wKingEnc
+    je kingAvailableMovesLabel
+
+    cmp cl,bKingEnc
+    je kingAvailableMovesLabel
     
     ret
 
@@ -185,6 +191,9 @@ getClickedPiece proc far
 
     queenAvailableMovesLabel:call queenAvMoves
                              ret
+
+    kingAvailableMovesLabel:call kingAvMoves
+                            ret
 
     ret
 getClickedPiece endp
@@ -204,6 +213,134 @@ queenAvMoves proc
     call axialMoves
     ret
 queenAvMoves endp
+
+kingAvMoves proc
+    mov al,blueEnc  ;setting the color of that position to green
+    mov tempColor,al ;storing the new color in tempColor to be passed to the next proc
+    mov ax,arrowPointer ;row
+    mov di,arrowPointer+2;column
+    lea bx,initGrid
+    
+    KingEast:
+              
+              add di,1
+              mov tempRow,ax
+              mov tempColumn,di
+              pusha
+              call checkGridBorders2
+              cmp ch,1
+              jne initKingSouth
+              call setSquareColor
+
+    initKingSouth: popa
+                       mov ax,arrowPointer ;row
+                       mov di,arrowPointer+2;column
+    kingSouth:add ax,1
+              mov tempRow,ax
+              mov tempColumn,di
+              pusha
+              call checkGridBorders2
+              cmp ch,1
+              jne initKingNorth
+              call setSquareColor
+
+
+
+    initKingNorth: popa
+                   mov ax,arrowPointer ;row
+                   mov di,arrowPointer+2;column
+    KingNorth:
+              sub ax,1
+              mov tempRow,ax
+              mov tempColumn,di
+              pusha
+              call checkGridBorders2
+              cmp ch,1
+              jne initKingWest
+              call setSquareColor
+
+
+     initKingWest:popa
+                   mov ax,arrowPointer ;row
+                   mov di,arrowPointer+2;column
+
+    kingWest:
+              sub di,1
+              mov tempRow,ax
+              mov tempColumn,di
+              pusha
+              call checkGridBorders2
+              cmp ch,1
+              jne initKingNorthEast
+              call setSquareColor
+   
+    initKingNorthEast:popa
+                   mov ax,arrowPointer ;row
+                   mov di,arrowPointer+2;column
+
+    kingNorthEast:
+              sub ax,1
+              add di,1
+              mov tempRow,ax
+              mov tempColumn,di
+              pusha
+              call checkGridBorders2
+              cmp ch,1
+              jne initKingNorthWest
+              call setSquareColor
+         
+         
+
+    initKingNorthWest: popa
+                   mov ax,arrowPointer ;row
+                   mov di,arrowPointer+2;column
+    kingNorthWest:sub ax,1
+              sub di,1
+              mov tempRow,ax
+              mov tempColumn,di
+              pusha
+              call checkGridBorders2
+              cmp ch,1
+              jne initKingSouthEast
+              call setSquareColor
+
+
+
+    initKingSouthEast: popa
+                   mov ax,arrowPointer ;row
+                   mov di,arrowPointer+2;column
+    kingSouthEast:
+              add ax,1
+              add di,1
+              mov tempRow,ax
+              mov tempColumn,di
+              pusha
+              call checkGridBorders2
+              cmp ch,1
+              jne initKingSouthWest
+              call setSquareColor
+
+
+     initKingSouthWest:popa
+                   mov ax,arrowPointer ;row
+                   mov di,arrowPointer+2;column
+
+    KingSouthWest:
+              add ax,1
+              sub di,1
+              mov tempRow,ax
+              mov tempColumn,di
+              pusha
+              call checkGridBorders2
+              cmp ch,1
+              jne returnKing
+              call setSquareColor
+            
+
+   returnKing: popa
+                ret
+    ret
+kingAvMoves endp
 
 checkGridBorders2 proc
     cmp tempRow,7d
