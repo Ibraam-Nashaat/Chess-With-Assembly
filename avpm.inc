@@ -1,5 +1,5 @@
 ;Available piece moves
-bishopAvMoves proc far
+diagonalMoves proc far
     
     mov al,blueEnc  ;setting the color of that position to green
     mov tempColor,al ;storing the new color in tempColor to be passed to the next proc
@@ -76,9 +76,9 @@ bishopAvMoves proc far
    return1: popa
             ret
    ret
-bishopAvMoves ENDP
+diagonalMoves ENDP
 
-rookAvMoves proc far
+axialMoves proc far
     
     mov al,blueEnc  ;setting the color of that position to green
     mov tempColor,al ;storing the new color in tempColor to be passed to the next proc
@@ -86,7 +86,7 @@ rookAvMoves proc far
     mov di,arrowPointer+2;column
     lea bx,initGrid
     
-    rookNorthEast:
+    east:
               
               add di,1
               mov tempRow,ax
@@ -94,65 +94,61 @@ rookAvMoves proc far
               pusha
               call checkGridBorders2
               cmp ch,1
-              jne rookInitNorthWest
+              jne initSouth
               call setSquareColor
               popa 
-              jmp rookNorthEast
+              jmp east
 
-    rookInitNorthWest: popa
+    initSouth: popa
                        mov ax,arrowPointer ;row
                        mov di,arrowPointer+2;column
-    rookNorthWest:add ax,1
+    south:add ax,1
               mov tempRow,ax
               mov tempColumn,di
               pusha
               call checkGridBorders2
               cmp ch,1
-              jne rookInitSouthEast
+              jne initNorth
               call setSquareColor
               popa 
-              jmp rookNorthWest
+              jmp south
 
 
-    rookInitSouthEast: popa
+    initNorth: popa
                    mov ax,arrowPointer ;row
                    mov di,arrowPointer+2;column
-    rookSouthEast:
+    north:
               sub ax,1
               mov tempRow,ax
               mov tempColumn,di
               pusha
               call checkGridBorders2
               cmp ch,1
-              jne rookInitSouthWest
+              jne initWest
               call setSquareColor
               popa 
-              jmp rookSouthEast
+              jmp north
 
-     rookInitSouthWest:popa
+     initWest:popa
                    mov ax,arrowPointer ;row
                    mov di,arrowPointer+2;column
 
-    rookSouthWest:
+    west:
               sub di,1
               mov tempRow,ax
               mov tempColumn,di
               pusha
               call checkGridBorders2
               cmp ch,1
-              jne returnRook
+              jne returnAxial
               call setSquareColor
               popa 
-              jmp rookSouthWest
-              
+              jmp west
 
-              
-  
-
-   returnRook: popa
+   returnAxial: popa
             ret
    ret
-rookAvMoves ENDP
+axialMoves ENDP
 
 getClickedPiece proc far
     mov ax,arrowPointer ;row
@@ -172,6 +168,12 @@ getClickedPiece proc far
 
     cmp cl,bRookEnc
     je rookAvailableMovesLabel
+
+    cmp cl,wQueenEnc
+    je queenAvailableMovesLabel
+
+    cmp cl,bQueenEnc
+    je queenAvailableMovesLabel
     
     ret
 
@@ -181,8 +183,27 @@ getClickedPiece proc far
     rookAvailableMovesLabel:call rookAvMoves
                             ret
 
+    queenAvailableMovesLabel:call queenAvMoves
+                             ret
+
     ret
 getClickedPiece endp
+
+bishopAvMoves proc
+    call diagonalMoves
+    ret
+bishopAvMoves endp
+
+rookAvMoves proc
+    call axialMoves
+    ret
+rookAvMoves endp
+
+queenAvMoves proc
+    call diagonalMoves
+    call axialMoves
+    ret
+queenAvMoves endp
 
 checkGridBorders2 proc
     cmp tempRow,7d
