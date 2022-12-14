@@ -78,6 +78,82 @@ bishopAvMoves proc far
    ret
 bishopAvMoves ENDP
 
+rookAvMoves proc far
+    
+    mov al,blueEnc  ;setting the color of that position to green
+    mov tempColor,al ;storing the new color in tempColor to be passed to the next proc
+    mov ax,arrowPointer ;row
+    mov di,arrowPointer+2;column
+    lea bx,initGrid
+    
+    rookNorthEast:
+              
+              add di,1
+              mov tempRow,ax
+              mov tempColumn,di
+              pusha
+              call checkGridBorders2
+              cmp ch,1
+              jne rookInitNorthWest
+              call setSquareColor
+              popa 
+              jmp rookNorthEast
+
+    rookInitNorthWest: popa
+                       mov ax,arrowPointer ;row
+                       mov di,arrowPointer+2;column
+    rookNorthWest:add ax,1
+              mov tempRow,ax
+              mov tempColumn,di
+              pusha
+              call checkGridBorders2
+              cmp ch,1
+              jne rookInitSouthEast
+              call setSquareColor
+              popa 
+              jmp rookNorthWest
+
+
+    rookInitSouthEast: popa
+                   mov ax,arrowPointer ;row
+                   mov di,arrowPointer+2;column
+    rookSouthEast:
+              sub ax,1
+              mov tempRow,ax
+              mov tempColumn,di
+              pusha
+              call checkGridBorders2
+              cmp ch,1
+              jne rookInitSouthWest
+              call setSquareColor
+              popa 
+              jmp rookSouthEast
+
+     rookInitSouthWest:popa
+                   mov ax,arrowPointer ;row
+                   mov di,arrowPointer+2;column
+
+    rookSouthWest:
+              sub di,1
+              mov tempRow,ax
+              mov tempColumn,di
+              pusha
+              call checkGridBorders2
+              cmp ch,1
+              jne returnRook
+              call setSquareColor
+              popa 
+              jmp rookSouthWest
+              
+
+              
+  
+
+   returnRook: popa
+            ret
+   ret
+rookAvMoves ENDP
+
 getClickedPiece proc far
     mov ax,arrowPointer ;row
     mov di,arrowPointer+2;column
@@ -90,11 +166,20 @@ getClickedPiece proc far
 
     cmp cl,wBishopEnc
     je bishopAvMovesLabel
+
+    cmp cl,wRookEnc
+    je rookAvailableMovesLabel
+
+    cmp cl,bRookEnc
+    je rookAvailableMovesLabel
     
     ret
 
     bishopAvMovesLabel:call bishopAvMoves
                        ret
+
+    rookAvailableMovesLabel:call rookAvMoves
+                            ret
 
     ret
 getClickedPiece endp
