@@ -111,6 +111,7 @@ setDefaultGridAfterClick endp
 resetDefGridAfter2ndClick proc
     lea bx,defGrid
     lea si,stdGrid
+    lea di,initGrid
     mov cx,0
 
         loopDefGrid:        mov dl,[bx]
@@ -120,13 +121,16 @@ resetDefGridAfter2ndClick proc
         contLoopDefGrid :   popa
                             add si,1
                             add bx,1
+                            add di,1
                             inc cx
                             cmp cx,64d
                             jne loopDefGrid
     ret
 
-    changeColor:mov al,[si]
+    changeColor:
+                mov al,[si]
                 mov [bx],al ;moving the color encoding of stdGrid to defGrid
+                mov [di],al ;moving the color encoding of stdGrid to initGrid
                 ;getting the exact position of the cell by
                 ;row= cx/8
                 ;column=cx%8
@@ -138,7 +142,7 @@ resetDefGridAfter2ndClick proc
                 mov di,dx
                 mov bl,[si]
                 mov tempColor,bl
-                lea bx,defGrid
+                lea bx,initGrid
                 call updateSquareBackgroundAndPiece
                 jmp contLoopDefGrid
     ret
