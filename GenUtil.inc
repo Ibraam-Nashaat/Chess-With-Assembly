@@ -10,7 +10,7 @@
 
 ;get the piece pos that we want to redraw
 getPiecePosToDraw proc
-    ;pieceToRedraw= initPiecePos*row+column
+    ;pieceToRedraw= initPiecePos+(8*row+column)
     mov ax,tempRow ;storing the row number
     mov di,tempColumn;storing the column number
     lea bx,initPiecePos
@@ -57,20 +57,28 @@ updateSquareBackgroundAndPiece proc
 updateSquareBackgroundAndPiece endp
 
 
-
+;before calling this procedure you will need to pass
+;   1)bx: containing the address of the grid
+;   2)tempRow: containig the current row of the cell that you want to recolor
+;   3)tempColumn: containing the current column of the cell that you want to recolor
+;   4)tempColor: containing the background color encoding of the cell
 setSquareColor proc
+    ;get the exact position of the cell by 
+    ;gridAddress+(8*tempRow+tempColumn)
+    mov ax,tempRow
+    mov di,tempColumn
     mov si,8        
-    mul si          ;multiply ax by 8
-    add bx,ax       ;then adding it to initGrid starting position
-    add bx,di       ;then adding it to the column index to get the exact starting index of arrowPointer
+    mul si          
+    add bx,ax       
+    add bx,di       
     mov al,tempColor
     mov [bx],al     ;update the grid background matrix with the new color encoding
-    cmp al,blueEnc
+    cmp al,blueEnc  
     jne notBlue
 
-    call setDefaultGridAfterClick
+    call setDefaultGridAfterClick ;if the color encoding is blue then we will call this proc
 
-    ;reDrawing the grid after the update
+    ;reDrawing the grid after the update if the current position is not blue
     notBlue:call updateSquareBackgroundAndPiece
     ret
 
@@ -78,15 +86,17 @@ setSquareColor proc
 setSquareColor endp
 
 
-
+;This proc aims at recoloring the defGrid with blue cells
+;To know the difference between defGrid,initGrid and stdGrid, Refer to the data segment comments.
 setDefaultGridAfterClick proc
+    ;Pos=defGrid+(8*tempRow+tempColumn)
     mov ax,tempRow
     mov di,tempColumn
     lea bx,defGrid
     mov si,8        
-    mul si          ;multiply ax by 8
-    add bx,ax       ;then adding it to initGrid starting position
-    add bx,di       ;then adding it to the column index to get the exact starting index of arrowPointer
+    mul si          
+    add bx,ax       
+    add bx,di       
     mov al,tempColor
     mov [bx],al     ;update the grid background matrix with the new color encoding
     ret
@@ -94,7 +104,10 @@ setDefaultGridAfterClick endp
 
 
 
-
+;reset defGrid back to grey and white by looping over defGrid and stdGrid and comparing
+;the color encoding at each single position.
+;If it is the same color then we will see the next position, otherwise we would recolor defGrid cell
+;with its original grey and white color.
 resetDefGridAfter2ndClick proc
     lea bx,defGrid
     lea si,stdGrid
@@ -113,8 +126,11 @@ resetDefGridAfter2ndClick proc
     ret
 
     changeColor:mov al,[si]
-                mov [bx],al
-                mov ax,cx
+                mov [bx],al ;moving the color encoding of stdGrid to defGrid
+                ;getting the exact position of the cell by
+                ;row= cx/8
+                ;column=cx%8
+                mov ax,cx  
                 mov cx,8d
                 div cx
                 mov tempRow,ax
@@ -134,11 +150,12 @@ resetDefGridAfter2ndClick endp
 checkClickCount proc
     mov al,clickCount
     cmp al,0
-    je click1
+    je click1 ;if it is the first click jmp to click1
 
-    mov al,0
-    mov clickCount,al
-    call resetDefGridAfter2ndClick
+    ;Otherwise it is the second click
+    mov al,0 
+    mov clickCount,al   ;reset the counter back to zero
+    call resetDefGridAfter2ndClick 
     ret
     click1:inc al
            mov clickCount,al

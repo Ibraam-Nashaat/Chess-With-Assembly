@@ -307,7 +307,7 @@ arrowPointer dw 7d,0d ;r,c
 tempNewArrowptr dw ?
 
 
-tempColor db ?  ;temporary variable to store the color number
+tempColor db ?  ;temporary variable to store the color encoding
 tempRow dw ?    ;temporary variable to store the current row that I am currently working at
 tempColumn dw ? ;temporary variable to store the current column that I am currently working at
 

@@ -121,7 +121,7 @@ checkGridBorders proc
 checkGridBorders Endp
 
 ;recoloring old Arrow position with the original color of the backgroud (grey and white)
-;by comparing DefGrid (which contains the exact color of each square in grey and white)
+;by comparing DefGrid 
 ;with initGrid (which contains the colors of the background that we draw)
 redrawOldArrowPos proc
     ;get the aimed position that we want to compare 
