@@ -239,19 +239,18 @@ startDrawX dw ?
 
 DrawMode   db ? ;0 for grid, 1 for pieces
 
+;Colors Encoding
 whiteEnc   db 1
 greyEnc    db 0
-blueEnc    db 2 ;To be changed later
+blueEnc    db 2 
 greenEnc   db 3
 
-defGrid    db 0,1,0,1,0,1,0,1
-           db 1,0,1,0,1,0,1,0
-           db 0,1,0,1,0,1,0,1
-           db 1,0,1,0,1,0,1,0
-           db 0,1,0,1,0,1,0,1
-           db 1,0,1,0,1,0,1,0
-           db 0,1,0,1,0,1,0,1
-           db 1,0,1,0,1,0,1,0
+;There is three grid matices
+
+
+;initGrid represents the initial grid that would be drawn at first
+;It also represents the grid that I will manipulate each time i make a movement or want
+;to get the available movements 
 
 initGrid   db 0,1,0,1,0,1,0,1
            db 1,0,1,0,1,0,1,0
@@ -262,6 +261,29 @@ initGrid   db 0,1,0,1,0,1,0,1
            db 0,1,0,1,0,1,0,1
            db 3,0,1,0,1,0,1,0
 
+;On getting the available movements after the first click, I will recolor the available movements to blue
+;in defGrid and initGrid. On moving the arrowPointer over the available moves,
+;the green color should overwrite the blue color,so the green color would be written in initGrid .
+;When the arrowPointer leaves one available move, I need it to be recolored to blue not white or grey
+;so I need an intermediate grid that contains the blue color always after click which is defGrid.
+;When the arrowPointer leaves the old position of available moves, initGrid would be compared to defGrid
+;so that the blue colored cells would be redrawn.
+
+;If we don't use defGrid and compared it directly to stdGrid then when the arrow leaves a blue cell
+;it would be recolored to grey or white not blue
+
+
+defGrid    db 0,1,0,1,0,1,0,1
+           db 1,0,1,0,1,0,1,0
+           db 0,1,0,1,0,1,0,1
+           db 1,0,1,0,1,0,1,0
+           db 0,1,0,1,0,1,0,1
+           db 1,0,1,0,1,0,1,0
+           db 0,1,0,1,0,1,0,1
+           db 1,0,1,0,1,0,1,0
+
+;stdGrid represents the standard grid colors (white and grey) that would never change across the program
+;On the 2nd click, defGrid and initGrid would be compared to stdGrid to return them back to white and grey
 stdGrid    db 0,1,0,1,0,1,0,1
            db 1,0,1,0,1,0,1,0
            db 0,1,0,1,0,1,0,1
@@ -271,20 +293,25 @@ stdGrid    db 0,1,0,1,0,1,0,1
            db 0,1,0,1,0,1,0,1
            db 1,0,1,0,1,0,1,0
 
+
+;Color numbers
 whiteColor    db 31
 greyColor     db 27
-blueColor     db 53  ;To be changed later
+blueColor     db 53  
 greenColor    db 51
 
+;arrowPointer represents the current place of the arrow
 arrowPointer dw 7d,0d ;r,c
 
+;temperoray arrowPointer variable that I will need later
 tempNewArrowptr dw ?
 
-tempColor db ?
-tempRow dw ?
-tempColumn dw ?
 
-clickCount db 0
+tempColor db ?  ;temporary variable to store the color number
+tempRow dw ?    ;temporary variable to store the current row that I am currently working at
+tempColumn dw ? ;temporary variable to store the current column that I am currently working at
+
+clickCount db 0 ;1 after the first click and 2 after the second click
 
 .code
 include Draw.inc
@@ -301,7 +328,7 @@ main PROC far
     mov al,13h;
     int 10h;
 
-    ;call the drawing module
+    ;call the drawing module to draw the grid and pieces
     call Draw
 
     infiniteLoop: 

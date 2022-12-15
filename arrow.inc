@@ -28,7 +28,7 @@ moveArrow proc far
     cmp ah,1eh ;compare the scancode of the the key that we got to that of the A-key
     je moveLeft
 
-    cmp ah,10h
+    cmp ah,10h ;compare the scancode of the key that we got to that of the Q-key
     je click
 
     ret
@@ -81,7 +81,7 @@ moveArrow proc far
                mov arrowPointer+2,ax
                jmp updateGrid
     
-    click:call checkClickCount
+    click:call checkClickCount 
           ret
 
     updateGrid: call redrawNewArrowPos

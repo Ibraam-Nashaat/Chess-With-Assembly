@@ -3,31 +3,39 @@
 ;   1) getClickedPiece 
 ;   2) checkGridBorders2 
 
+;to get what piece type was clicked
 getClickedPiece proc far
-    mov ax,arrowPointer ;row
+    ;get the position of arrowPointer to determine the current position of the piece
+    mov ax,arrowPointer ;row 
     mov di,arrowPointer+2;column
     mov tempRow,ax
     mov tempColumn,di
 
-    call getPiecePosToDraw
+    call getPiecePosToDraw ;to get the piece encoding in cl
+
+    ;The clicked piece is Bishop
     cmp cl,bBishopEnc
     je bishopAvMovesLabel
 
     cmp cl,wBishopEnc
     je bishopAvMovesLabel
 
+
+    ;The clicked piece is Rook
     cmp cl,wRookEnc
     je rookAvailableMovesLabel
 
     cmp cl,bRookEnc
     je rookAvailableMovesLabel
 
+    ;The clicked piece is Queen
     cmp cl,wQueenEnc
     je queenAvailableMovesLabel
 
     cmp cl,bQueenEnc
     je queenAvailableMovesLabel
 
+    ;The clicked piece is King
     cmp cl,wKingEnc
     je kingAvailableMovesLabel
 
@@ -51,6 +59,7 @@ getClickedPiece proc far
     ret
 getClickedPiece endp
 
+;Check if the current position that we want to color is out of grid range
 checkGridBorders2 proc
     cmp tempRow,7d
     jg outOfRange2 ;if it is greater than 7 then it is out of range
