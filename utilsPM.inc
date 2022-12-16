@@ -45,6 +45,9 @@ getClickedPiece proc far
     ;The clicked piece is knight
     cmp cl, wKnightEnc
     je knightAvailableMovesLabel
+
+    cmp cl, bKnightEnc
+    je knightAvailableMovesLabel
     
     ret
 
@@ -59,6 +62,7 @@ getClickedPiece proc far
 
     kingAvailableMovesLabel:call kingAvMoves
                             ret
+                            
     knightAvailableMovesLabel:call knightAvMoves
                                 ret
 

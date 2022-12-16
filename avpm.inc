@@ -6,6 +6,7 @@
 ;   4)kingAvMoves
 ;   5)diagonalMoves
 ;   6)axialMoves
+;   7)knightAvMoves
 bishopAvMoves proc
     call diagonalMoves
     ret
@@ -439,7 +440,7 @@ knightAvMoves proc
     returnKnight:
         popa
         ret
-        
+
     ret
 knightAvMoves endp
 
