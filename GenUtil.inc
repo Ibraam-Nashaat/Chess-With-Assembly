@@ -150,7 +150,7 @@ resetDefGridAfter2ndClick endp
 
 
 ;Detect the current count of the Q-click to determine if we would get available moves(1st click)
-;or (move or deactivite available moves(2nd click))
+;or (move or deactivate available moves(2nd click))
 checkClickCount proc
     mov al,clickCount
     cmp al,0

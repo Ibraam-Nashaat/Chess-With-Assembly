@@ -303,7 +303,145 @@ axialMoves proc far
    ret
 axialMoves ENDP
 
+knightAvMoves proc
+    mov al,blueEnc  ;setting the color of that position to green
+    mov tempColor,al ;storing the new color in tempColor to be passed to the next proc
+    
+    lea bx,initGrid
 
+    mov ax,arrowPointer ;row
+    mov di,arrowPointer+2;column
+    
+    knightMove1:
+        add di,2
+        add ax, 1
+        mov tempRow,ax
+        mov tempColumn,di
+        pusha
+        call checkGridBorders2
+        cmp ch,1
+        jne initKnightMove2
+        call setSquareColor
+
+    initKnightMove2: 
+        popa
+        mov ax,arrowPointer ;row
+        mov di,arrowPointer+2;column
+
+    knightMove2:
+        add di,2
+        sub ax, 1
+        mov tempRow,ax
+        mov tempColumn,di
+        pusha
+        call checkGridBorders2
+        cmp ch,1
+        jne initKnightMove3
+        call setSquareColor
+
+    initKnightMove3: 
+        popa
+        mov ax,arrowPointer ;row
+        mov di,arrowPointer+2;column
+
+    knightMove3:
+        add ax,2
+        add di, 1
+        mov tempRow,ax
+        mov tempColumn,di
+        pusha
+        call checkGridBorders2
+        cmp ch,1
+        jne initKnightMove4
+        call setSquareColor
+
+    initKnightMove4:
+        popa
+        mov ax,arrowPointer ;row
+        mov di,arrowPointer+2;column
+
+    knightMove4:
+        add ax,2
+        sub di, 1
+        mov tempRow,ax
+        mov tempColumn,di
+        pusha
+        call checkGridBorders2
+        cmp ch,1
+        jne initKnightMove5
+        call setSquareColor
+   
+    initKnightMove5:
+        popa
+        mov ax,arrowPointer ;row
+        mov di,arrowPointer+2;column
+
+    knightMove5:
+        sub di,2
+        add ax,1
+        mov tempRow,ax
+        mov tempColumn,di
+        pusha
+        call checkGridBorders2
+        cmp ch,1
+        jne initKnightMove6
+        call setSquareColor
+         
+    initKnightMove6: 
+        popa
+        mov ax,arrowPointer ;row
+        mov di,arrowPointer+2;column
+
+    knightMove6:
+        sub di,2
+        sub ax,1
+        mov tempRow,ax
+        mov tempColumn,di
+        pusha
+        call checkGridBorders2
+        cmp ch,1
+        jne initKnightMove7
+        call setSquareColor
+
+    initKnightMove7: 
+        popa
+        mov ax,arrowPointer ;row
+        mov di,arrowPointer+2;column
+
+    knightMove7:
+        sub ax,2
+        sub di,1
+        mov tempRow,ax
+        mov tempColumn,di
+        pusha
+        call checkGridBorders2
+        cmp ch,1
+        jne initKnightMove8
+        call setSquareColor
+
+
+     initKnightMove8:
+        popa
+        mov ax,arrowPointer ;row
+        mov di,arrowPointer+2;column
+
+    KnightMove8:
+        sub ax,2
+        add di,1
+        mov tempRow,ax
+        mov tempColumn,di
+        pusha
+        call checkGridBorders2
+        cmp ch,1
+        jne initKnightMove8
+        call setSquareColor
+            
+    returnKnight:
+        popa
+        ret
+        
+    ret
+knightAvMoves endp
 
 
 
