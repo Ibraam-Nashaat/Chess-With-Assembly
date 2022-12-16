@@ -30,120 +30,124 @@ kingAvMoves proc
     mov di,arrowPointer+2;column
     lea bx,initGrid
     
-    KingEast:
-              
-              add di,1
-              mov tempRow,ax
-              mov tempColumn,di
-              pusha
-              call checkGridBorders2
-              cmp ch,1
-              jne initKingSouth
-              call setSquareColor
+    KingEast: 
+        add di,1
+        mov tempRow,ax
+        mov tempColumn,di
+        pusha
+        call checkGridBorders2
+        cmp ch,1
+        jne initKingSouth
+        call setSquareColor
 
-    initKingSouth: popa
-                       mov ax,arrowPointer ;row
-                       mov di,arrowPointer+2;column
-    kingSouth:add ax,1
-              mov tempRow,ax
-              mov tempColumn,di
-              pusha
-              call checkGridBorders2
-              cmp ch,1
-              jne initKingNorth
-              call setSquareColor
+    initKingSouth: 
+        popa
+        mov ax,arrowPointer ;row
+        mov di,arrowPointer+2;column
 
+    kingSouth:
+        add ax,1
+        mov tempRow,ax
+        mov tempColumn,di
+        pusha
+        call checkGridBorders2
+        cmp ch,1
+        jne initKingNorth
+        call setSquareColor
 
+    initKingNorth:
+        popa
+        mov ax,arrowPointer ;row
+        mov di,arrowPointer+2;column
 
-    initKingNorth: popa
-                   mov ax,arrowPointer ;row
-                   mov di,arrowPointer+2;column
     KingNorth:
-              sub ax,1
-              mov tempRow,ax
-              mov tempColumn,di
-              pusha
-              call checkGridBorders2
-              cmp ch,1
-              jne initKingWest
-              call setSquareColor
+        sub ax,1
+        mov tempRow,ax
+        mov tempColumn,di
+        pusha
+        call checkGridBorders2
+        cmp ch,1
+        jne initKingWest
+        call setSquareColor
 
-
-     initKingWest:popa
-                   mov ax,arrowPointer ;row
-                   mov di,arrowPointer+2;column
+    initKingWest:
+        popa
+        mov ax,arrowPointer ;row
+        mov di,arrowPointer+2;column
 
     kingWest:
-              sub di,1
-              mov tempRow,ax
-              mov tempColumn,di
-              pusha
-              call checkGridBorders2
-              cmp ch,1
-              jne initKingNorthEast
-              call setSquareColor
+        sub di,1
+        mov tempRow,ax
+        mov tempColumn,di
+        pusha
+        call checkGridBorders2
+        cmp ch,1
+        jne initKingNorthEast
+        call setSquareColor
    
-    initKingNorthEast:popa
-                   mov ax,arrowPointer ;row
-                   mov di,arrowPointer+2;column
+    initKingNorthEast:
+        popa
+        mov ax,arrowPointer ;row
+        mov di,arrowPointer+2;column
 
     kingNorthEast:
-              sub ax,1
-              add di,1
-              mov tempRow,ax
-              mov tempColumn,di
-              pusha
-              call checkGridBorders2
-              cmp ch,1
-              jne initKingNorthWest
-              call setSquareColor
-         
-         
+        sub ax,1
+        add di,1
+        mov tempRow,ax
+        mov tempColumn,di
+        pusha
+        call checkGridBorders2
+        cmp ch,1
+        jne initKingNorthWest
+        call setSquareColor 
 
-    initKingNorthWest: popa
-                   mov ax,arrowPointer ;row
-                   mov di,arrowPointer+2;column
-    kingNorthWest:sub ax,1
-              sub di,1
-              mov tempRow,ax
-              mov tempColumn,di
-              pusha
-              call checkGridBorders2
-              cmp ch,1
-              jne initKingSouthEast
-              call setSquareColor
+    initKingNorthWest:
+        popa
+        mov ax,arrowPointer ;row
+        mov di,arrowPointer+2;column
 
+    kingNorthWest:
+        sub ax,1
+        sub di,1
+        mov tempRow,ax
+        mov tempColumn,di
+        pusha
+        call checkGridBorders2
+        cmp ch,1
+        jne initKingSouthEast
+        call setSquareColor
 
+    initKingSouthEast:
+        popa
+        mov ax,arrowPointer ;row
+        mov di,arrowPointer+2;column
 
-    initKingSouthEast: popa
-                   mov ax,arrowPointer ;row
-                   mov di,arrowPointer+2;column
     kingSouthEast:
-              add ax,1
-              add di,1
-              mov tempRow,ax
-              mov tempColumn,di
-              pusha
-              call checkGridBorders2
-              cmp ch,1
-              jne initKingSouthWest
-              call setSquareColor
+        add ax,1
+        add di,1
+        mov tempRow,ax
+        mov tempColumn,di
+        pusha
+        call checkGridBorders2
+        cmp ch,1
+        jne initKingSouthWest
+        call setSquareColor
 
-
-     initKingSouthWest:popa
-                   mov ax,arrowPointer ;row
-                   mov di,arrowPointer+2;column
+    initKingSouthWest:
+        popa
+        mov ax,arrowPointer ;row
+        mov di,arrowPointer+2;column
 
     KingSouthWest:
-              add ax,1
-              sub di,1
-              mov tempRow,ax
-              mov tempColumn,di
-              pusha
-              call checkGridBorders2
-              cmp ch,1
-              jne returnKing
-              call setSquareColor
+        add ax,1
+        sub di,1
+        mov tempRow,ax
+        mov tempColumn,di
+        pusha
+        call checkGridBorders2
+        cmp ch,1
+        jne returnKing
+        call setSquareColor
             
 
    returnKing: popa
@@ -162,73 +166,77 @@ diagonalMoves proc far
     lea bx,initGrid
     
     northEast:
-              sub ax,1
-              add di,1
-              mov tempRow,ax
-              mov tempColumn,di
-              pusha
-              call checkGridBorders2
-              cmp ch,1
-              jne initNorthWest
-              call setSquareColor
-              popa 
-              jmp northEast
+        sub ax,1
+        add di,1
+        mov tempRow,ax
+        mov tempColumn,di
+        pusha
+        call checkGridBorders2
+        cmp ch,1
+        jne initNorthWest
+        call setSquareColor
+        popa 
+        jmp northEast
 
-    initNorthWest: popa
-                   mov ax,arrowPointer ;row
-                   mov di,arrowPointer+2;column
-    northWest:sub ax,1
-              sub di,1
-              mov tempRow,ax
-              mov tempColumn,di
-              pusha
-              call checkGridBorders2
-              cmp ch,1
-              jne initSouthEast
-              call setSquareColor
-              popa 
-              jmp northWest
+    initNorthWest:
+        popa
+        mov ax,arrowPointer ;row
+        mov di,arrowPointer+2;column
+
+    northWest:
+        sub ax,1
+        sub di,1
+        mov tempRow,ax
+        mov tempColumn,di
+        pusha
+        call checkGridBorders2
+        cmp ch,1
+        jne initSouthEast
+        call setSquareColor
+        popa 
+        jmp northWest
 
 
-    initSouthEast: popa
-                   mov ax,arrowPointer ;row
-                   mov di,arrowPointer+2;column
+    initSouthEast:
+        popa
+        mov ax,arrowPointer ;row
+        mov di,arrowPointer+2;column
+
     southEast:
-              add ax,1
-              add di,1
-              mov tempRow,ax
-              mov tempColumn,di
-              pusha
-              call checkGridBorders2
-              cmp ch,1
-              jne initSouthWest
-              call setSquareColor
-              popa 
-              jmp southEast
+        add ax,1
+        add di,1
+        mov tempRow,ax
+        mov tempColumn,di
+        pusha
+        call checkGridBorders2
+        cmp ch,1
+        jne initSouthWest
+        call setSquareColor
+        popa 
+        jmp southEast
 
-     initSouthWest:popa
-                   mov ax,arrowPointer ;row
-                   mov di,arrowPointer+2;column
+    initSouthWest:
+        popa
+        mov ax,arrowPointer ;row
+        mov di,arrowPointer+2;column
 
     southWest:
-              add ax,1
-              sub di,1
-              mov tempRow,ax
-              mov tempColumn,di
-              pusha
-              call checkGridBorders2
-              cmp ch,1
-              jne return1
-              call setSquareColor
-              popa 
-              jmp southWest
-              
+        add ax,1
+        sub di,1
+        mov tempRow,ax
+        mov tempColumn,di
+        pusha
+        call checkGridBorders2
+        cmp ch,1
+        jne return1
+        call setSquareColor
+        popa 
+        jmp southWest
 
-              
-  
+    return1: 
+        popa
+        ret
 
-   return1: popa
-            ret
    ret
 diagonalMoves ENDP
 
@@ -240,67 +248,73 @@ axialMoves proc far
     mov di,arrowPointer+2;column
     lea bx,initGrid
     
-    east:
-              
-              add di,1
-              mov tempRow,ax
-              mov tempColumn,di
-              pusha
-              call checkGridBorders2
-              cmp ch,1
-              jne initSouth
-              call setSquareColor
-              popa 
-              jmp east
+    east:    
+        add di,1
+        mov tempRow,ax
+        mov tempColumn,di
+        pusha
+        call checkGridBorders2
+        cmp ch,1
+        jne initSouth
+        call setSquareColor
+        popa 
+        jmp east
 
-    initSouth: popa
-                       mov ax,arrowPointer ;row
-                       mov di,arrowPointer+2;column
-    south:add ax,1
-              mov tempRow,ax
-              mov tempColumn,di
-              pusha
-              call checkGridBorders2
-              cmp ch,1
-              jne initNorth
-              call setSquareColor
-              popa 
-              jmp south
+    initSouth:
+        popa
+        mov ax,arrowPointer ;row
+        mov di,arrowPointer+2;column
 
+    south:
+        add ax,1
+        mov tempRow,ax
+        mov tempColumn,di
+        pusha
+        call checkGridBorders2
+        cmp ch,1
+        jne initNorth
+        call setSquareColor
+        popa 
+        jmp south
 
-    initNorth: popa
-                   mov ax,arrowPointer ;row
-                   mov di,arrowPointer+2;column
+    initNorth:
+        popa
+        mov ax,arrowPointer ;row
+        mov di,arrowPointer+2;column
+
     north:
-              sub ax,1
-              mov tempRow,ax
-              mov tempColumn,di
-              pusha
-              call checkGridBorders2
-              cmp ch,1
-              jne initWest
-              call setSquareColor
-              popa 
-              jmp north
+        sub ax,1
+        mov tempRow,ax
+        mov tempColumn,di
+        pusha
+        call checkGridBorders2
+        cmp ch,1
+        jne initWest
+        call setSquareColor
+        popa 
+        jmp north
 
-     initWest:popa
-                   mov ax,arrowPointer ;row
-                   mov di,arrowPointer+2;column
+    initWest:
+        popa
+        mov ax,arrowPointer ;row
+        mov di,arrowPointer+2;column
 
     west:
-              sub di,1
-              mov tempRow,ax
-              mov tempColumn,di
-              pusha
-              call checkGridBorders2
-              cmp ch,1
-              jne returnAxial
-              call setSquareColor
-              popa 
-              jmp west
+        sub di,1
+        mov tempRow,ax
+        mov tempColumn,di
+        pusha
+        call checkGridBorders2
+        cmp ch,1
+        jne returnAxial
+        call setSquareColor
+        popa 
+        jmp west
 
-   returnAxial: popa
-            ret
+    returnAxial: 
+        popa
+        ret
+
    ret
 axialMoves ENDP
 
