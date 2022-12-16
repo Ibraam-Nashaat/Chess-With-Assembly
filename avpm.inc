@@ -448,7 +448,7 @@ knightAvMoves proc
         pusha
         call checkGridBorders2
         cmp ch,1
-        jne initKnightMove8
+        jne returnKnight
         call setSquareColor
             
     returnKnight:
