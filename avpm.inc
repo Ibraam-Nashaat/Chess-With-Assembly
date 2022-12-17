@@ -558,10 +558,11 @@ knightAvMoves proc
         mov tempColumn,di
         add tempRow, 1
         add tempColumn,2
-        pusha
+
         call checkGridBorders2
         cmp ch,1
-        jne initKnightMove2
+        jne knightMove2
+
         ; Checking if the next position has a piece of the same color
         call getPieceInPos
         mov tempFromPiece, cl
@@ -578,8 +579,7 @@ knightAvMoves proc
 
         call setSquareColor
 
-    initKnightMove2: 
-        popa
+    initKnightMove2:
         mov ax,arrowPointer ;row
         mov di,arrowPointer+2;column
 
@@ -588,10 +588,10 @@ knightAvMoves proc
         mov tempColumn,di
         sub tempRow, 1
         add tempColumn,2
-        pusha
+
         call checkGridBorders2
         cmp ch,1
-        jne initKnightMove3
+        jne knightMove3
         ; Checking if the next position has a piece of the same color
         call getPieceInPos
         mov tempFromPiece, cl
@@ -609,7 +609,6 @@ knightAvMoves proc
         call setSquareColor
 
     initKnightMove3: 
-        popa
         mov ax,arrowPointer ;row
         mov di,arrowPointer+2;column
 
@@ -618,10 +617,10 @@ knightAvMoves proc
         mov tempColumn,di
         add tempRow,2
         add tempColumn, 1
-        pusha
+
         call checkGridBorders2
         cmp ch,1
-        jne initKnightMove4
+        jne knightMove4
         ; Checking if the next position has a piece of the same color
         call getPieceInPos
         mov tempFromPiece, cl
@@ -639,7 +638,6 @@ knightAvMoves proc
         call setSquareColor
 
     initKnightMove4:
-        popa
         mov ax,arrowPointer ;row
         mov di,arrowPointer+2;column
 
@@ -648,10 +646,10 @@ knightAvMoves proc
         mov tempColumn,di
         add tempRow,2
         sub tempColumn, 1
-        pusha
+
         call checkGridBorders2
         cmp ch,1
-        jne initKnightMove5
+        jne knightMove5
         ; Checking if the next position has a piece of the same color
         call getPieceInPos
         mov tempFromPiece, cl
@@ -669,7 +667,6 @@ knightAvMoves proc
         call setSquareColor
    
     initKnightMove5:
-        popa
         mov ax,arrowPointer ;row
         mov di,arrowPointer+2;column
 
@@ -678,10 +675,10 @@ knightAvMoves proc
         mov tempColumn,di
         sub tempColumn,2
         add tempRow,1
-        pusha
+
         call checkGridBorders2
         cmp ch,1
-        jne initKnightMove6
+        jne knightMove6
         ; Checking if the next position has a piece of the same color
         call getPieceInPos
         mov tempFromPiece, cl
@@ -699,7 +696,6 @@ knightAvMoves proc
         call setSquareColor
          
     initKnightMove6: 
-        popa
         mov ax,arrowPointer ;row
         mov di,arrowPointer+2;column
 
@@ -708,10 +704,10 @@ knightAvMoves proc
         mov tempColumn,di
         sub tempColumn,2
         sub tempRow,1
-        pusha
+
         call checkGridBorders2
         cmp ch,1
-        jne initKnightMove7
+        jne knightMove7
         ; Checking if the next position has a piece of the same color
         call getPieceInPos
         mov tempFromPiece, cl
@@ -728,7 +724,6 @@ knightAvMoves proc
         call setSquareColor
 
     initKnightMove7: 
-        popa
         mov ax,arrowPointer ;row
         mov di,arrowPointer+2;column
 
@@ -737,10 +732,10 @@ knightAvMoves proc
         mov tempColumn,di
         sub tempRow,2
         sub tempColumn,1
-        pusha
+
         call checkGridBorders2
         cmp ch,1
-        jne initKnightMove8
+        jne knightMove8
         ; Checking if the next position has a piece of the same color
         call getPieceInPos
         mov tempFromPiece, cl
@@ -757,9 +752,7 @@ knightAvMoves proc
 
         call setSquareColor
 
-
      initKnightMove8:
-        popa
         mov ax,arrowPointer ;row
         mov di,arrowPointer+2;column
 
@@ -768,7 +761,7 @@ knightAvMoves proc
         mov tempColumn,di
         sub tempRow,2
         add tempColumn,1
-        pusha
+
         call checkGridBorders2
         cmp ch,1
         jne returnKnight
@@ -789,7 +782,6 @@ knightAvMoves proc
         call setSquareColor
             
     returnKnight:
-        popa
         ret
 
     ret
@@ -811,7 +803,7 @@ blackPawnAvMoves proc
         pusha
         call checkGridBorders2
         cmp ch,1
-        jne initBlackPawnMove2
+        jne returnBlackPawn
         ; Checking if the next position has a piece of the same color
         call getPieceInPos
         mov tempFromPiece, cl
@@ -885,7 +877,22 @@ whitePawnAvMoves proc
         pusha
         call checkGridBorders2
         cmp ch,1
-        jne initWhitePawnMove2
+        jne returnWhitePawn
+        
+        ; Checking if the next position has a piece of the same color
+        call getPieceInPos
+        mov tempFromPiece, cl
+
+        mov ax, tempRow
+        mov di, tempColumn
+
+        call getPieceInPos
+        mov tempToPiece, cl
+
+        call isValidPossibleMove
+        cmp ch, 1
+        jne returnWhitePawn
+
         call setSquareColor
 
     initWhitePawnMove2: 
@@ -904,6 +911,20 @@ whitePawnAvMoves proc
         call checkGridBorders2
         cmp ch,1
         jne returnWhitePawn
+        ; Checking if the next position has a piece of the same color
+        call getPieceInPos
+        mov tempFromPiece, cl
+
+        mov ax, tempRow
+        mov di, tempColumn
+
+        call getPieceInPos
+        mov tempToPiece, cl
+
+        call isValidPossibleMove
+        cmp ch, 1
+        jne returnWhitePawn
+
         call setSquareColor
 
     returnWhitePawn:
