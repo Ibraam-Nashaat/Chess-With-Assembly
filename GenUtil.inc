@@ -64,6 +64,7 @@ updateSquareBackgroundAndPiece endp
 setSquareColor proc
     ;get the exact position of the cell by 
     ;gridAddress+(8*tempRow+tempColumn)
+    pusha
     mov ax,tempRow
     mov di,tempColumn
     lea bx,initGrid
@@ -79,7 +80,10 @@ setSquareColor proc
     call setDefaultGridAfterClick ;if the color encoding is blue then we will call this proc
 
     ;reDrawing the grid after the update if the current position is not blue
-    notBlue:call updateSquareBackgroundAndPiece
+    notBlue:
+        call updateSquareBackgroundAndPiece
+
+    popa
     ret
 
     ret
@@ -90,6 +94,7 @@ setSquareColor endp
 ;To know the difference between defGrid,initGrid and stdGrid, Refer to the data segment comments.
 setDefaultGridAfterClick proc
     ;Pos=defGrid+(8*tempRow+tempColumn)
+    pusha
     mov ax,tempRow
     mov di,tempColumn
     lea bx,defGrid
@@ -99,6 +104,7 @@ setDefaultGridAfterClick proc
     add bx,di       
     mov al,tempColor
     mov [bx],al     ;update the grid background matrix with the new color encoding
+    popa
     ret
 setDefaultGridAfterClick endp
 
@@ -114,37 +120,40 @@ resetDefGridAfter2ndClick proc
     lea di,initGrid
     mov cx,0
 
-        loopDefGrid:        mov dl,[bx]
-                            pusha
-                            cmp dl,[si]
-                            jne changeColor
-        contLoopDefGrid :   popa
-                            add si,1
-                            add bx,1
-                            add di,1
-                            inc cx
-                            cmp cx,64d
-                            jne loopDefGrid
+    loopDefGrid:
+        mov dl,[bx]
+        pusha
+        cmp dl,[si]
+        jne changeColor
+
+    contLoopDefGrid:
+        popa
+        add si,1
+        add bx,1
+        add di,1
+        inc cx
+        cmp cx,64d
+        jne loopDefGrid
     ret
 
     changeColor:
-                mov al,[si]
-                mov [bx],al ;moving the color encoding of stdGrid to defGrid
-                mov [di],al ;moving the color encoding of stdGrid to initGrid
-                ;getting the exact position of the cell by
-                ;row= cx/8
-                ;column=cx%8
-                mov ax,cx  
-                mov cx,8d
-                div cx
-                mov tempRow,ax
-                mov tempColumn,dx
-                mov di,dx
-                mov bl,[si]
-                mov tempColor,bl
-                lea bx,initGrid
-                call updateSquareBackgroundAndPiece
-                jmp contLoopDefGrid
+        mov al,[si]
+        mov [bx],al ;moving the color encoding of stdGrid to defGrid
+        mov [di],al ;moving the color encoding of stdGrid to initGrid
+        ;getting the exact position of the cell by
+        ;row= cx/8
+        ;column=cx%8
+        mov ax,cx  
+        mov cx,8d
+        div cx
+        mov tempRow,ax
+        mov tempColumn,dx
+        mov di,dx
+        mov bl,[si]
+        mov tempColor,bl
+        lea bx,initGrid
+        call updateSquareBackgroundAndPiece
+        jmp contLoopDefGrid
     ret
 resetDefGridAfter2ndClick endp
 

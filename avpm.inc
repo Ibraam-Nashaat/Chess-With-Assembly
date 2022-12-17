@@ -28,7 +28,7 @@ kingAvMoves proc
     mov tempColor,al ;storing the new color in tempColor to be passed to the next proc
     mov ax,arrowPointer ;row
     mov di,arrowPointer+2;column
-    lea bx,initGrid
+    
     
     KingEast: 
         add di,1
@@ -40,14 +40,8 @@ kingAvMoves proc
         jne initKingSouth
 
         ; Checking if the next position has a piece of the same color
-        call getPieceInPos
-        mov tempFromPiece, cl
-
-        mov ax, tempRow
-        mov di, tempColumn
-
-        call getPieceInPos
-        mov tempToPiece, cl
+        call getFromPiece ; sets tempFromPiece to the piece in initial location
+        call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
         cmp ch, 1
@@ -68,15 +62,10 @@ kingAvMoves proc
         call checkGridBorders2
         cmp ch,1
         jne initKingNorth
+
         ; Checking if the next position has a piece of the same color
-        call getPieceInPos
-        mov tempFromPiece, cl
-
-        mov ax, tempRow
-        mov di, tempColumn
-
-        call getPieceInPos
-        mov tempToPiece, cl
+        call getFromPiece ; sets tempFromPiece to the piece in initial location
+        call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
         cmp ch, 1
@@ -99,14 +88,8 @@ kingAvMoves proc
         jne initKingWest
 
         ; Checking if the next position has a piece of the same color
-        call getPieceInPos
-        mov tempFromPiece, cl
-
-        mov ax, tempRow
-        mov di, tempColumn
-
-        call getPieceInPos
-        mov tempToPiece, cl
+        call getFromPiece ; sets tempFromPiece to the piece in initial location
+        call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
         cmp ch, 1
@@ -129,14 +112,8 @@ kingAvMoves proc
         jne initKingNorthEast
 
         ; Checking if the next position has a piece of the same color
-        call getPieceInPos
-        mov tempFromPiece, cl
-
-        mov ax, tempRow
-        mov di, tempColumn
-
-        call getPieceInPos
-        mov tempToPiece, cl
+        call getFromPiece ; sets tempFromPiece to the piece in initial location
+        call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
         cmp ch, 1
@@ -158,15 +135,10 @@ kingAvMoves proc
         call checkGridBorders2
         cmp ch,1
         jne initKingNorthWest
+
         ; Checking if the next position has a piece of the same color
-        call getPieceInPos
-        mov tempFromPiece, cl
-
-        mov ax, tempRow
-        mov di, tempColumn
-
-        call getPieceInPos
-        mov tempToPiece, cl
+        call getFromPiece ; sets tempFromPiece to the piece in initial location
+        call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
         cmp ch, 1
@@ -188,15 +160,10 @@ kingAvMoves proc
         call checkGridBorders2
         cmp ch,1
         jne initKingSouthEast
+
         ; Checking if the next position has a piece of the same color
-        call getPieceInPos
-        mov tempFromPiece, cl
-
-        mov ax, tempRow
-        mov di, tempColumn
-
-        call getPieceInPos
-        mov tempToPiece, cl
+        call getFromPiece ; sets tempFromPiece to the piece in initial location
+        call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
         cmp ch, 1
@@ -218,15 +185,10 @@ kingAvMoves proc
         call checkGridBorders2
         cmp ch,1
         jne initKingSouthWest
+
         ; Checking if the next position has a piece of the same color
-        call getPieceInPos
-        mov tempFromPiece, cl
-
-        mov ax, tempRow
-        mov di, tempColumn
-
-        call getPieceInPos
-        mov tempToPiece, cl
+        call getFromPiece ; sets tempFromPiece to the piece in initial location
+        call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
         cmp ch, 1
@@ -248,15 +210,10 @@ kingAvMoves proc
         call checkGridBorders2
         cmp ch,1
         jne returnKing
+
         ; Checking if the next position has a piece of the same color
-        call getPieceInPos
-        mov tempFromPiece, cl
-
-        mov ax, tempRow
-        mov di, tempColumn
-
-        call getPieceInPos
-        mov tempToPiece, cl
+        call getFromPiece ; sets tempFromPiece to the piece in initial location
+        call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
         cmp ch, 1
@@ -278,7 +235,7 @@ diagonalMoves proc far
     mov tempColor,al ;storing the new color in tempColor to be passed to the next proc
     mov ax,arrowPointer ;row
     mov di,arrowPointer+2;column
-    lea bx,initGrid
+    
     
     northEast:
         sub ax,1
@@ -289,15 +246,10 @@ diagonalMoves proc far
         call checkGridBorders2
         cmp ch,1
         jne initNorthWest
+
         ; Checking if the next position has a piece of the same color
-        call getPieceInPos
-        mov tempFromPiece, cl
-
-        mov ax, tempRow
-        mov di, tempColumn
-
-        call getPieceInPos
-        mov tempToPiece, cl
+        call getFromPiece ; sets tempFromPiece to the piece in initial location
+        call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
         cmp ch, 1
@@ -321,15 +273,10 @@ diagonalMoves proc far
         call checkGridBorders2
         cmp ch,1
         jne initSouthEast
+
         ; Checking if the next position has a piece of the same color
-        call getPieceInPos
-        mov tempFromPiece, cl
-
-        mov ax, tempRow
-        mov di, tempColumn
-
-        call getPieceInPos
-        mov tempToPiece, cl
+        call getFromPiece ; sets tempFromPiece to the piece in initial location
+        call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
         cmp ch, 1
@@ -354,15 +301,10 @@ diagonalMoves proc far
         call checkGridBorders2
         cmp ch,1
         jne initSouthWest
+
         ; Checking if the next position has a piece of the same color
-        call getPieceInPos
-        mov tempFromPiece, cl
-
-        mov ax, tempRow
-        mov di, tempColumn
-
-        call getPieceInPos
-        mov tempToPiece, cl
+        call getFromPiece ; sets tempFromPiece to the piece in initial location
+        call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
         cmp ch, 1
@@ -386,15 +328,10 @@ diagonalMoves proc far
         call checkGridBorders2
         cmp ch,1
         jne return1
+
         ; Checking if the next position has a piece of the same color
-        call getPieceInPos
-        mov tempFromPiece, cl
-
-        mov ax, tempRow
-        mov di, tempColumn
-
-        call getPieceInPos
-        mov tempToPiece, cl
+        call getFromPiece ; sets tempFromPiece to the piece in initial location
+        call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
         cmp ch, 1
@@ -416,7 +353,7 @@ axialMoves proc far
     mov tempColor,al ;storing the new color in tempColor to be passed to the next proc
     mov ax,arrowPointer ;row
     mov di,arrowPointer+2;column
-    lea bx,initGrid
+    
     
     east:    
         add di,1
@@ -426,15 +363,10 @@ axialMoves proc far
         call checkGridBorders2
         cmp ch,1
         jne initSouth
+
         ; Checking if the next position has a piece of the same color
-        call getPieceInPos
-        mov tempFromPiece, cl
-
-        mov ax, tempRow
-        mov di, tempColumn
-
-        call getPieceInPos
-        mov tempToPiece, cl
+        call getFromPiece ; sets tempFromPiece to the piece in initial location
+        call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
         cmp ch, 1
@@ -457,15 +389,10 @@ axialMoves proc far
         call checkGridBorders2
         cmp ch,1
         jne initNorth
+
         ; Checking if the next position has a piece of the same color
-        call getPieceInPos
-        mov tempFromPiece, cl
-
-        mov ax, tempRow
-        mov di, tempColumn
-
-        call getPieceInPos
-        mov tempToPiece, cl
+        call getFromPiece ; sets tempFromPiece to the piece in initial location
+        call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
         cmp ch, 1
@@ -488,15 +415,10 @@ axialMoves proc far
         call checkGridBorders2
         cmp ch,1
         jne initWest
+
         ; Checking if the next position has a piece of the same color
-        call getPieceInPos
-        mov tempFromPiece, cl
-
-        mov ax, tempRow
-        mov di, tempColumn
-
-        call getPieceInPos
-        mov tempToPiece, cl
+        call getFromPiece ; sets tempFromPiece to the piece in initial location
+        call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
         cmp ch, 1
@@ -519,15 +441,10 @@ axialMoves proc far
         call checkGridBorders2
         cmp ch,1
         jne returnAxial
+        
         ; Checking if the next position has a piece of the same color
-        call getPieceInPos
-        mov tempFromPiece, cl
-
-        mov ax, tempRow
-        mov di, tempColumn
-
-        call getPieceInPos
-        mov tempToPiece, cl
+        call getFromPiece ; sets tempFromPiece to the piece in initial location
+        call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
         cmp ch, 1
@@ -548,8 +465,6 @@ knightAvMoves proc
     mov al,blueEnc  ;setting the color of that position to green
     mov tempColor,al ;storing the new color in tempColor to be passed to the next proc
     
-    lea bx,initGrid
-
     mov ax,arrowPointer ;row
     mov di,arrowPointer+2;column
     
@@ -564,24 +479,14 @@ knightAvMoves proc
         jne knightMove2
 
         ; Checking if the next position has a piece of the same color
-        call getPieceInPos
-        mov tempFromPiece, cl
-
-        mov ax, tempRow
-        mov di, tempColumn
-
-        call getPieceInPos
-        mov tempToPiece, cl
+        call getFromPiece ; sets tempFromPiece to the piece in initial location
+        call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
         cmp ch, 1
-        jne initKnightMove2
+        jne knightMove2
 
         call setSquareColor
-
-    initKnightMove2:
-        mov ax,arrowPointer ;row
-        mov di,arrowPointer+2;column
 
     knightMove2:
         mov tempRow,ax
@@ -593,24 +498,14 @@ knightAvMoves proc
         cmp ch,1
         jne knightMove3
         ; Checking if the next position has a piece of the same color
-        call getPieceInPos
-        mov tempFromPiece, cl
-
-        mov ax, tempRow
-        mov di, tempColumn
-
-        call getPieceInPos
-        mov tempToPiece, cl
+        call getFromPiece ; sets tempFromPiece to the piece in initial location
+        call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
         cmp ch, 1
-        jne initKnightMove3
+        jne knightMove3
 
         call setSquareColor
-
-    initKnightMove3: 
-        mov ax,arrowPointer ;row
-        mov di,arrowPointer+2;column
 
     knightMove3:
         mov tempRow,ax
@@ -622,24 +517,14 @@ knightAvMoves proc
         cmp ch,1
         jne knightMove4
         ; Checking if the next position has a piece of the same color
-        call getPieceInPos
-        mov tempFromPiece, cl
-
-        mov ax, tempRow
-        mov di, tempColumn
-
-        call getPieceInPos
-        mov tempToPiece, cl
+        call getFromPiece ; sets tempFromPiece to the piece in initial location
+        call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
         cmp ch, 1
-        jne initKnightMove4
+        jne knightMove4
 
         call setSquareColor
-
-    initKnightMove4:
-        mov ax,arrowPointer ;row
-        mov di,arrowPointer+2;column
 
     knightMove4:
         mov tempRow,ax
@@ -651,24 +536,14 @@ knightAvMoves proc
         cmp ch,1
         jne knightMove5
         ; Checking if the next position has a piece of the same color
-        call getPieceInPos
-        mov tempFromPiece, cl
-
-        mov ax, tempRow
-        mov di, tempColumn
-
-        call getPieceInPos
-        mov tempToPiece, cl
+        call getFromPiece ; sets tempFromPiece to the piece in initial location
+        call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
         cmp ch, 1
-        jne initKnightMove5
+        jne knightMove5
 
         call setSquareColor
-   
-    initKnightMove5:
-        mov ax,arrowPointer ;row
-        mov di,arrowPointer+2;column
 
     knightMove5:
         mov tempRow,ax
@@ -680,24 +555,14 @@ knightAvMoves proc
         cmp ch,1
         jne knightMove6
         ; Checking if the next position has a piece of the same color
-        call getPieceInPos
-        mov tempFromPiece, cl
-
-        mov ax, tempRow
-        mov di, tempColumn
-
-        call getPieceInPos
-        mov tempToPiece, cl
+        call getFromPiece ; sets tempFromPiece to the piece in initial location
+        call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
         cmp ch, 1
-        jne initKnightMove6
+        jne knightMove6
 
         call setSquareColor
-         
-    initKnightMove6: 
-        mov ax,arrowPointer ;row
-        mov di,arrowPointer+2;column
 
     knightMove6:
         mov tempRow,ax
@@ -709,23 +574,13 @@ knightAvMoves proc
         cmp ch,1
         jne knightMove7
         ; Checking if the next position has a piece of the same color
-        call getPieceInPos
-        mov tempFromPiece, cl
-
-        mov ax, tempRow
-        mov di, tempColumn
-
-        call getPieceInPos
-        mov tempToPiece, cl
+        call getFromPiece ; sets tempFromPiece to the piece in initial location
+        call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
         cmp ch, 1
-        jne initKnightMove7
+        jne knightMove7
         call setSquareColor
-
-    initKnightMove7: 
-        mov ax,arrowPointer ;row
-        mov di,arrowPointer+2;column
 
     knightMove7:
         mov tempRow,ax
@@ -737,24 +592,14 @@ knightAvMoves proc
         cmp ch,1
         jne knightMove8
         ; Checking if the next position has a piece of the same color
-        call getPieceInPos
-        mov tempFromPiece, cl
-
-        mov ax, tempRow
-        mov di, tempColumn
-
-        call getPieceInPos
-        mov tempToPiece, cl
+        call getFromPiece ; sets tempFromPiece to the piece in initial location
+        call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
         cmp ch, 1
-        jne initKnightMove8
+        jne knightMove8
 
         call setSquareColor
-
-     initKnightMove8:
-        mov ax,arrowPointer ;row
-        mov di,arrowPointer+2;column
 
     KnightMove8:
         mov tempRow,ax
@@ -766,14 +611,8 @@ knightAvMoves proc
         cmp ch,1
         jne returnKnight
         ; Checking if the next position has a piece of the same color
-        call getPieceInPos
-        mov tempFromPiece, cl
-
-        mov ax, tempRow
-        mov di, tempColumn
-
-        call getPieceInPos
-        mov tempToPiece, cl
+        call getFromPiece ; sets tempFromPiece to the piece in initial location
+        call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
         cmp ch, 1
@@ -791,7 +630,7 @@ blackPawnAvMoves proc
     mov al,blueEnc  ;setting the color of that position to green
     mov tempColor,al ;storing the new color in tempColor to be passed to the next proc
     
-    lea bx,initGrid
+    
 
     mov ax,arrowPointer ;row
     mov di,arrowPointer+2;column
@@ -800,19 +639,13 @@ blackPawnAvMoves proc
         mov tempRow,ax
         mov tempColumn,di
         add tempRow,1
-        
+
         call checkGridBorders2
         cmp ch,1
         jne returnBlackPawn
         ; Checking if the next position has a piece of the same color
-        call getPieceInPos
-        mov tempFromPiece, cl
-
-        mov ax, tempRow
-        mov di, tempColumn
-
-        call getPieceInPos
-        mov tempToPiece, cl
+        call getFromPiece ; sets tempFromPiece to the piece in initial location
+        call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
         cmp ch, 1
@@ -836,14 +669,8 @@ blackPawnAvMoves proc
         cmp ch,1
         jne returnBlackPawn
         ; Checking if the next position has a piece of the same color
-        call getPieceInPos
-        mov tempFromPiece, cl
-
-        mov ax, tempRow
-        mov di, tempColumn
-
-        call getPieceInPos
-        mov tempToPiece, cl
+        call getFromPiece ; sets tempFromPiece to the piece in initial location
+        call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
         cmp ch, 1
@@ -861,7 +688,7 @@ whitePawnAvMoves proc
     mov al,blueEnc  ;setting the color of that position to green
     mov tempColor,al ;storing the new color in tempColor to be passed to the next proc
     
-    lea bx,initGrid
+    
 
     mov ax,arrowPointer ;row
     mov di,arrowPointer+2;column
@@ -876,14 +703,8 @@ whitePawnAvMoves proc
         jne returnWhitePawn
         
         ; Checking if the next position has a piece of the same color
-        call getPieceInPos
-        mov tempFromPiece, cl
-
-        mov ax, tempRow
-        mov di, tempColumn
-
-        call getPieceInPos
-        mov tempToPiece, cl
+        call getFromPiece ; sets tempFromPiece to the piece in initial location
+        call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
         cmp ch, 1
@@ -907,14 +728,8 @@ whitePawnAvMoves proc
         cmp ch,1
         jne returnWhitePawn
         ; Checking if the next position has a piece of the same color
-        call getPieceInPos
-        mov tempFromPiece, cl
-
-        mov ax, tempRow
-        mov di, tempColumn
-
-        call getPieceInPos
-        mov tempToPiece, cl
+        call getFromPiece ; sets tempFromPiece to the piece in initial location
+        call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
         cmp ch, 1

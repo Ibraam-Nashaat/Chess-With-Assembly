@@ -144,3 +144,31 @@ getPieceInPos proc
     mov cl, [bx]
     ret
 getPieceInPos endp
+
+getFromPiece proc
+    pusha
+    lea bx,initPiecePos
+    mov si,8
+    mul si
+    add bx,ax
+    add bx,di 
+    mov cl, [bx]
+    mov tempFromPiece, cl
+    popa
+    ret
+getFromPiece endp
+
+getToPiece proc
+    pusha
+    mov ax,tempRow
+    mov di,tempColumn
+    lea bx,initPiecePos
+    mov si,8
+    mul si
+    add bx,ax
+    add bx,di 
+    mov cl, [bx]
+    mov tempToPiece, cl
+    popa
+    ret
+getToPiece endp
