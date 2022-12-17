@@ -52,6 +52,9 @@ getClickedPiece proc far
 
     cmp cl, bPawnEnc
     je blackPawnAvailableMovesLabel
+
+    cmp cl, wPawnEnc
+    je whitePawnAvailableMovesLabel
     
     ret
 
@@ -71,6 +74,10 @@ getClickedPiece proc far
                                 ret
     blackPawnAvailableMovesLabel:
         call blackPawnAvMoves
+        ret
+
+    whitePawnAvailableMovesLabel:
+        call whitePawnAvMoves
         ret
 
     ret

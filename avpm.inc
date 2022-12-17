@@ -710,7 +710,7 @@ blackPawnAvMoves proc
 
     blackPawnMove2:
         cmp ax, 1 ;Checking if it's the first movement
-        jne noMoreMoves
+        jne noTwoStepsForBlackPawn
 
         add ax,2
         mov tempRow,ax
@@ -725,7 +725,53 @@ blackPawnAvMoves proc
         popa
         ret
     
-    noMoreMoves:
+    noTwoStepsForBlackPawn:
         ret
     ret
 blackPawnAvMoves endp
+
+whitePawnAvMoves proc
+    mov al,blueEnc  ;setting the color of that position to green
+    mov tempColor,al ;storing the new color in tempColor to be passed to the next proc
+    
+    lea bx,initGrid
+
+    mov ax,arrowPointer ;row
+    mov di,arrowPointer+2;column
+
+    whitePawnMove1:
+        sub ax,1
+        mov tempRow,ax
+        mov tempColumn,di
+        pusha
+        call checkGridBorders2
+        cmp ch,1
+        jne initWhitePawnMove2
+        call setSquareColor
+
+    initWhitePawnMove2: 
+        popa
+        mov ax,arrowPointer ;row
+        mov di,arrowPointer+2;column
+
+    whitePawnMove2:
+        cmp ax, 6 ;Checking if it's the first movement
+        jne noTwoStepsForWhitePawn
+
+        sub ax,2
+        mov tempRow,ax
+        mov tempColumn,di
+        pusha
+        call checkGridBorders2
+        cmp ch,1
+        jne returnWhitePawn
+        call setSquareColor
+
+    returnWhitePawn:
+        popa
+        ret
+    
+    noTwoStepsForWhitePawn:
+        ret
+    ret
+whitePawnAvMoves endp
