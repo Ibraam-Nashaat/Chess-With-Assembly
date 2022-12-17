@@ -800,7 +800,7 @@ blackPawnAvMoves proc
         mov tempRow,ax
         mov tempColumn,di
         add tempRow,1
-        pusha
+        
         call checkGridBorders2
         cmp ch,1
         jne returnBlackPawn
@@ -821,18 +821,17 @@ blackPawnAvMoves proc
         call setSquareColor
 
     initBlackPawnMove2: 
-        popa
         mov ax,arrowPointer ;row
         mov di,arrowPointer+2;column
 
     blackPawnMove2:
         cmp ax, 1 ;Checking if it's the first movement
-        jne noTwoStepsForBlackPawn
+        jne returnBlackPawn
 
         mov tempRow,ax
         mov tempColumn,di
         add tempRow,2
-        pusha
+
         call checkGridBorders2
         cmp ch,1
         jne returnBlackPawn
@@ -853,11 +852,8 @@ blackPawnAvMoves proc
         call setSquareColor
 
     returnBlackPawn:
-        popa
-        ret
-    
-    noTwoStepsForBlackPawn:
-        ret
+        ret 
+
     ret
 blackPawnAvMoves endp
 
@@ -874,7 +870,7 @@ whitePawnAvMoves proc
         mov tempRow,ax
         mov tempColumn,di
         sub tempRow,1
-        pusha
+
         call checkGridBorders2
         cmp ch,1
         jne returnWhitePawn
@@ -896,18 +892,17 @@ whitePawnAvMoves proc
         call setSquareColor
 
     initWhitePawnMove2: 
-        popa
         mov ax,arrowPointer ;row
         mov di,arrowPointer+2;column
 
     whitePawnMove2:
         cmp ax, 6 ;Checking if it's the first movement
-        jne noTwoStepsForWhitePawn
+        jne returnWhitePawn
 
         mov tempRow,ax
         mov tempColumn,di
         sub tempRow,2
-        pusha
+
         call checkGridBorders2
         cmp ch,1
         jne returnWhitePawn
@@ -928,10 +923,7 @@ whitePawnAvMoves proc
         call setSquareColor
 
     returnWhitePawn:
-        popa
         ret
-    
-    noTwoStepsForWhitePawn:
-        ret
+        
     ret
 whitePawnAvMoves endp

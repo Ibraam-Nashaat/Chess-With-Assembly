@@ -66,6 +66,7 @@ setSquareColor proc
     ;gridAddress+(8*tempRow+tempColumn)
     mov ax,tempRow
     mov di,tempColumn
+    lea bx,initGrid
     mov si,8        
     mul si          
     add bx,ax       
