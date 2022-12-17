@@ -33,59 +33,63 @@ moveArrow proc far
 
     ret
     moveUp:
-           mov ax,arrowPointer 
-           dec ax               ;To move the arrowPointer up we will need to dec the row number
-           mov tempNewArrowptr,ax ;We will store it temporarily because we will need it later
-           call checkGridBorders ;check that the new position of arrowPointer is within the grid range
-           cmp ch,0              
-           je return            ;if the new arrowPosition is out of range we won't do anything so we would return
-           call redrawOldArrowPos;To redraw the old ArrowPosition with its default color in the grid
-           mov ax,tempNewArrowptr
-           mov arrowPointer,ax  ;update the arrowPointer position with the new position
-           jmp updateGrid      ;jmp to updateGrid reDraw the grid and the pieces
+        mov ax,arrowPointer 
+        dec ax               ;To move the arrowPointer up we will need to dec the row number
+        mov tempNewArrowptr,ax ;We will store it temporarily because we will need it later
+        call checkGridBorders ;check that the new position of arrowPointer is within the grid range
+        cmp ch,0              
+        je return            ;if the new arrowPosition is out of range we won't do anything so we would return
+        call redrawOldArrowPos;To redraw the old ArrowPosition with its default color in the grid
+        mov ax,tempNewArrowptr
+        mov arrowPointer,ax  ;update the arrowPointer position with the new position
+        jmp updateGrid      ;jmp to updateGrid reDraw the grid and the pieces
 
     moveDown:
-             mov ax,arrowPointer
-             inc ax
-             mov tempNewArrowptr,ax
-             call checkGridBorders
-             cmp ch,0
-             je return
-             call redrawOldArrowPos
-             mov ax,tempNewArrowptr
-             mov arrowPointer,ax
-             jmp updateGrid
+        mov ax,arrowPointer
+        inc ax
+        mov tempNewArrowptr,ax
+        call checkGridBorders
+        cmp ch,0
+        je return
+        call redrawOldArrowPos
+        mov ax,tempNewArrowptr
+        mov arrowPointer,ax
+        jmp updateGrid
 
 
     moveRight: 
-               mov ax,arrowPointer+2
-               inc ax
-               mov tempNewArrowptr,ax
-               call checkGridBorders
-               cmp ch,0
-               je return
-               call redrawOldArrowPos
-               mov ax,tempNewArrowptr
-               mov arrowPointer+2,ax
-               jmp updateGrid
+        mov ax,arrowPointer+2
+        inc ax
+        mov tempNewArrowptr,ax
+        call checkGridBorders
+        cmp ch,0
+        je return
+        call redrawOldArrowPos
+        mov ax,tempNewArrowptr
+        mov arrowPointer+2,ax
+        jmp updateGrid
 
     moveLeft: 
-               mov ax,arrowPointer+2
-               dec ax
-               mov tempNewArrowptr,ax
-               call checkGridBorders
-               cmp ch,0
-               je return
-               call redrawOldArrowPos
-               mov ax,tempNewArrowptr
-               mov arrowPointer+2,ax
-               jmp updateGrid
+        mov ax,arrowPointer+2
+        dec ax
+        mov tempNewArrowptr,ax
+        call checkGridBorders
+        cmp ch,0
+        je return
+        call redrawOldArrowPos
+        mov ax,tempNewArrowptr
+        mov arrowPointer+2,ax
+        jmp updateGrid
     
-    click:call checkClickCount 
-          ret
+    click:
+        call checkClickCount 
+        ret
 
-    updateGrid: call redrawNewArrowPos
- return:   ret
+    updateGrid: 
+        call redrawNewArrowPos
+
+    return:   
+        ret
 moveArrow ENDP
 
 ;Update the grid matrix (initGrid) which contains the colors of the square background

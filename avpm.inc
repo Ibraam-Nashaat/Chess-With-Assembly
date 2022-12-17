@@ -7,6 +7,8 @@
 ;   5)diagonalMoves
 ;   6)axialMoves
 ;   7)knightAvMoves
+;   8)blackPawnAvMoves
+;   9)whitePawnAvMoves
 bishopAvMoves proc
     call diagonalMoves
     ret

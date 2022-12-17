@@ -1,5 +1,5 @@
 .286
-.model huge   
+.model small   
 .stack 64                
 .data
 
@@ -322,27 +322,24 @@ include avpm.inc
 include utilsPM.inc
 include GenUtil.inc
 main PROC far
-    mov ax , @data ;
-    mov ds , ax ;
+    mov ax , @data
+    mov ds , ax
 
     ;Open the graphics mode
-    mov ah,0;
-    mov al,13h;
-    int 10h;
+    mov ah,0
+    mov al,13h
+    int 10h
 
     ;call the drawing module to draw the grid and pieces
     call Draw
 
     infiniteLoop: 
-                call moveArrow
-                 jmp infiniteLoop
-
+        call moveArrow
+        jmp infiniteLoop
 
     ;finish the execution and halting the program
-    mov ah , 4ch ;
-    int 21h;
-
-
+    mov ah , 4ch
+    int 21h
 
 main ENDP
 

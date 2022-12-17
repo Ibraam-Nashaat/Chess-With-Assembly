@@ -170,8 +170,9 @@ checkClickCount proc
     mov clickCount,al   ;reset the counter back to zero
     call resetDefGridAfter2ndClick 
     ret
-    click1:inc al
-           mov clickCount,al
-           call getClickedPiece
+    click1:
+        inc al
+        mov clickCount,al
+        call getClickedPiece
     ret
 checkClickCount endp

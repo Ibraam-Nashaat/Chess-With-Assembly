@@ -2,7 +2,10 @@
 ;This file contains the following procedures:
 ;   1) getClickedPiece 
 ;   2) checkGridBorders2 
-;   3) isBlack
+;   3) isValidPossibleMove
+;   4) getPieceInPos
+;   5) getFromPiece
+;   6) getToPiece
 
 ;to get what piece type was clicked
 getClickedPiece proc far
@@ -20,7 +23,6 @@ getClickedPiece proc far
 
     cmp cl,wBishopEnc
     je bishopAvMovesLabel
-
 
     ;The clicked piece is Rook
     cmp cl,wRookEnc
@@ -50,34 +52,49 @@ getClickedPiece proc far
     cmp cl, bKnightEnc
     je knightAvailableMovesLabel
 
+    ;The clicked piece is pawn
     cmp cl, bPawnEnc
     je blackPawnAvailableMovesLabel
 
     cmp cl, wPawnEnc
     je whitePawnAvailableMovesLabel
+
+    ;The user clicked on an empty place
+    cmp cl, emptyEnc
+    je resetClickCountLabel
     
     ret
 
-    bishopAvMovesLabel:call bishopAvMoves
-                       ret
+    bishopAvMovesLabel:
+        call bishopAvMoves
+        ret
 
-    rookAvailableMovesLabel:call rookAvMoves
-                            ret
+    rookAvailableMovesLabel:
+        call rookAvMoves
+        ret
 
-    queenAvailableMovesLabel:call queenAvMoves
-                             ret
+    queenAvailableMovesLabel:
+        call queenAvMoves
+        ret
 
-    kingAvailableMovesLabel:call kingAvMoves
-                            ret
+    kingAvailableMovesLabel:
+        call kingAvMoves
+        ret
                             
-    knightAvailableMovesLabel:call knightAvMoves
-                                ret
+    knightAvailableMovesLabel:
+        call knightAvMoves
+        ret
+
     blackPawnAvailableMovesLabel:
         call blackPawnAvMoves
         ret
 
     whitePawnAvailableMovesLabel:
         call whitePawnAvMoves
+        ret
+
+    resetClickCountLabel:
+        mov clickCount, 0
         ret
 
     ret
