@@ -310,6 +310,8 @@ tempNewArrowptr dw ?
 tempColor db ?  ;temporary variable to store the color encoding
 tempRow dw ?    ;temporary variable to store the current row that I am currently working at
 tempColumn dw ? ;temporary variable to store the current column that I am currently working at
+tempFromPiece db ? ;temporary variable to store the current piece that I am currently going from
+tempToPiece db ? ;temporary variable to store the current piece that I am currently going to
 
 clickCount db 0 ;1 after the first click and 2 after the second click
 

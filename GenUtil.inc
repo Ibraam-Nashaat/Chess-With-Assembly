@@ -22,7 +22,6 @@ getPiecePosToDraw proc
     ret
 getPiecePosToDraw endp
 
-
 ;get the starting pixel position of redrawing 
 getPixelStartPosToDraw proc
     ;startPixelRow= arrowPointerRow*25

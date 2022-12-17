@@ -2,6 +2,7 @@
 ;This file contains the following procedures:
 ;   1) getClickedPiece 
 ;   2) checkGridBorders2 
+;   3) isBlack
 
 ;to get what piece type was clicked
 getClickedPiece proc far
@@ -89,3 +90,44 @@ checkGridBorders2 proc
     outOfRange2:mov ch,0 ;set a flag indicating that it is out of Range
     ret
 checkGridBorders2 Endp
+
+isValidPossibleMove proc
+    cmp tempFromPiece, wBishopEnc ;checking if from piece is black
+    jl fromPieceIsBlack
+
+    fromPieceIsWhite:
+    cmp tempToPiece, emptyEnc
+    je secondPieceNotSameColor
+
+    cmp tempToPiece, wBishopEnc ;checking if to piece is black
+    jl secondPieceNotSameColor
+    
+    jmp secondPieceHasSameColor
+
+    fromPieceIsBlack:
+        cmp tempToPiece, emptyEnc
+        je secondPieceNotSameColor
+
+        cmp tempToPiece, bRookEnc ;checking if to piece is white
+        jg secondPieceNotSameColor
+
+    secondPieceHasSameColor:
+        mov ch, 0 ;set a flag indicating that the second piece has the same color
+        ret
+
+    secondPieceNotSameColor:
+        mov ch, 1 ;set a flag indicating that the second piece does not have the same color
+        ret
+
+isValidPossibleMove endp
+
+; From piece is located in (ax, di)
+getPieceInPos proc
+    lea bx,initPiecePos
+    mov si,8
+    mul si
+    add bx,ax
+    add bx,di 
+    mov cl, [bx]
+    ret
+getPieceInPos endp

@@ -38,6 +38,20 @@ kingAvMoves proc
         call checkGridBorders2
         cmp ch,1
         jne initKingSouth
+        
+        ; Checking if the next position has a piece of the same color
+        call getPieceInPos
+        mov tempFromPiece, cl
+
+        mov ax, tempRow
+        mov di, tempColumn
+
+        call getPieceInPos
+        mov tempToPiece, cl
+
+        call isValidPossibleMove
+        cmp ch, 1
+        jne initKingSouth
         call setSquareColor
 
     initKingSouth: 
@@ -50,9 +64,24 @@ kingAvMoves proc
         mov tempRow,ax
         mov tempColumn,di
         pusha
+        ; Checking if the next position is within the grid borders
         call checkGridBorders2
         cmp ch,1
         jne initKingNorth
+        ; Checking if the next position has a piece of the same color
+        call getPieceInPos
+        mov tempFromPiece, cl
+
+        mov ax, tempRow
+        mov di, tempColumn
+
+        call getPieceInPos
+        mov tempToPiece, cl
+
+        call isValidPossibleMove
+        cmp ch, 1
+        jne initKingNorth
+        
         call setSquareColor
 
     initKingNorth:
@@ -68,6 +97,21 @@ kingAvMoves proc
         call checkGridBorders2
         cmp ch,1
         jne initKingWest
+
+        ; Checking if the next position has a piece of the same color
+        call getPieceInPos
+        mov tempFromPiece, cl
+
+        mov ax, tempRow
+        mov di, tempColumn
+
+        call getPieceInPos
+        mov tempToPiece, cl
+
+        call isValidPossibleMove
+        cmp ch, 1
+        jne initKingWest
+
         call setSquareColor
 
     initKingWest:
@@ -83,6 +127,21 @@ kingAvMoves proc
         call checkGridBorders2
         cmp ch,1
         jne initKingNorthEast
+
+        ; Checking if the next position has a piece of the same color
+        call getPieceInPos
+        mov tempFromPiece, cl
+
+        mov ax, tempRow
+        mov di, tempColumn
+
+        call getPieceInPos
+        mov tempToPiece, cl
+
+        call isValidPossibleMove
+        cmp ch, 1
+        jne initKingNorthEast
+
         call setSquareColor
    
     initKingNorthEast:
@@ -99,6 +158,20 @@ kingAvMoves proc
         call checkGridBorders2
         cmp ch,1
         jne initKingNorthWest
+        ; Checking if the next position has a piece of the same color
+        call getPieceInPos
+        mov tempFromPiece, cl
+
+        mov ax, tempRow
+        mov di, tempColumn
+
+        call getPieceInPos
+        mov tempToPiece, cl
+
+        call isValidPossibleMove
+        cmp ch, 1
+        jne initKingNorthWest
+
         call setSquareColor 
 
     initKingNorthWest:
@@ -115,6 +188,20 @@ kingAvMoves proc
         call checkGridBorders2
         cmp ch,1
         jne initKingSouthEast
+        ; Checking if the next position has a piece of the same color
+        call getPieceInPos
+        mov tempFromPiece, cl
+
+        mov ax, tempRow
+        mov di, tempColumn
+
+        call getPieceInPos
+        mov tempToPiece, cl
+
+        call isValidPossibleMove
+        cmp ch, 1
+        jne initKingSouthEast
+
         call setSquareColor
 
     initKingSouthEast:
@@ -131,6 +218,20 @@ kingAvMoves proc
         call checkGridBorders2
         cmp ch,1
         jne initKingSouthWest
+        ; Checking if the next position has a piece of the same color
+        call getPieceInPos
+        mov tempFromPiece, cl
+
+        mov ax, tempRow
+        mov di, tempColumn
+
+        call getPieceInPos
+        mov tempToPiece, cl
+
+        call isValidPossibleMove
+        cmp ch, 1
+        jne initKingSouthWest
+
         call setSquareColor
 
     initKingSouthWest:
@@ -147,6 +248,20 @@ kingAvMoves proc
         call checkGridBorders2
         cmp ch,1
         jne returnKing
+        ; Checking if the next position has a piece of the same color
+        call getPieceInPos
+        mov tempFromPiece, cl
+
+        mov ax, tempRow
+        mov di, tempColumn
+
+        call getPieceInPos
+        mov tempToPiece, cl
+
+        call isValidPossibleMove
+        cmp ch, 1
+        jne returnKing
+
         call setSquareColor
             
 
