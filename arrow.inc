@@ -152,11 +152,8 @@ redrawOldArrowPos proc
     mov [bx],ch ;replace the current color of old arrowPosition with its original default color stored in ch
                 ;that we got from DefGrid
 
-    
     mov tempColor,ch
     call updateSquareBackgroundAndPiece
-
-
     
     ret
 redrawOldArrowPos endp 

@@ -315,12 +315,10 @@ diagonalMoves proc far
 diagonalMoves ENDP
 
 axialMoves proc far
-    
     mov al,blueEnc  ;setting the color of that position to green
     mov tempColor,al ;storing the new color in tempColor to be passed to the next proc
     mov ax,arrowPointer ;row
     mov di,arrowPointer+2;column
-    
     
     east:    
         add di,1
@@ -596,8 +594,6 @@ knightAvMoves endp
 blackPawnAvMoves proc
     mov al,blueEnc  ;setting the color of that position to green
     mov tempColor,al ;storing the new color in tempColor to be passed to the next proc
-    
-    
 
     mov ax,arrowPointer ;row
     mov di,arrowPointer+2;column
@@ -655,8 +651,6 @@ whitePawnAvMoves proc
     mov al,blueEnc  ;setting the color of that position to green
     mov tempColor,al ;storing the new color in tempColor to be passed to the next proc
     
-    
-
     mov ax,arrowPointer ;row
     mov di,arrowPointer+2;column
 

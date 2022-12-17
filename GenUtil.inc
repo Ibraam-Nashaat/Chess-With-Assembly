@@ -85,8 +85,6 @@ setSquareColor proc
 
     popa
     ret
-
-    ret
 setSquareColor endp
 
 
@@ -166,10 +164,11 @@ checkClickCount proc
     je click1 ;if it is the first click jmp to click1
 
     ;Otherwise it is the second click
-    mov al,0 
-    mov clickCount,al   ;reset the counter back to zero
+    mov clickCount,0   ;reset the counter back to zero
     call resetDefGridAfter2ndClick 
+
     ret
+    
     click1:
         inc al
         mov clickCount,al
