@@ -38,7 +38,7 @@ kingAvMoves proc
         call checkGridBorders2
         cmp ch,1
         jne initKingSouth
-        
+
         ; Checking if the next position has a piece of the same color
         call getPieceInPos
         mov tempFromPiece, cl
@@ -289,6 +289,20 @@ diagonalMoves proc far
         call checkGridBorders2
         cmp ch,1
         jne initNorthWest
+        ; Checking if the next position has a piece of the same color
+        call getPieceInPos
+        mov tempFromPiece, cl
+
+        mov ax, tempRow
+        mov di, tempColumn
+
+        call getPieceInPos
+        mov tempToPiece, cl
+
+        call isValidPossibleMove
+        cmp ch, 1
+        jne initNorthWest
+
         call setSquareColor
         popa 
         jmp northEast
@@ -307,6 +321,20 @@ diagonalMoves proc far
         call checkGridBorders2
         cmp ch,1
         jne initSouthEast
+        ; Checking if the next position has a piece of the same color
+        call getPieceInPos
+        mov tempFromPiece, cl
+
+        mov ax, tempRow
+        mov di, tempColumn
+
+        call getPieceInPos
+        mov tempToPiece, cl
+
+        call isValidPossibleMove
+        cmp ch, 1
+        jne initSouthEast
+
         call setSquareColor
         popa 
         jmp northWest
@@ -326,6 +354,20 @@ diagonalMoves proc far
         call checkGridBorders2
         cmp ch,1
         jne initSouthWest
+        ; Checking if the next position has a piece of the same color
+        call getPieceInPos
+        mov tempFromPiece, cl
+
+        mov ax, tempRow
+        mov di, tempColumn
+
+        call getPieceInPos
+        mov tempToPiece, cl
+
+        call isValidPossibleMove
+        cmp ch, 1
+        jne initSouthWest
+
         call setSquareColor
         popa 
         jmp southEast
@@ -343,6 +385,19 @@ diagonalMoves proc far
         pusha
         call checkGridBorders2
         cmp ch,1
+        jne return1
+        ; Checking if the next position has a piece of the same color
+        call getPieceInPos
+        mov tempFromPiece, cl
+
+        mov ax, tempRow
+        mov di, tempColumn
+
+        call getPieceInPos
+        mov tempToPiece, cl
+
+        call isValidPossibleMove
+        cmp ch, 1
         jne return1
         call setSquareColor
         popa 
@@ -371,6 +426,20 @@ axialMoves proc far
         call checkGridBorders2
         cmp ch,1
         jne initSouth
+        ; Checking if the next position has a piece of the same color
+        call getPieceInPos
+        mov tempFromPiece, cl
+
+        mov ax, tempRow
+        mov di, tempColumn
+
+        call getPieceInPos
+        mov tempToPiece, cl
+
+        call isValidPossibleMove
+        cmp ch, 1
+        jne initSouth
+
         call setSquareColor
         popa 
         jmp east
@@ -388,6 +457,20 @@ axialMoves proc far
         call checkGridBorders2
         cmp ch,1
         jne initNorth
+        ; Checking if the next position has a piece of the same color
+        call getPieceInPos
+        mov tempFromPiece, cl
+
+        mov ax, tempRow
+        mov di, tempColumn
+
+        call getPieceInPos
+        mov tempToPiece, cl
+
+        call isValidPossibleMove
+        cmp ch, 1
+        jne initNorth
+
         call setSquareColor
         popa 
         jmp south
@@ -405,6 +488,20 @@ axialMoves proc far
         call checkGridBorders2
         cmp ch,1
         jne initWest
+        ; Checking if the next position has a piece of the same color
+        call getPieceInPos
+        mov tempFromPiece, cl
+
+        mov ax, tempRow
+        mov di, tempColumn
+
+        call getPieceInPos
+        mov tempToPiece, cl
+
+        call isValidPossibleMove
+        cmp ch, 1
+        jne initWest
+
         call setSquareColor
         popa 
         jmp north
@@ -422,6 +519,20 @@ axialMoves proc far
         call checkGridBorders2
         cmp ch,1
         jne returnAxial
+        ; Checking if the next position has a piece of the same color
+        call getPieceInPos
+        mov tempFromPiece, cl
+
+        mov ax, tempRow
+        mov di, tempColumn
+
+        call getPieceInPos
+        mov tempToPiece, cl
+
+        call isValidPossibleMove
+        cmp ch, 1
+        jne returnAxial
+        
         call setSquareColor
         popa 
         jmp west
