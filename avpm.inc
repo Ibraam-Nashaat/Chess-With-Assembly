@@ -31,13 +31,13 @@ kingAvMoves proc
     
     
     KingEast: 
-        add di,1
         mov tempRow,ax
         mov tempColumn,di
-        pusha
+        add tempColumn,1
+
         call checkGridBorders2
         cmp ch,1
-        jne initKingSouth
+        jne kingSouth
 
         ; Checking if the next position has a piece of the same color
         call getFromPiece ; sets tempFromPiece to the piece in initial location
@@ -45,23 +45,18 @@ kingAvMoves proc
 
         call isValidPossibleMove
         cmp ch, 1
-        jne initKingSouth
+        jne kingSouth
         call setSquareColor
 
-    initKingSouth: 
-        popa
-        mov ax,arrowPointer ;row
-        mov di,arrowPointer+2;column
-
     kingSouth:
-        add ax,1
         mov tempRow,ax
         mov tempColumn,di
-        pusha
+        add tempRow,1
+
         ; Checking if the next position is within the grid borders
         call checkGridBorders2
         cmp ch,1
-        jne initKingNorth
+        jne kingNorth
 
         ; Checking if the next position has a piece of the same color
         call getFromPiece ; sets tempFromPiece to the piece in initial location
@@ -69,23 +64,18 @@ kingAvMoves proc
 
         call isValidPossibleMove
         cmp ch, 1
-        jne initKingNorth
+        jne kingNorth
         
         call setSquareColor
 
-    initKingNorth:
-        popa
-        mov ax,arrowPointer ;row
-        mov di,arrowPointer+2;column
-
-    KingNorth:
-        sub ax,1
+    kingNorth:
         mov tempRow,ax
         mov tempColumn,di
-        pusha
+        sub tempRow,1
+
         call checkGridBorders2
         cmp ch,1
-        jne initKingWest
+        jne kingWest
 
         ; Checking if the next position has a piece of the same color
         call getFromPiece ; sets tempFromPiece to the piece in initial location
@@ -93,23 +83,18 @@ kingAvMoves proc
 
         call isValidPossibleMove
         cmp ch, 1
-        jne initKingWest
+        jne kingWest
 
         call setSquareColor
-
-    initKingWest:
-        popa
-        mov ax,arrowPointer ;row
-        mov di,arrowPointer+2;column
 
     kingWest:
-        sub di,1
         mov tempRow,ax
         mov tempColumn,di
-        pusha
+        sub tempColumn,1
+
         call checkGridBorders2
         cmp ch,1
-        jne initKingNorthEast
+        jne kingNorthEast
 
         ; Checking if the next position has a piece of the same color
         call getFromPiece ; sets tempFromPiece to the piece in initial location
@@ -117,24 +102,19 @@ kingAvMoves proc
 
         call isValidPossibleMove
         cmp ch, 1
-        jne initKingNorthEast
+        jne kingNorthEast
 
         call setSquareColor
-   
-    initKingNorthEast:
-        popa
-        mov ax,arrowPointer ;row
-        mov di,arrowPointer+2;column
 
     kingNorthEast:
-        sub ax,1
-        add di,1
         mov tempRow,ax
         mov tempColumn,di
-        pusha
+        sub tempRow,1
+        add tempColumn,1
+
         call checkGridBorders2
         cmp ch,1
-        jne initKingNorthWest
+        jne kingNorthWest
 
         ; Checking if the next position has a piece of the same color
         call getFromPiece ; sets tempFromPiece to the piece in initial location
@@ -142,24 +122,19 @@ kingAvMoves proc
 
         call isValidPossibleMove
         cmp ch, 1
-        jne initKingNorthWest
+        jne kingNorthWest
 
-        call setSquareColor 
-
-    initKingNorthWest:
-        popa
-        mov ax,arrowPointer ;row
-        mov di,arrowPointer+2;column
+        call setSquareColor
 
     kingNorthWest:
-        sub ax,1
-        sub di,1
         mov tempRow,ax
         mov tempColumn,di
-        pusha
+        sub tempRow,1
+        sub tempColumn,1
+
         call checkGridBorders2
         cmp ch,1
-        jne initKingSouthEast
+        jne kingSouthEast
 
         ; Checking if the next position has a piece of the same color
         call getFromPiece ; sets tempFromPiece to the piece in initial location
@@ -167,24 +142,19 @@ kingAvMoves proc
 
         call isValidPossibleMove
         cmp ch, 1
-        jne initKingSouthEast
+        jne kingSouthEast
 
         call setSquareColor
-
-    initKingSouthEast:
-        popa
-        mov ax,arrowPointer ;row
-        mov di,arrowPointer+2;column
 
     kingSouthEast:
-        add ax,1
-        add di,1
         mov tempRow,ax
         mov tempColumn,di
-        pusha
+        add tempRow,1
+        add tempColumn,1
+
         call checkGridBorders2
         cmp ch,1
-        jne initKingSouthWest
+        jne kingSouthWest
 
         ; Checking if the next position has a piece of the same color
         call getFromPiece ; sets tempFromPiece to the piece in initial location
@@ -192,21 +162,16 @@ kingAvMoves proc
 
         call isValidPossibleMove
         cmp ch, 1
-        jne initKingSouthWest
+        jne kingSouthWest
 
         call setSquareColor
 
-    initKingSouthWest:
-        popa
-        mov ax,arrowPointer ;row
-        mov di,arrowPointer+2;column
-
     KingSouthWest:
-        add ax,1
-        sub di,1
         mov tempRow,ax
         mov tempColumn,di
-        pusha
+        add tempRow,1
+        sub tempColumn,1
+
         call checkGridBorders2
         cmp ch,1
         jne returnKing
@@ -222,8 +187,8 @@ kingAvMoves proc
         call setSquareColor
             
 
-   returnKing: popa
-                ret
+    returnKing:
+        ret
     ret
 kingAvMoves endp
 
@@ -441,7 +406,7 @@ axialMoves proc far
         call checkGridBorders2
         cmp ch,1
         jne returnAxial
-        
+
         ; Checking if the next position has a piece of the same color
         call getFromPiece ; sets tempFromPiece to the piece in initial location
         call getToPiece ; sets tempToPiece to the piece in next location
