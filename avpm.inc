@@ -554,10 +554,10 @@ knightAvMoves proc
     mov di,arrowPointer+2;column
     
     knightMove1:
-        add di,2
-        add ax, 1
         mov tempRow,ax
         mov tempColumn,di
+        add tempRow, 1
+        add tempColumn,2
         pusha
         call checkGridBorders2
         cmp ch,1
@@ -584,10 +584,10 @@ knightAvMoves proc
         mov di,arrowPointer+2;column
 
     knightMove2:
-        add di,2
-        sub ax, 1
         mov tempRow,ax
         mov tempColumn,di
+        sub tempRow, 1
+        add tempColumn,2
         pusha
         call checkGridBorders2
         cmp ch,1
@@ -614,10 +614,10 @@ knightAvMoves proc
         mov di,arrowPointer+2;column
 
     knightMove3:
-        add ax,2
-        add di, 1
         mov tempRow,ax
         mov tempColumn,di
+        add tempRow,2
+        add tempColumn, 1
         pusha
         call checkGridBorders2
         cmp ch,1
@@ -644,10 +644,10 @@ knightAvMoves proc
         mov di,arrowPointer+2;column
 
     knightMove4:
-        add ax,2
-        sub di, 1
         mov tempRow,ax
         mov tempColumn,di
+        add tempRow,2
+        sub tempColumn, 1
         pusha
         call checkGridBorders2
         cmp ch,1
@@ -674,10 +674,10 @@ knightAvMoves proc
         mov di,arrowPointer+2;column
 
     knightMove5:
-        sub di,2
-        add ax,1
         mov tempRow,ax
         mov tempColumn,di
+        sub tempColumn,2
+        add tempRow,1
         pusha
         call checkGridBorders2
         cmp ch,1
@@ -704,10 +704,10 @@ knightAvMoves proc
         mov di,arrowPointer+2;column
 
     knightMove6:
-        sub di,2
-        sub ax,1
         mov tempRow,ax
         mov tempColumn,di
+        sub tempColumn,2
+        sub tempRow,1
         pusha
         call checkGridBorders2
         cmp ch,1
@@ -733,10 +733,10 @@ knightAvMoves proc
         mov di,arrowPointer+2;column
 
     knightMove7:
-        sub ax,2
-        sub di,1
         mov tempRow,ax
         mov tempColumn,di
+        sub tempRow,2
+        sub tempColumn,1
         pusha
         call checkGridBorders2
         cmp ch,1
@@ -764,10 +764,10 @@ knightAvMoves proc
         mov di,arrowPointer+2;column
 
     KnightMove8:
-        sub ax,2
-        add di,1
         mov tempRow,ax
         mov tempColumn,di
+        sub tempRow,2
+        add tempColumn,1
         pusha
         call checkGridBorders2
         cmp ch,1
@@ -805,13 +805,27 @@ blackPawnAvMoves proc
     mov di,arrowPointer+2;column
 
     blackPawnMove1:
-        add ax,1
         mov tempRow,ax
         mov tempColumn,di
+        add tempRow,1
         pusha
         call checkGridBorders2
         cmp ch,1
         jne initBlackPawnMove2
+        ; Checking if the next position has a piece of the same color
+        call getPieceInPos
+        mov tempFromPiece, cl
+
+        mov ax, tempRow
+        mov di, tempColumn
+
+        call getPieceInPos
+        mov tempToPiece, cl
+
+        call isValidPossibleMove
+        cmp ch, 1
+        jne returnBlackPawn
+
         call setSquareColor
 
     initBlackPawnMove2: 
@@ -823,13 +837,27 @@ blackPawnAvMoves proc
         cmp ax, 1 ;Checking if it's the first movement
         jne noTwoStepsForBlackPawn
 
-        add ax,2
         mov tempRow,ax
         mov tempColumn,di
+        add tempRow,2
         pusha
         call checkGridBorders2
         cmp ch,1
         jne returnBlackPawn
+        ; Checking if the next position has a piece of the same color
+        call getPieceInPos
+        mov tempFromPiece, cl
+
+        mov ax, tempRow
+        mov di, tempColumn
+
+        call getPieceInPos
+        mov tempToPiece, cl
+
+        call isValidPossibleMove
+        cmp ch, 1
+        jne returnBlackPawn
+
         call setSquareColor
 
     returnBlackPawn:
@@ -851,9 +879,9 @@ whitePawnAvMoves proc
     mov di,arrowPointer+2;column
 
     whitePawnMove1:
-        sub ax,1
         mov tempRow,ax
         mov tempColumn,di
+        sub tempRow,1
         pusha
         call checkGridBorders2
         cmp ch,1
@@ -869,9 +897,9 @@ whitePawnAvMoves proc
         cmp ax, 6 ;Checking if it's the first movement
         jne noTwoStepsForWhitePawn
 
-        sub ax,2
         mov tempRow,ax
         mov tempColumn,di
+        sub tempRow,2
         pusha
         call checkGridBorders2
         cmp ch,1
