@@ -684,5 +684,48 @@ knightAvMoves proc
     ret
 knightAvMoves endp
 
+blackPawnAvMoves proc
+    mov al,blueEnc  ;setting the color of that position to green
+    mov tempColor,al ;storing the new color in tempColor to be passed to the next proc
+    
+    lea bx,initGrid
 
+    mov ax,arrowPointer ;row
+    mov di,arrowPointer+2;column
 
+    blackPawnMove1:
+        add ax,1
+        mov tempRow,ax
+        mov tempColumn,di
+        pusha
+        call checkGridBorders2
+        cmp ch,1
+        jne initBlackPawnMove2
+        call setSquareColor
+
+    initBlackPawnMove2: 
+        popa
+        mov ax,arrowPointer ;row
+        mov di,arrowPointer+2;column
+
+    blackPawnMove2:
+        cmp ax, 1 ;Checking if it's the first movement
+        jne noMoreMoves
+
+        add ax,2
+        mov tempRow,ax
+        mov tempColumn,di
+        pusha
+        call checkGridBorders2
+        cmp ch,1
+        jne returnBlackPawn
+        call setSquareColor
+
+    returnBlackPawn:
+        popa
+        ret
+    
+    noMoreMoves:
+        ret
+    ret
+blackPawnAvMoves endp

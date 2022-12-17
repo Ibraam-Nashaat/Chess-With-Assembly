@@ -49,6 +49,9 @@ getClickedPiece proc far
 
     cmp cl, bKnightEnc
     je knightAvailableMovesLabel
+
+    cmp cl, bPawnEnc
+    je blackPawnAvailableMovesLabel
     
     ret
 
@@ -66,6 +69,9 @@ getClickedPiece proc far
                             
     knightAvailableMovesLabel:call knightAvMoves
                                 ret
+    blackPawnAvailableMovesLabel:
+        call blackPawnAvMoves
+        ret
 
     ret
 getClickedPiece endp
@@ -101,7 +107,7 @@ isValidPossibleMove proc
 
     cmp tempToPiece, wBishopEnc ;checking if to piece is black
     jl secondPieceNotSameColor
-    
+
     jmp secondPieceHasSameColor
 
     fromPieceIsBlack:

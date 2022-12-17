@@ -228,7 +228,7 @@ wRookEnc equ 12
 ;initial position of each piece in the 2D-Grid
 initPiecePos db   6,3,1,5,2,1,3,6
             db   4,4,4,4,4,4,4,4
-            db   0,0,0,0,0,0,0,0
+            db   4,0,0,0,0,0,0,0
             db   0,0,0,0,0,0,0,0
             db   0,0,0,0,0,0,0,0
             db   0,0,0,0,0,0,0,0

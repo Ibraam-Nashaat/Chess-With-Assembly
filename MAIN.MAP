@@ -1,9 +1,9 @@
 
  Start  Stop   Length Name               Class
 
- 00000H 009A7H 009A8H MAIN_TEXT          CODE
- 009B0H 02814H 01E65H _DATA              DATA
- 02820H 0285FH 00040H STACK              STACK
+ 00000H 00A02H 00A03H MAIN_TEXT          CODE
+ 00A10H 02874H 01E65H _DATA              DATA
+ 02880H 028BFH 00040H STACK              STACK
 
-Program entry point at 0000:098F
+Program entry point at 0000:09EA
 
