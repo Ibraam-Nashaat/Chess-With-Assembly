@@ -156,7 +156,7 @@ isValidPossibleMove proc
         ret
 
     emptySquare:
-        mov ch,2
+        mov ch,1
         ret
 
 isValidPossibleMove endp
