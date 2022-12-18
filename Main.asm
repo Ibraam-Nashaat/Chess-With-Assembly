@@ -226,14 +226,14 @@ wQueenEnc equ 11
 wRookEnc equ 12
 
 ;initial position of each piece in the 2D-Grid
-initPiecePos db   6,3,1,5,2,1,3,6
-            db   4,4,4,4,4,4,4,4
-            db   4,0,0,0,0,0,0,0
-            db   0,0,0,0,0,0,0,0
-            db   9,0,10,0,8,0,0,0
+initPiecePos db   0,3,0,0,2,1,0,6
+            db   4,0,4,4,8,4,4,4
+            db   4,4,7,0,0,4,0,0
+            db   12,1,0,3,0,0,0,5
+            db   9,10,10,0,0,0,0,0
             db   10,0,0,0,0,10,0,0
-            db   0,10,0,10,10,0,10,10
-            db   12,0,7,11,8,7,9,12
+            db   0,0,0,10,10,0,10,10
+            db   6,0,0,11,0,7,9,12
 
 startDrawX dw ?
 
@@ -312,6 +312,7 @@ tempRow dw ?    ;temporary variable to store the current row that I am currently
 tempColumn dw ? ;temporary variable to store the current column that I am currently working at
 tempFromPiece db ? ;temporary variable to store the current piece that I am currently going from
 tempToPiece db ? ;temporary variable to store the current piece that I am currently going to
+notEmptyToPlace db ?
 
 clickCount db 0 ;1 after the first click and 2 after the second click
 

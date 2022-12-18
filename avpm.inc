@@ -46,8 +46,8 @@ kingAvMoves proc
         call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
-        cmp ch, 1
-        jne kingSouth
+        cmp ch, 0
+        je kingSouth
         call setSquareColor
 
     kingSouth:
@@ -65,8 +65,8 @@ kingAvMoves proc
         call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
-        cmp ch, 1
-        jne kingNorth
+        cmp ch, 0
+        je kingNorth
         
         call setSquareColor
 
@@ -84,8 +84,8 @@ kingAvMoves proc
         call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
-        cmp ch, 1
-        jne kingWest
+        cmp ch, 0
+        je kingWest
 
         call setSquareColor
 
@@ -103,8 +103,8 @@ kingAvMoves proc
         call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
-        cmp ch, 1
-        jne kingNorthEast
+        cmp ch, 0
+        je kingNorthEast
 
         call setSquareColor
 
@@ -123,8 +123,8 @@ kingAvMoves proc
         call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
-        cmp ch, 1
-        jne kingNorthWest
+        cmp ch, 0
+        je kingNorthWest
 
         call setSquareColor
 
@@ -143,8 +143,8 @@ kingAvMoves proc
         call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
-        cmp ch, 1
-        jne kingSouthEast
+        cmp ch, 0
+        je kingSouthEast
 
         call setSquareColor
 
@@ -163,8 +163,8 @@ kingAvMoves proc
         call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
-        cmp ch, 1
-        jne kingSouthWest
+        cmp ch, 0
+        je kingSouthWest
 
         call setSquareColor
 
@@ -183,8 +183,8 @@ kingAvMoves proc
         call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
-        cmp ch, 1
-        jne returnKing
+        cmp ch, 0
+        je returnKing
 
         call setSquareColor
             
@@ -202,6 +202,7 @@ diagonalMoves proc far
     mov tempColor,al ;storing the new color in tempColor to be passed to the next proc
     mov ax,arrowPointer ;row
     mov di,arrowPointer+2;column
+    call getFromPiece ; sets tempFromPiece to the piece in initial location
     
     
     northEast:
@@ -215,14 +216,15 @@ diagonalMoves proc far
         jne initNorthWest
 
         ; Checking if the next position has a piece of the same color
-        call getFromPiece ; sets tempFromPiece to the piece in initial location
         call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
-        cmp ch, 1
-        jne initNorthWest
+        cmp ch, 0
+        je initNorthWest
 
         call setSquareColor
+        cmp notEmptyToPlace,1
+        je initNorthWest
         popa 
         jmp northEast
 
@@ -242,14 +244,15 @@ diagonalMoves proc far
         jne initSouthEast
 
         ; Checking if the next position has a piece of the same color
-        call getFromPiece ; sets tempFromPiece to the piece in initial location
         call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
-        cmp ch, 1
-        jne initSouthEast
+        cmp ch, 0
+        je initSouthEast
 
         call setSquareColor
+        cmp notEmptyToPlace,1
+        je initSouthEast
         popa 
         jmp northWest
 
@@ -270,14 +273,15 @@ diagonalMoves proc far
         jne initSouthWest
 
         ; Checking if the next position has a piece of the same color
-        call getFromPiece ; sets tempFromPiece to the piece in initial location
         call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
-        cmp ch, 1
-        jne initSouthWest
+        cmp ch, 0
+        je initSouthWest
 
         call setSquareColor
+        cmp notEmptyToPlace,1
+        je initSouthWest
         popa 
         jmp southEast
 
@@ -297,13 +301,14 @@ diagonalMoves proc far
         jne return1
 
         ; Checking if the next position has a piece of the same color
-        call getFromPiece ; sets tempFromPiece to the piece in initial location
         call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
-        cmp ch, 1
-        jne return1
+        cmp ch, 0
+        je return1
         call setSquareColor
+        cmp notEmptyToPlace,1
+        je return1
         popa 
         jmp southWest
 
@@ -319,6 +324,8 @@ axialMoves proc far
     mov tempColor,al ;storing the new color in tempColor to be passed to the next proc
     mov ax,arrowPointer ;row
     mov di,arrowPointer+2;column
+    call getFromPiece ; sets tempFromPiece to the piece in initial location
+
     
     east:    
         add di,1
@@ -330,14 +337,15 @@ axialMoves proc far
         jne initSouth
 
         ; Checking if the next position has a piece of the same color
-        call getFromPiece ; sets tempFromPiece to the piece in initial location
         call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
-        cmp ch, 1
-        jne initSouth
+        cmp ch, 0
+        je initSouth
 
         call setSquareColor
+        cmp notEmptyToPlace,1
+        je initSouth
         popa 
         jmp east
 
@@ -356,14 +364,15 @@ axialMoves proc far
         jne initNorth
 
         ; Checking if the next position has a piece of the same color
-        call getFromPiece ; sets tempFromPiece to the piece in initial location
         call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
-        cmp ch, 1
-        jne initNorth
+        cmp ch, 0
+        je initNorth
 
         call setSquareColor
+        cmp notEmptyToPlace,1
+        je initNorth
         popa 
         jmp south
 
@@ -382,14 +391,15 @@ axialMoves proc far
         jne initWest
 
         ; Checking if the next position has a piece of the same color
-        call getFromPiece ; sets tempFromPiece to the piece in initial location
         call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
-        cmp ch, 1
-        jne initWest
+        cmp ch, 0
+        je initWest
 
         call setSquareColor
+        cmp notEmptyToPlace,1
+        je initWest
         popa 
         jmp north
 
@@ -408,14 +418,15 @@ axialMoves proc far
         jne returnAxial
 
         ; Checking if the next position has a piece of the same color
-        call getFromPiece ; sets tempFromPiece to the piece in initial location
         call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
-        cmp ch, 1
-        jne returnAxial
+        cmp ch, 0
+        je returnAxial
         
         call setSquareColor
+        cmp notEmptyToPlace,1
+        je returnAxial
         popa 
         jmp west
 
@@ -448,8 +459,8 @@ knightAvMoves proc
         call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
-        cmp ch, 1
-        jne knightMove2
+        cmp ch, 0
+        je knightMove2
 
         call setSquareColor
 
@@ -467,8 +478,8 @@ knightAvMoves proc
         call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
-        cmp ch, 1
-        jne knightMove3
+        cmp ch, 0
+        je knightMove3
 
         call setSquareColor
 
@@ -486,8 +497,8 @@ knightAvMoves proc
         call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
-        cmp ch, 1
-        jne knightMove4
+        cmp ch, 0
+        je knightMove4
 
         call setSquareColor
 
@@ -505,8 +516,8 @@ knightAvMoves proc
         call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
-        cmp ch, 1
-        jne knightMove5
+        cmp ch, 0
+        je knightMove5
 
         call setSquareColor
 
@@ -524,8 +535,8 @@ knightAvMoves proc
         call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
-        cmp ch, 1
-        jne knightMove6
+        cmp ch, 0
+        je knightMove6
 
         call setSquareColor
 
@@ -543,8 +554,8 @@ knightAvMoves proc
         call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
-        cmp ch, 1
-        jne knightMove7
+        cmp ch, 0
+        je knightMove7
         call setSquareColor
 
     knightMove7:
@@ -561,8 +572,8 @@ knightAvMoves proc
         call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
-        cmp ch, 1
-        jne knightMove8
+        cmp ch, 0
+        je knightMove8
 
         call setSquareColor
 
@@ -580,8 +591,8 @@ knightAvMoves proc
         call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
-        cmp ch, 1
-        jne returnKnight
+        cmp ch, 0
+        je returnKnight
         
         call setSquareColor
             
@@ -611,8 +622,8 @@ blackPawnAvMoves proc
         call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
-        cmp ch, 1
-        jne returnBlackPawn
+        cmp ch, 0
+        je returnBlackPawn
 
         call setSquareColor
 
@@ -636,8 +647,8 @@ blackPawnAvMoves proc
         call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
-        cmp ch, 1
-        jne returnBlackPawn
+        cmp ch, 0
+        je returnBlackPawn
 
         call setSquareColor
 
@@ -668,8 +679,8 @@ whitePawnAvMoves proc
         call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
-        cmp ch, 1
-        jne returnWhitePawn
+        cmp ch, 0
+        je returnWhitePawn
 
         call setSquareColor
 
@@ -693,8 +704,8 @@ whitePawnAvMoves proc
         call getToPiece ; sets tempToPiece to the piece in next location
 
         call isValidPossibleMove
-        cmp ch, 1
-        jne returnWhitePawn
+        cmp ch, 0
+        je returnWhitePawn
 
         call setSquareColor
 
