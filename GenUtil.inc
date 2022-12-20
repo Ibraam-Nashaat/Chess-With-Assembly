@@ -137,22 +137,30 @@ resetDefGridAfter2ndClick proc
     changeColor:
         mov al,[si]
         mov [bx],al ;moving the color encoding of stdGrid to defGrid
+        mov bl,greenEnc
+        cmp [di],bl
+        je setSquareColorToGreen
         mov [di],al ;moving the color encoding of stdGrid to initGrid
+        mov tempColor,al
         ;getting the exact position of the cell by
         ;row= cx/8
         ;column=cx%8
+ continueChangingColor:       
         mov ax,cx  
         mov cx,8d
         div cx
         mov tempRow,ax
         mov tempColumn,dx
         mov di,dx
-        mov bl,[si]
-        mov tempColor,bl
+
         lea bx,initGrid
         call updateSquareBackgroundAndPiece
         jmp contLoopDefGrid
     ret
+
+    setSquareColorToGreen:mov bl,[di]
+                          mov tempColor,bl
+                          jmp continueChangingColor
 resetDefGridAfter2ndClick endp
 
 
