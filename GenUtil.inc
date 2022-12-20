@@ -165,6 +165,7 @@ checkClickCount proc
 
     ;Otherwise it is the second click
     mov clickCount,0   ;reset the counter back to zero
+    call checkFromPosContainsPieceOrNot
     call resetDefGridAfter2ndClick 
 
     ret
@@ -175,3 +176,66 @@ checkClickCount proc
         call getClickedPiece
     ret
 checkClickCount endp
+
+checkFromPosContainsPieceOrNot proc
+    mov ax,clickedPieceRow ;storing the row number
+    mov di,clickedPieceCol;storing the column number
+    mov tempRow,ax
+    mov tempColumn,di
+    call getPiecePosToDraw
+
+    cmp cl,emptyEnc
+    je fromPieceIsEmptyCell
+
+    mov fromPieceEnc,cl
+    call checkAvailbleMov
+
+    fromPieceIsEmptyCell:ret ;move isn't available as from position does't contain any piece
+
+    ret
+checkFromPosContainsPieceOrNot endp
+
+checkAvailbleMov proc   
+    mov ax,arrowPointer ;storing the row number
+    mov di,arrowPointer+2;storing the column number
+    lea bx,defGrid
+    mov si,8
+    mul si
+    add bx,ax
+    add bx,di 
+    mov cl,[bx]
+
+    cmp cl,blueEnc
+    jne notAvailableMove
+
+
+    availableMov:mov ax,arrowPointer
+                 mov di,arrowPointer+2
+                 mov tempRow,ax
+                 mov tempColumn,di
+                 call getPiecePosToDraw
+                 mov cl,fromPieceEnc
+                 mov [bx],cl
+
+
+                 mov ax,clickedPieceRow ;storing the row number
+                 mov di,clickedPieceCol;storing the column number
+                 mov tempRow,ax
+                 mov tempColumn,di
+                 call getPiecePosToDraw
+                 mov cl,emptyEnc
+                 mov [bx],cl
+                 call updateSquareBackgroundAndPiece
+
+                mov ax,clickedPieceRow ;storing the row number
+                mov di,clickedPieceCol;storing the column number
+                lea bx,defGrid
+                mov si,8
+                mul si
+                add bx,ax
+                add bx,di 
+                mov cl,blueEnc
+                mov [bx],cl
+                 
+  notAvailableMove:  ret
+checkAvailbleMov endp

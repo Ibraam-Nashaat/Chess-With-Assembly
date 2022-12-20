@@ -313,6 +313,10 @@ tempColumn dw ? ;temporary variable to store the current column that I am curren
 tempFromPiece db ? ;temporary variable to store the current piece that I am currently going from
 tempToPiece db ? ;temporary variable to store the current piece that I am currently going to
 notEmptyToPlace db ?
+clickedPieceRow dw ? ;to store the row of the clicked piece
+clickedPieceCol dw ? ;to store the column of the clicked piece
+fromPieceEnc db ?
+
 
 clickCount db 0 ;1 after the first click and 2 after the second click
 

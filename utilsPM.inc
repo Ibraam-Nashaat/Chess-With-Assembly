@@ -14,6 +14,8 @@ getClickedPiece proc far
     mov di,arrowPointer+2;column
     mov tempRow,ax
     mov tempColumn,di
+    mov clickedPieceRow,ax
+    mov clickedPieceCol,di
 
     call getPiecePosToDraw ;to get the piece encoding in cl
 
