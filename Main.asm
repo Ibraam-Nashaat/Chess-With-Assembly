@@ -327,6 +327,7 @@ fromPieceEnc db ?
 
 clickCount db 0 ;1 after the first click and 2 after the second click
 seconds  db 99
+canMove  db 1
 
 
 .code

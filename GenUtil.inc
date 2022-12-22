@@ -181,8 +181,13 @@ checkClickCount proc
     click1:
         inc al
         mov clickCount,al
+        call checkIfClickedPieceTimerIsZero
+        mov al,canMove
+        cmp al,0d
+        je pieceTimerIsGreaterThanZero
         call getClickedPiece
-    ret
+        
+    pieceTimerIsGreaterThanZero:ret
 checkClickCount endp
 
 checkFromPosContainsPieceOrNot proc
@@ -227,6 +232,7 @@ checkAvailbleMov proc
                  call getPiecePosToDraw
                  mov cl,fromPieceEnc
                  mov [bx],cl
+                 call addDelayTimeToMovingPiece
 
                 ;update the position of the FROM piece with empty cell in initPiecePos as the piece has moved 
                  mov ax,clickedPieceRow ;storing the row number

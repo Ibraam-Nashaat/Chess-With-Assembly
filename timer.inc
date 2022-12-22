@@ -24,7 +24,7 @@ updateTimerMatrix proc
     loopTimerMatrix:            mov al,[bx]
                                 cmp al,0
                                 jne decrementTimer
-    continuTimerLoopUpdating:   inc bx
+    continueTimerLoopUpdating:   inc bx
                                 inc cl
                                 cmp cl,64d
                                 jne loopTimerMatrix
@@ -33,5 +33,39 @@ updateTimerMatrix proc
     ret
     decrementTimer:dec al
                    mov [bx],al
-                   jmp continuTimerLoopUpdating
+                   jmp continueTimerLoopUpdating
 updateTimerMatrix endp
+
+
+addDelayTimeToMovingPiece proc
+    pusha
+    call getPiecePosTimer
+    mov [bx],3d
+    popa
+    ret
+addDelayTimeToMovingPiece endp
+
+checkIfClickedPieceTimerIsZero proc
+    pusha
+    call getPiecePosTimer
+    mov bl,[bx]
+    cmp bl,0d
+    jne canNotMove
+    mov canMove,1
+    popa
+    ret
+    canNotMove: mov canMove,0
+                popa
+                ret
+checkIfClickedPieceTimerIsZero endp
+
+getPiecePosTimer proc
+    mov ax,arrowPointer
+    mov di,arrowPointer+2
+    lea bx,timer
+    mov si,8
+    mul si
+    add bx,ax
+    add bx,di 
+    ret
+getPiecePosTimer endp
