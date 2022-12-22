@@ -7,4 +7,4 @@ display message_name mov ah, 9 mov dx, offset game_mode int 21h ;move cursor to
 ah, 9 mov dx, offset end_game int 21h ;press the key mov ah,0 int 16h
 ;conditions ;F1 mov bl,3Bh cmp ah,bl jz Clean ;F2 mov bl,3Ch cmp ah,bl jz Clean
 ;ESC mov bl,01 cmp ah,bl jz Clean Clean:mov ax,0600h mov bh,07 mov cx,0 mov
-dx,184FH int 10h ret modes endp
+dx,184FH int 10h ret exit: mov ah , 4ch int 21h modes endp
