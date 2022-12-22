@@ -329,6 +329,21 @@ clickCount db 0 ;1 after the first click and 2 after the second click
 seconds  db 99
 canMove  db 1
 
+chatting_mode db 'To start chatting press F1','$'
+game_mode db 'To start the game press F2','$'
+end_game db 'To end the program press Esc','$'
+msg_name db 'Please enter your name:','$'
+msg_startGame db 'Press Enter Key to continue','$'
+mybuffer label byte
+bufferSize db 15
+actualSize db ?
+bufferName db 15 dup('$')
+
+modeFlag db ?
+
+chatModeEnc equ 0
+gameModeEnc equ 1
+escEnc  equ 2
 
 .code
 include Draw.inc
@@ -337,26 +352,43 @@ include avpm.inc
 include utilsPM.inc
 include GenUtil.inc
 include timer.inc
-
+include modes.inc
+include welcome.inc
 main PROC far
     mov ax , @data
     mov ds , ax
 
-    ;Open the graphics mode
-    mov ah,0
-    mov al,13h
-    int 10h
+    call welcome_window
+    cmp cl,escEnc
+    je exit
+
+    call modes
+    cmp cl,chatModeEnc
+    je exit
+
+    cmp cl,gameModeEnc
+    je startGame
+
+    jmp exit
+
+
+    
 
     ;call the drawing module to draw the grid and pieces
-    call Draw
+   startGame :
+                ;Open the graphics mode
+                mov ah,0
+                mov al,13h
+                int 10h
+                call Draw
 
-    infiniteLoop: 
-        call moveArrow
-        jmp infiniteLoop
+                infiniteLoop: 
+                    call moveArrow
+                    jmp infiniteLoop
 
     ;finish the execution and halting the program
-    mov ah , 4ch
-    int 21h
+   exit: mov ah , 4ch
+         int 21h
 
 main ENDP
 
