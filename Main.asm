@@ -315,7 +315,7 @@ tempToPiece db ? ;temporary variable to store the current piece that I am curren
 notEmptyToPlace db ?
 clickedPieceRow dw ? ;to store the row of the clicked piece
 clickedPieceCol dw ? ;to store the column of the clicked piece
-fromPieceEnc db ?
+fromPieceEnc db ?    
 
 
 clickCount db 0 ;1 after the first click and 2 after the second click

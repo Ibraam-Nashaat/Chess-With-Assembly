@@ -190,8 +190,9 @@ checkFromPosContainsPieceOrNot proc
     mov di,clickedPieceCol;storing the column number
     mov tempRow,ax
     mov tempColumn,di
-    call getPiecePosToDraw
+    call getPiecePosToDraw ;get the piece encoding at the clicked position
 
+    ;if there is so piece at the TO position then return
     cmp cl,emptyEnc
     je fromPieceIsEmptyCell
 
@@ -212,12 +213,14 @@ checkAvailbleMov proc
     add bx,ax
     add bx,di 
     mov cl,[bx]
-
+    ;check if the clicked TO position is within the available moves or no
     cmp cl,blueEnc
     jne notAvailableMove
 
 
-    availableMov:mov ax,arrowPointer
+    availableMov:;if the move is available then go to its position in initPiecePos and update it with the moving piece encoding
+                 ;to mimic eating of the piece
+                 mov ax,arrowPointer
                  mov di,arrowPointer+2
                  mov tempRow,ax
                  mov tempColumn,di
@@ -225,7 +228,7 @@ checkAvailbleMov proc
                  mov cl,fromPieceEnc
                  mov [bx],cl
 
-
+                ;update the position of the FROM piece with empty cell in initPiecePos as the piece has moved 
                  mov ax,clickedPieceRow ;storing the row number
                  mov di,clickedPieceCol;storing the column number
                  mov tempRow,ax
@@ -235,6 +238,8 @@ checkAvailbleMov proc
                  mov [bx],cl
                  call updateSquareBackgroundAndPiece
 
+
+                ;update the clicked piece pos with blue Background in order for the next proc to recolor it
                 mov ax,clickedPieceRow ;storing the row number
                 mov di,clickedPieceCol;storing the column number
                 lea bx,defGrid
