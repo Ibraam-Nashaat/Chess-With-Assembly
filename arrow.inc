@@ -7,7 +7,7 @@
 
 moveArrow proc far
     ;check loop is for getting the key pressed without waiting for it
-    CHECK:  
+    CHECK:  call checkTimer
             mov ah,1 
             int 16h
             jz CHECK 

@@ -293,7 +293,14 @@ stdGrid    db 0,1,0,1,0,1,0,1
            db 0,1,0,1,0,1,0,1
            db 1,0,1,0,1,0,1,0
 
-
+timer      db 0,0,0,0,0,0,0,0
+           db 0,0,0,0,0,0,0,0
+           db 0,0,0,0,0,0,0,0
+           db 0,0,0,0,0,0,0,0
+           db 0,0,0,0,0,0,0,0
+           db 0,0,0,0,0,0,0,0
+           db 0,0,0,0,0,0,0,0
+           db 0,0,0,0,0,0,0,0
 ;Color numbers
 whiteColor    db 31
 greyColor     db 27
@@ -319,6 +326,8 @@ fromPieceEnc db ?
 
 
 clickCount db 0 ;1 after the first click and 2 after the second click
+seconds  db 99
+
 
 .code
 include Draw.inc
@@ -326,6 +335,7 @@ include arrow.inc
 include avpm.inc
 include utilsPM.inc
 include GenUtil.inc
+include timer.inc
 
 main PROC far
     mov ax , @data
