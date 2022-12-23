@@ -621,6 +621,9 @@ blackPawnAvMoves proc
         call getFromPiece ; sets tempFromPiece to the piece in initial location
         call getToPiece ; sets tempToPiece to the piece in next location
 
+        cmp tempToPiece, emptyEnc
+        jne returnBlackPawn
+
         call isValidPossibleMove
         cmp ch, 0
         je returnBlackPawn
@@ -677,6 +680,9 @@ whitePawnAvMoves proc
         ; Checking if the next position has a piece of the same color
         call getFromPiece ; sets tempFromPiece to the piece in initial location
         call getToPiece ; sets tempToPiece to the piece in next location
+
+        cmp tempToPiece, emptyEnc
+        jne returnWhitePawn
 
         call isValidPossibleMove
         cmp ch, 0
