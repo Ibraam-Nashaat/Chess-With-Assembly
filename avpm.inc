@@ -663,6 +663,29 @@ blackPawnAvMoves proc
 
         call checkGridBorders2
         cmp ch,1
+        jne blackPawnMove4
+
+        ; Checking if the next position has a piece of the same color
+        call getFromPiece ; sets tempFromPiece to the piece in initial location
+        call getToPiece ; sets tempToPiece to the piece in next location
+
+        cmp tempToPiece, wBishopEnc ;checking if to piece is black or empty (invalid)
+        jl blackPawnMove4
+
+        call isValidPossibleMove
+        cmp ch, 0
+        je blackPawnMove4
+
+        call setSquareColor
+
+    blackPawnMove4:
+        mov tempRow,ax
+        mov tempColumn,di
+        add tempRow,1
+        sub tempColumn, 1
+
+        call checkGridBorders2
+        cmp ch,1
         jne returnBlackPawn
 
         ; Checking if the next position has a piece of the same color
