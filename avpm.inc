@@ -769,6 +769,32 @@ whitePawnAvMoves proc
 
         call checkGridBorders2
         cmp ch,1
+        jne whitePawnMove4
+
+        ; Checking if the next position has a piece of the same color
+        call getFromPiece ; sets tempFromPiece to the piece in initial location
+        call getToPiece ; sets tempToPiece to the piece in next location
+
+        cmp tempToPiece, bRookEnc ;checking if to piece is black or empty (invalid)
+        jg whitePawnMove4
+
+        cmp tempToPiece, emptyEnc
+        je whitePawnMove4
+
+        call isValidPossibleMove
+        cmp ch, 0
+        je whitePawnMove4
+
+        call setSquareColor
+
+    whitePawnMove4:
+        mov tempRow,ax
+        mov tempColumn,di
+        sub tempRow,1
+        sub tempColumn, 1
+
+        call checkGridBorders2
+        cmp ch,1
         jne returnWhitePawn
 
         ; Checking if the next position has a piece of the same color
