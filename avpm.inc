@@ -616,17 +616,17 @@ blackPawnAvMoves proc
 
         call checkGridBorders2
         cmp ch,1
-        jne returnBlackPawn
+        jne blackPawnMove3
         ; Checking if the next position has a piece of the same color
         call getFromPiece ; sets tempFromPiece to the piece in initial location
         call getToPiece ; sets tempToPiece to the piece in next location
 
         cmp tempToPiece, emptyEnc
-        jne returnBlackPawn
+        jne blackPawnMove3
 
         call isValidPossibleMove
         cmp ch, 0
-        je returnBlackPawn
+        je blackPawnMove3
 
         call setSquareColor
 
@@ -636,7 +636,7 @@ blackPawnAvMoves proc
 
     blackPawnMove2:
         cmp ax, 1 ;Checking if it's the first movement
-        jne returnBlackPawn
+        jne blackPawnMove3
 
         mov tempRow,ax
         mov tempColumn,di
@@ -644,10 +644,33 @@ blackPawnAvMoves proc
 
         call checkGridBorders2
         cmp ch,1
-        jne returnBlackPawn
+        jne blackPawnMove3
         ; Checking if the next position has a piece of the same color
         call getFromPiece ; sets tempFromPiece to the piece in initial location
         call getToPiece ; sets tempToPiece to the piece in next location
+
+        call isValidPossibleMove
+        cmp ch, 0
+        je blackPawnMove3
+
+        call setSquareColor
+
+    blackPawnMove3:
+        mov tempRow,ax
+        mov tempColumn,di
+        add tempRow,1
+        add tempColumn, 1
+
+        call checkGridBorders2
+        cmp ch,1
+        jne returnBlackPawn
+
+        ; Checking if the next position has a piece of the same color
+        call getFromPiece ; sets tempFromPiece to the piece in initial location
+        call getToPiece ; sets tempToPiece to the piece in next location
+
+        cmp tempToPiece, wBishopEnc ;checking if to piece is black or empty (invalid)
+        jl returnBlackPawn
 
         call isValidPossibleMove
         cmp ch, 0
