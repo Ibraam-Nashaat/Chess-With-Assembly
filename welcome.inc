@@ -14,18 +14,14 @@ mov bh,0
 mov dx,0000h
 int 10h
 ; display message_name
-mov ah, 9
-mov dx, offset msg_name
-int 21h 
+printMsg msg_name
 ;move cursor to 0A line
 mov ah,2
 mov bh,0
 mov dx,0A00h
 int 10h
 ; display msg_startGame
-mov ah, 9
-mov dx, offset msg_startGame
-int 21h
+printMsg msg_startGame
 
 ;move cursor to second line
 mov ah,2

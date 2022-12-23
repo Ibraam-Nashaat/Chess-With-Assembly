@@ -329,11 +329,11 @@ clickCount db 0 ;1 after the first click and 2 after the second click
 seconds  db 99
 canMove  db 1
 
-chatting_mode db 'To start chatting press F1','$'
-game_mode db 'To start the game press F2','$'
-end_game db 'To end the program press Esc','$'
-msg_name db 'Please enter your name:','$'
-msg_startGame db 'Press Enter Key to continue','$'
+chatting_mode db 'To start chatting press F1$'
+game_mode db 'To start the game press F2$'
+end_game db 'To end the program press Esc$'
+msg_name db 'Please enter your name:$'
+msg_startGame db 'Press Enter Key to continue$'
 mybuffer label byte
 bufferSize db 15
 actualSize db ?
@@ -345,6 +345,21 @@ chatModeEnc equ 0
 gameModeEnc equ 1
 escEnc  equ 2
 
+rr db 80 dup('-'),'$'
+pos db ?,?
+rec_msg db ?    
+rec_bool db ?
+tra_bool db ?
+VALUE db ? ;recieved byte in chat mode
+str1 db 'YOU:$'
+str2 db 'ME:$'
+
+chatModeMeCursorX db ?
+chatModeYouCursorX db ?
+
+chatModeMeCursorY db ?
+chatModeYouCursorY db ?
+
 .code
 include Draw.inc
 include arrow.inc
@@ -353,6 +368,7 @@ include utilsPM.inc
 include GenUtil.inc
 include timer.inc
 include modes.inc
+include cursor.inc
 include welcome.inc
 main PROC far
     mov ax , @data
