@@ -368,8 +368,10 @@ include utilsPM.inc
 include GenUtil.inc
 include timer.inc
 include modes.inc
+include uart.inc
 include cursor.inc
 include welcome.inc
+include chat.inc
 main PROC far
     mov ax , @data
     mov ds , ax
@@ -380,31 +382,32 @@ main PROC far
 
     call modes
     cmp cl,chatModeEnc
-    je exit
+    je chatMode
 
     cmp cl,gameModeEnc
     je startGame
 
     jmp exit
 
-
-    
-
     ;call the drawing module to draw the grid and pieces
-   startGame :
-                ;Open the graphics mode
-                mov ah,0
-                mov al,13h
-                int 10h
-                call Draw
+    startGame :
+        ;Open the graphics mode
+        mov ah,0
+        mov al,13h
+        int 10h
+        call Draw
 
-                infiniteLoop: 
-                    call moveArrow
-                    jmp infiniteLoop
+        infiniteLoop: 
+            call moveArrow
+            jmp infiniteLoop
+
+    chatMode:
+        call startChatMode
 
     ;finish the execution and halting the program
-   exit: mov ah , 4ch
-         int 21h
+    exit: 
+        mov ah , 4ch
+        int 21h
 
 main ENDP
 
