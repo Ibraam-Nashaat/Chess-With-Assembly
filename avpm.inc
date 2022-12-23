@@ -630,16 +630,13 @@ blackPawnAvMoves proc
 
         call setSquareColor
 
-    initBlackPawnMove2: 
-        mov ax,arrowPointer ;row
-        mov di,arrowPointer+2;column
-
     blackPawnMove2:
-        cmp ax, 1 ;Checking if it's the first movement
-        jne blackPawnMove3
-
         mov tempRow,ax
         mov tempColumn,di
+
+        cmp tempRow, 1 ;Checking if it's the first movement
+        jne blackPawnMove3
+
         add tempRow,2
 
         call checkGridBorders2
@@ -736,16 +733,13 @@ whitePawnAvMoves proc
 
         call setSquareColor
 
-    initWhitePawnMove2: 
-        mov ax,arrowPointer ;row
-        mov di,arrowPointer+2;column
-
     whitePawnMove2:
-        cmp ax, 6 ;Checking if it's the first movement
-        jne whitePawnMove3
-
         mov tempRow,ax
         mov tempColumn,di
+
+        cmp tempRow, 6 ;Checking if it's the first movement
+        jne whitePawnMove3
+
         sub tempRow,2
 
         call checkGridBorders2

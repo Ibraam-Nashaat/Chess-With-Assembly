@@ -223,38 +223,39 @@ checkAvailbleMov proc
     jne notAvailableMove
 
 
-    availableMov:;if the move is available then go to its position in initPiecePos and update it with the moving piece encoding
-                 ;to mimic eating of the piece
-                 mov ax,arrowPointer
-                 mov di,arrowPointer+2
-                 mov tempRow,ax
-                 mov tempColumn,di
-                 call getPiecePosToDraw
-                 mov cl,fromPieceEnc
-                 mov [bx],cl
-                 call addDelayTimeToMovingPiece
+    availableMov:
+        ;if the move is available then go to its position in initPiecePos and update it with the moving piece encoding
+        ;to mimic eating of the piece
+        mov ax,arrowPointer
+        mov di,arrowPointer+2
+        mov tempRow,ax
+        mov tempColumn,di
+        call getPiecePosToDraw
+        mov cl,fromPieceEnc
+        mov [bx],cl
+        call addDelayTimeToMovingPiece
 
-                ;update the position of the FROM piece with empty cell in initPiecePos as the piece has moved 
-                 mov ax,clickedPieceRow ;storing the row number
-                 mov di,clickedPieceCol;storing the column number
-                 mov tempRow,ax
-                 mov tempColumn,di
-                 call getPiecePosToDraw
-                 mov cl,emptyEnc
-                 mov [bx],cl
-                 call updateSquareBackgroundAndPiece
+        ;update the position of the FROM piece with empty cell in initPiecePos as the piece has moved 
+        mov ax,clickedPieceRow ;storing the row number
+        mov di,clickedPieceCol;storing the column number
+        mov tempRow,ax
+        mov tempColumn,di
+        call getPiecePosToDraw
+        mov cl,emptyEnc
+        mov [bx],cl
+        call updateSquareBackgroundAndPiece
 
 
-                ;update the clicked piece pos with blue Background in order for the next proc to recolor it
-                mov ax,clickedPieceRow ;storing the row number
-                mov di,clickedPieceCol;storing the column number
-                lea bx,defGrid
-                mov si,8
-                mul si
-                add bx,ax
-                add bx,di 
-                mov cl,blueEnc
-                mov [bx],cl
+        ;update the clicked piece pos with blue Background in order for the next proc to recolor it
+        mov ax,clickedPieceRow ;storing the row number
+        mov di,clickedPieceCol;storing the column number
+        lea bx,defGrid
+        mov si,8
+        mul si
+        add bx,ax
+        add bx,di 
+        mov cl,blueEnc
+        mov [bx],cl
                  
   notAvailableMove:  ret
 checkAvailbleMov endp
