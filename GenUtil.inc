@@ -233,8 +233,6 @@ checkAvailbleMov proc
         call getPiecePosToDraw
         mov cl,fromPieceEnc
         call checkIfKingIsEaten
-        cmp al,1
-        je notAvailableMove
         mov [bx],cl
         call addDelayTimeToMovingPiece
 
