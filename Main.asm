@@ -360,6 +360,11 @@ chatModeYouCursorX db ?
 chatModeMeCursorY db ?
 chatModeYouCursorY db ?
 
+whiteWon db "White Won"
+blackWon db "Black Won"
+
+exitFlag db 0
+
 .code
 include Draw.inc
 include arrow.inc
@@ -399,6 +404,9 @@ main PROC far
 
         infiniteLoop: 
             call moveArrow
+            mov al,exitFlag
+            cmp al,1d
+            je exit
             jmp infiniteLoop
 
     chatMode:

@@ -232,6 +232,9 @@ checkAvailbleMov proc
         mov tempColumn,di
         call getPiecePosToDraw
         mov cl,fromPieceEnc
+        call checkIfKingIsEaten
+        cmp al,1
+        je notAvailableMove
         mov [bx],cl
         call addDelayTimeToMovingPiece
 
@@ -259,3 +262,20 @@ checkAvailbleMov proc
                  
   notAvailableMove:  ret
 checkAvailbleMov endp
+
+checkIfKingIsEaten proc
+    mov al,[bx]
+    cmp al,wKingEnc
+    je setExitFlag
+
+    cmp al,bKingEnc
+    je setExitFlag
+
+    mov al,0
+
+    ret
+
+    setExitFlag:mov al,1d
+                mov exitFlag,al
+    ret
+checkIfKingIsEaten endp
