@@ -320,3 +320,37 @@ initializeGame proc
     popa
     ret
 initializeGame endp
+
+printEatenPieces proc
+    lea di,row1Print
+    mov dx,0019h
+    call printMessage
+
+
+    lea di,row2Print
+    mov dx,0119h
+    call printMessage
+  
+
+    lea di,row3Print
+    mov dx,0219h
+    call printMessage
+   
+    ret
+printEatenPieces endp
+
+printMessage proc
+    mov ah,2
+    mov bx,0
+    int 10h
+    mov ah,0eh
+    xor bx,bx
+    mov bl,02h
+    print1:  mov al,[di]
+            int 10h
+            inc di
+            mov al,[di]
+            cmp al,"$"
+            jne print1
+ret
+printMessage endp

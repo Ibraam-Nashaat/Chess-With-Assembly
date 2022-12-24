@@ -375,6 +375,10 @@ stdPiecesGrid db   0,3,0,0,2,1,0,6
               db   0,0,0,10,10,0,10,10
               db   6,0,0,11,0,7,9,12
 
+row1Print db "0bB 0bK 0bP 0bQ$"
+row2Print db "0bR 0wB 0wK 0wP$"
+row3Print db "0wQ 0wR$"
+
 
 .code
 include Draw.inc
@@ -408,6 +412,7 @@ main PROC far
     cmp cl,gameModeEnc
     je startGame
 
+
     jmp exit
 
     ;call the drawing module to draw the grid and pieces
@@ -420,6 +425,7 @@ main PROC far
         mov al,13h
         int 10h
         call Draw
+                call printEatenPieces
 
         infiniteLoop: 
             call moveArrow
