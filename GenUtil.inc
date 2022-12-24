@@ -262,18 +262,39 @@ checkAvailbleMov proc
 checkAvailbleMov endp
 
 checkIfKingIsEaten proc
+    pusha
     mov al,[bx]
     cmp al,wKingEnc
-    je setExitFlag
+    je blackWonLabel
 
     cmp al,bKingEnc
-    je setExitFlag
+    je whiteWonLabel
 
     mov al,0
-
+    popa
     ret
+ 
 
-    setExitFlag:mov al,1d
+    blackWonLabel:mov al,1d
                 mov exitFlag,al
+                lea di,blackWon
+                call printWinningMessage
+                popa
+                ret
+    whiteWonLabel:mov al,1d
+                  mov exitFlag,al
+                  lea di,whiteWon
+                  call printWinningMessage
+                  popa
     ret
 checkIfKingIsEaten endp
+
+printWinningMessage proc
+    mov ah,2h
+    print:  mov dl,[di]
+            int 21h
+            inc di
+            cmp dl,"$"
+            jne print
+    ret
+printWinningMessage endp

@@ -360,8 +360,8 @@ chatModeYouCursorX db ?
 chatModeMeCursorY db ?
 chatModeYouCursorY db ?
 
-whiteWon db "White Won"
-blackWon db "Black Won"
+whiteWon db "White Won$"
+blackWon db "Black Won$"
 
 exitFlag db 0
 
@@ -414,6 +414,8 @@ main PROC far
 
     ;finish the execution and halting the program
     exit: 
+        mov ah,0
+        int 16h 
         mov ah , 4ch
         int 21h
 
