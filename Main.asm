@@ -365,6 +365,17 @@ blackWon db "Black Won$"
 
 exitFlag db 0
 
+;initialize pieces grid 
+stdPiecesGrid db   0,3,0,0,2,1,0,6
+              db   4,0,4,4,8,4,4,4
+              db   4,4,7,0,0,4,0,0
+              db   12,1,0,3,0,0,0,5
+              db   9,10,10,0,0,0,0,0
+              db   10,0,0,0,0,10,0,0
+              db   0,0,0,10,10,0,10,10
+              db   6,0,0,11,0,7,9,12
+
+
 .code
 include Draw.inc
 include arrow.inc
@@ -401,6 +412,9 @@ main PROC far
 
     ;call the drawing module to draw the grid and pieces
     startGame :
+        call initializeGame
+        mov al,0
+        mov exitFlag,al
         ;Open the graphics mode
         mov ah,0
         mov al,13h

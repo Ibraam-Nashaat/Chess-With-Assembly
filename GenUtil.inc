@@ -303,3 +303,20 @@ printWinningMessage proc
             jne print
     ret
 printWinningMessage endp
+
+initializeGame proc
+    pusha
+    lea bx,stdPiecesGrid
+    lea di,initPiecePos
+    mov cl,0
+    loopPiecesMatrix:           mov al,[bx]
+                                mov [di],al
+                                inc bx
+                                inc di
+                                inc cl
+                                cmp cl,64d
+                                jne loopPiecesMatrix
+                             
+    popa
+    ret
+initializeGame endp
