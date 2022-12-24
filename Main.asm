@@ -381,6 +381,8 @@ row1Print db "0bB 0bK 0bP 0bQ$"
 row2Print db "0bR 0wB 0wK 0wP$"
 row3Print db "0wQ 0wR$"
 
+eatenArray db 0,0,0,0,0,0,0,0,0,0,0,0
+
 
 .code
 include Draw.inc
@@ -427,7 +429,7 @@ main PROC far
         mov al,13h
         int 10h
         call Draw
-                call printEatenPieces
+        call printEatenPieces
 
         infiniteLoop: 
             call moveArrow

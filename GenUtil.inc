@@ -231,7 +231,9 @@ checkAvailbleMov proc
         mov tempRow,ax
         mov tempColumn,di
         call getPiecePosToDraw
+        call incrementEatenPieces
         mov cl,fromPieceEnc
+        call printEatenPieces
         call checkIfKingIsEaten
         mov [bx],cl
         call addDelayTimeToMovingPiece
@@ -322,6 +324,9 @@ initializeGame proc
 initializeGame endp
 
 printEatenPieces proc
+    pusha
+    lea si,eatenArray
+    inc si
     lea di,row1Print
     mov dx,0019h
     call printMessage
@@ -335,22 +340,45 @@ printEatenPieces proc
     lea di,row3Print
     mov dx,0219h
     call printMessage
-   
+    popa
     ret
 printEatenPieces endp
 
 printMessage proc
+
     mov ah,2
     mov bx,0
     int 10h
     mov ah,0eh
     xor bx,bx
     mov bl,02h
-    print1:  mov al,[di]
-            int 10h
+    print1:  
+            mov al,[di]
+            cmp al,"0"
+            je changeNumber
+completePrint:int 10h
             inc di
             mov al,[di]
             cmp al,"$"
             jne print1
 ret
+
+changeNumber:
+             mov al,"0"
+             mov ch,[si]
+             add al,ch
+             inc si
+             jmp completePrint
 printMessage endp
+
+incrementEatenPieces proc
+    pusha
+    lea bx,eatenArray
+    mov ch,0
+    add bx,cx
+    mov cl,[bx]
+    inc cl
+    mov [bx],cl
+    popa
+    ret
+incrementEatenPieces endp
