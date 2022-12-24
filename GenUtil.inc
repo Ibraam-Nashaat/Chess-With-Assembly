@@ -290,10 +290,15 @@ checkIfKingIsEaten proc
 checkIfKingIsEaten endp
 
 printWinningMessage proc
+    mov ah,2
+    mov dx,001Ah
+    mov bx,0
+    int 10h
     mov ah,2h
     print:  mov dl,[di]
             int 21h
             inc di
+            mov dl,[di]
             cmp dl,"$"
             jne print
     ret

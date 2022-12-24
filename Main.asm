@@ -385,6 +385,11 @@ main PROC far
     cmp cl,escEnc
     je exit
 
+    mainMenu:
+    mov ah,0
+    mov al,03h
+    int 10h
+
     call modes
     cmp cl,chatModeEnc
     je chatMode
@@ -406,16 +411,20 @@ main PROC far
             call moveArrow
             mov al,exitFlag
             cmp al,1d
-            je exit
+            je waitPress
             jmp infiniteLoop
+
+    waitPress:
+        mov ah,0
+        int 16h
+        jmp  mainMenu
 
     chatMode:
         call startChatMode
 
+
     ;finish the execution and halting the program
     exit: 
-        mov ah,0
-        int 16h 
         mov ah , 4ch
         int 21h
 
