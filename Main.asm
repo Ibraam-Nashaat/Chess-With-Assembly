@@ -211,31 +211,29 @@ emptyEnc equ 0
 
 ;Black Pieces Encoding
 bBishopEnc equ 1
-bKnightEnc equ 2
-bPawnEnc equ 3
-bQueenEnc equ 4
-bRookEnc equ 5
+bKingEnc equ 2
+bKnightEnc equ 3
+bPawnEnc equ 4
+bQueenEnc equ 5
+bRookEnc equ 6
 
 ;White pieces Encoding
-wBishopEnc equ 6
-wKnightEnc equ 7
-wPawnEnc equ 8
-wQueenEnc equ 9
-wRookEnc equ 10
-
-bKingEnc equ 11
-wKingEnc equ 12
-
+wBishopEnc equ 7
+wKingEnc equ 8
+wKnightEnc equ 9
+wPawnEnc equ 10
+wQueenEnc equ 11
+wRookEnc equ 12
 
 ;initial position of each piece in the 2D-Grid
-initPiecePos db   0,2,0,0,11,1,0,5
-            db   3,0,3,3,12,3,3,3
-            db   3,3,6,0,0,3,0,0
-            db   10,1,0,2,0,0,0,4
-            db   7,8,8,0,0,0,0,0
-            db   8,0,0,0,0,8,0,0
-            db   0,0,0,8,8,0,8,8
-            db   5,0,0,9,0,6,7,10
+initPiecePos db   0,3,0,0,2,1,0,6
+            db   4,0,4,4,8,4,4,4
+            db   4,4,7,0,0,4,0,0
+            db   12,1,0,3,0,0,0,5
+            db   9,10,10,0,0,0,0,0
+            db   10,0,0,0,0,10,0,0
+            db   0,0,0,10,10,0,10,10
+            db   6,0,0,11,0,7,9,12
 
 startDrawX dw ?
 
@@ -368,20 +366,20 @@ blackWon db "Black Won$"
 exitFlag db 0
 
 ;initialize pieces grid 
-stdPiecesGrid db   0,2,0,0,11,1,0,5
-            db   3,0,3,3,12,3,3,3
-            db   3,3,6,0,0,3,0,0
-            db   10,1,0,2,0,0,0,4
-            db   7,8,8,0,0,0,0,0
-            db   8,0,0,0,0,8,0,0
-            db   0,0,0,8,8,0,8,8
-            db   5,0,0,9,0,6,7,10
+stdPiecesGrid db   0,3,0,0,2,1,0,6
+            db   4,0,4,4,8,4,4,4
+            db   4,4,7,0,0,4,0,0
+            db   12,1,0,3,0,0,0,5
+            db   9,10,10,0,0,0,0,0
+            db   10,0,0,0,0,10,0,0
+            db   0,0,0,10,10,0,10,10
+            db   6,0,0,11,0,7,9,12
 
 row1Print db "0bB 0bK 0bP 0bQ$"
 row2Print db "0bR 0wB 0wK 0wP$"
 row3Print db "0wQ 0wR$"
 
-eatenArray db 0,0,0,0,0,0,0,0,0,0,0,0
+eatenArray db 0,0,0,0,0,0,0,0,0,0,0,0,0,0
 
 
 .code

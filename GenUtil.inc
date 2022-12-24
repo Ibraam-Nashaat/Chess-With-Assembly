@@ -327,6 +327,7 @@ printEatenPieces proc
     pusha
     lea si,eatenArray
     inc si
+    mov cl,1
     lea di,row1Print
     mov dx,0019h
     call printMessage
@@ -363,12 +364,22 @@ completePrint:int 10h
             jne print1
 ret
 
+
 changeNumber:
-             mov al,"0"
+             cmp cl,wKingEnc
+             je incrementSICounter
+             cmp cl,bKingEnc
+             je incrementSICounter
+completeLoop:mov al,"0"
              mov ch,[si]
              add al,ch
              inc si
+             inc cl
              jmp completePrint
+
+incrementSICounter:inc si
+                   inc cl
+                   jmp completeLoop
 printMessage endp
 
 incrementEatenPieces proc
