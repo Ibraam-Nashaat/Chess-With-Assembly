@@ -325,6 +325,21 @@ initializeGame proc
     ret
 initializeGame endp
 
+initializeEatenArray proc
+    pusha
+    lea bx,eatenArray
+    mov cl,0
+    loopEatenArray:             mov al,0
+                                 mov [bx],al
+                                inc bx
+                                inc cl
+                                cmp cl,14d
+                                jne loopEatenArray
+                             
+    popa
+    ret
+initializeEatenArray endp
+
 printEatenPieces proc
     pusha
     lea si,eatenArray

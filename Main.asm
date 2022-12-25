@@ -379,7 +379,7 @@ row1Print db "0bB 0bK 0bP 0bQ$"
 row2Print db "0bR 0wB 0wK 0wP$"
 row3Print db "0wQ 0wR$"
 
-eatenArray db 0,0,0,0,0,0,0,0,0,0,0,0,0,0
+eatenArray db 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"$"
 
 
 .code
@@ -420,6 +420,7 @@ main PROC far
     ;call the drawing module to draw the grid and pieces
     startGame :
         call initializeGame
+        call initializeEatenArray
         mov al,0
         mov exitFlag,al
         ;Open the graphics mode
