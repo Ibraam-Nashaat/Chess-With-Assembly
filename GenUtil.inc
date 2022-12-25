@@ -293,15 +293,17 @@ checkIfKingIsEaten endp
 
 printWinningMessage proc
     mov ah,2
-    mov dx,001Ah
+    mov dx,0319h
     mov bx,0
     int 10h
-    mov ah,2h
-    print:  mov dl,[di]
-            int 21h
+    mov ah,0eh
+    xor bx,bx
+    mov bl,02h
+    print:  mov al,[di]
+            int 10h
             inc di
-            mov dl,[di]
-            cmp dl,"$"
+            mov al,[di]
+            cmp al,"$"
             jne print
     ret
 printWinningMessage endp
