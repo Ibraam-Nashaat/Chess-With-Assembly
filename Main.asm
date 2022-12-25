@@ -233,7 +233,7 @@ initPiecePos db   0,3,0,0,2,1,0,6
             db   9,10,10,0,0,0,0,0
             db   10,0,0,0,0,10,0,0
             db   0,0,0,10,10,0,10,10
-            db   6,0,0,11,0,7,9,12
+            db   6,0,0,11,0,7,9,12,0
 
 startDrawX dw ?
 
@@ -259,7 +259,7 @@ initGrid   db 0,1,0,1,0,1,0,1
            db 0,1,0,1,0,1,0,1
            db 1,0,1,0,1,0,1,0
            db 0,1,0,1,0,1,0,1
-           db 3,0,1,0,1,0,1,0
+           db 3,0,1,0,1,0,1,0,0
 
 ;On getting the available movements after the first click, I will recolor the available movements to blue
 ;in defGrid and initGrid. On moving the arrowPointer over the available moves,
@@ -280,7 +280,7 @@ defGrid    db 0,1,0,1,0,1,0,1
            db 0,1,0,1,0,1,0,1
            db 1,0,1,0,1,0,1,0
            db 0,1,0,1,0,1,0,1
-           db 1,0,1,0,1,0,1,0
+           db 1,0,1,0,1,0,1,0,0
 
 ;stdGrid represents the standard grid colors (white and grey) that would never change across the program
 ;On the 2nd click, defGrid and initGrid would be compared to stdGrid to return them back to white and grey
@@ -291,7 +291,7 @@ stdGrid    db 0,1,0,1,0,1,0,1
            db 0,1,0,1,0,1,0,1
            db 1,0,1,0,1,0,1,0
            db 0,1,0,1,0,1,0,1
-           db 1,0,1,0,1,0,1,0
+           db 1,0,1,0,1,0,1,0,0
 
 timer      db 0,0,0,0,0,0,0,0
            db 0,0,0,0,0,0,0,0
@@ -300,7 +300,7 @@ timer      db 0,0,0,0,0,0,0,0
            db 0,0,0,0,0,0,0,0
            db 0,0,0,0,0,0,0,0
            db 0,0,0,0,0,0,0,0
-           db 0,0,0,0,0,0,0,0
+           db 0,0,0,0,0,0,0,0,0
 ;Color numbers
 whiteColor    db 31
 greyColor     db 27
