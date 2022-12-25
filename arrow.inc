@@ -31,6 +31,9 @@ moveArrow proc far
     cmp ah,10h ;compare the scancode of the key that we got to that of the Q-key
     je click
 
+    cmp ah,3Eh
+    je exitGame
+
     ret
     moveUp:
         mov ax,arrowPointer 
@@ -87,9 +90,12 @@ moveArrow proc far
 
     updateGrid: 
         call redrawNewArrowPos
+    return:  ret
 
-    return:   
-        ret
+
+    exitGame:mov al,1d
+            mov exitFlag,al
+            ret
 moveArrow ENDP
 
 ;Update the grid matrix (initGrid) which contains the colors of the square background

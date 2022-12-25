@@ -233,7 +233,7 @@ initPiecePos db   0,3,0,0,2,1,0,6
             db   9,10,10,0,0,0,0,0
             db   10,0,0,0,0,10,0,0
             db   0,0,0,10,10,0,10,10
-            db   6,0,0,11,0,7,9,12
+            db   6,0,0,11,0,7,9,12,0
 
 startDrawX dw ?
 
@@ -259,7 +259,7 @@ initGrid   db 0,1,0,1,0,1,0,1
            db 0,1,0,1,0,1,0,1
            db 1,0,1,0,1,0,1,0
            db 0,1,0,1,0,1,0,1
-           db 3,0,1,0,1,0,1,0
+           db 3,0,1,0,1,0,1,0,0
 
 ;On getting the available movements after the first click, I will recolor the available movements to blue
 ;in defGrid and initGrid. On moving the arrowPointer over the available moves,
@@ -280,7 +280,7 @@ defGrid    db 0,1,0,1,0,1,0,1
            db 0,1,0,1,0,1,0,1
            db 1,0,1,0,1,0,1,0
            db 0,1,0,1,0,1,0,1
-           db 1,0,1,0,1,0,1,0
+           db 1,0,1,0,1,0,1,0,0
 
 ;stdGrid represents the standard grid colors (white and grey) that would never change across the program
 ;On the 2nd click, defGrid and initGrid would be compared to stdGrid to return them back to white and grey
@@ -291,7 +291,7 @@ stdGrid    db 0,1,0,1,0,1,0,1
            db 0,1,0,1,0,1,0,1
            db 1,0,1,0,1,0,1,0
            db 0,1,0,1,0,1,0,1
-           db 1,0,1,0,1,0,1,0
+           db 1,0,1,0,1,0,1,0,0
 
 timer      db 0,0,0,0,0,0,0,0
            db 0,0,0,0,0,0,0,0
@@ -300,7 +300,7 @@ timer      db 0,0,0,0,0,0,0,0
            db 0,0,0,0,0,0,0,0
            db 0,0,0,0,0,0,0,0
            db 0,0,0,0,0,0,0,0
-           db 0,0,0,0,0,0,0,0
+           db 0,0,0,0,0,0,0,0,0
 ;Color numbers
 whiteColor    db 31
 greyColor     db 27
@@ -360,10 +360,27 @@ chatModeYouCursorX db ?
 chatModeMeCursorY db ?
 chatModeYouCursorY db ?
 
-whiteWon db "White Won"
-blackWon db "Black Won"
+whiteWon db "White Won$"
+blackWon db "Black Won$"
 
 exitFlag db 0
+
+;initialize pieces grid 
+stdPiecesGrid db   0,3,0,0,2,1,0,6
+            db   4,0,4,4,8,4,4,4
+            db   4,4,7,0,0,4,0,0
+            db   12,1,0,3,0,0,0,5
+            db   9,10,10,0,0,0,0,0
+            db   10,0,0,0,0,10,0,0
+            db   0,0,0,10,10,0,10,10
+            db   6,0,0,11,0,7,9,12
+
+row1Print db "0bB 0bK 0bP 0bQ$"
+row2Print db "0bR 0wB 0wK 0wP$"
+row3Print db "0wQ 0wR$"
+
+eatenArray db 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"$"
+
 
 .code
 include Draw.inc
@@ -385,6 +402,11 @@ main PROC far
     cmp cl,escEnc
     je exit
 
+    mainMenu:
+    mov ah,0
+    mov al,03h
+    int 10h
+
     call modes
     cmp cl,chatModeEnc
     je chatMode
@@ -392,25 +414,37 @@ main PROC far
     cmp cl,gameModeEnc
     je startGame
 
+
     jmp exit
 
     ;call the drawing module to draw the grid and pieces
     startGame :
+        call initializeGame
+        call initializeEatenArray
+        mov al,0
+        mov exitFlag,al
         ;Open the graphics mode
         mov ah,0
         mov al,13h
         int 10h
         call Draw
+        call printEatenPieces
 
         infiniteLoop: 
             call moveArrow
             mov al,exitFlag
             cmp al,1d
-            je exit
+            je waitPress
             jmp infiniteLoop
+
+    waitPress:
+        mov ah,0
+        int 16h
+        jmp  mainMenu
 
     chatMode:
         call startChatMode
+
 
     ;finish the execution and halting the program
     exit: 

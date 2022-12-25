@@ -231,7 +231,9 @@ checkAvailbleMov proc
         mov tempRow,ax
         mov tempColumn,di
         call getPiecePosToDraw
+        call incrementEatenPieces
         mov cl,fromPieceEnc
+        call printEatenPieces
         call checkIfKingIsEaten
         mov [bx],cl
         call addDelayTimeToMovingPiece
@@ -262,18 +264,149 @@ checkAvailbleMov proc
 checkAvailbleMov endp
 
 checkIfKingIsEaten proc
+    pusha
     mov al,[bx]
     cmp al,wKingEnc
-    je setExitFlag
+    je blackWonLabel
 
     cmp al,bKingEnc
-    je setExitFlag
+    je whiteWonLabel
 
     mov al,0
-
+    popa
     ret
+ 
 
-    setExitFlag:mov al,1d
+    blackWonLabel:mov al,1d
                 mov exitFlag,al
+                lea di,blackWon
+                call printWinningMessage
+                popa
+                ret
+    whiteWonLabel:mov al,1d
+                  mov exitFlag,al
+                  lea di,whiteWon
+                  call printWinningMessage
+                  popa
     ret
 checkIfKingIsEaten endp
+
+printWinningMessage proc
+    mov ah,2
+    mov dx,0319h
+    mov bx,0
+    int 10h
+    mov ah,0eh
+    xor bx,bx
+    mov bl,02h
+    print:  mov al,[di]
+            int 10h
+            inc di
+            mov al,[di]
+            cmp al,"$"
+            jne print
+    ret
+printWinningMessage endp
+
+initializeGame proc
+    pusha
+    lea bx,stdPiecesGrid
+    lea di,initPiecePos
+    mov cl,0
+    loopPiecesMatrix:           mov al,[bx]
+                                mov [di],al
+                                inc bx
+                                inc di
+                                inc cl
+                                cmp cl,64d
+                                jne loopPiecesMatrix
+                             
+    popa
+    ret
+initializeGame endp
+
+initializeEatenArray proc
+    pusha
+    lea bx,eatenArray
+    mov cl,0
+    loopEatenArray:             mov al,0
+                                 mov [bx],al
+                                inc bx
+                                inc cl
+                                cmp cl,14d
+                                jne loopEatenArray
+                             
+    popa
+    ret
+initializeEatenArray endp
+
+printEatenPieces proc
+    pusha
+    lea si,eatenArray
+    inc si
+    mov cl,1
+    lea di,row1Print
+    mov dx,0019h
+    call printMessage
+
+
+    lea di,row2Print
+    mov dx,0119h
+    call printMessage
+  
+
+    lea di,row3Print
+    mov dx,0219h
+    call printMessage
+    popa
+    ret
+printEatenPieces endp
+
+printMessage proc
+
+    mov ah,2
+    mov bx,0
+    int 10h
+    mov ah,0eh
+    xor bx,bx
+    mov bl,02h
+    print1:  
+            mov al,[di]
+            cmp al,"0"
+            je changeNumber
+completePrint:int 10h
+            inc di
+            mov al,[di]
+            cmp al,"$"
+            jne print1
+ret
+
+
+changeNumber:
+             cmp cl,wKingEnc
+             je incrementSICounter
+             cmp cl,bKingEnc
+             je incrementSICounter
+completeLoop:mov al,"0"
+             mov ch,[si]
+             add al,ch
+             inc si
+             inc cl
+             jmp completePrint
+
+incrementSICounter:inc si
+                   inc cl
+                   jmp completeLoop
+printMessage endp
+
+incrementEatenPieces proc
+    pusha
+    lea bx,eatenArray
+    mov ch,0
+    add bx,cx
+    mov cl,[bx]
+    inc cl
+    mov [bx],cl
+    popa
+    ret
+incrementEatenPieces endp
