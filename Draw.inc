@@ -189,6 +189,9 @@ determineCubeColor proc
     cmp al,greenEnc
     je greenSquare
 
+    cmp al,pinkEnc
+    je pinkSquare
+
     blueCube:mov al,blueColor
              call drawCube
 
@@ -202,6 +205,10 @@ determineCubeColor proc
              ret
 
     greenSquare:mov al,greenColor
+                call drawCube
+                ret
+
+    pinkSquare:mov al,pinkColor
                 call drawCube
                 ret
 

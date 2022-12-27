@@ -121,6 +121,8 @@ resetDefGridAfter2ndClick proc
     loopDefGrid:
         mov dl,[bx]
         pusha
+        cmp dl,pinkEnc
+        je setColorToPink
         cmp dl,[si]
         jne changeColor
 
@@ -161,6 +163,9 @@ resetDefGridAfter2ndClick proc
     setSquareColorToGreen:mov bl,[di]
                           mov tempColor,bl
                           jmp continueChangingColor
+
+    setColorToPink:jmp setSquareColorToGreen
+
 resetDefGridAfter2ndClick endp
 
 
@@ -237,6 +242,7 @@ checkAvailbleMov proc
         call checkIfKingIsEaten
         mov [bx],cl
         call addDelayTimeToMovingPiece
+        call markPieceCantMove
 
         ;update the position of the FROM piece with empty cell in initPiecePos as the piece has moved 
         mov ax,clickedPieceRow ;storing the row number

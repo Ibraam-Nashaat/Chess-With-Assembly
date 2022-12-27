@@ -21,19 +21,32 @@ updateTimerMatrix proc
     pusha
     lea bx,timer
     mov cl,0
-    loopTimerMatrix:            mov al,[bx]
-                                cmp al,0
-                                jne decrementTimer
-    continueTimerLoopUpdating:   inc bx
-                                inc cl
-                                cmp cl,64d
+    mov si,0 ;row
+    mov di,0 ;column
+
+        loopTimerMatrix:            mov al,[bx]
+                                    cmp al,0
+                                    jne decrementTimer
+         continueTimerLoopUpdating: inc bx
+                                    inc di
+                                    inc cl
+                                    cmp di,8d
+                                    jne loopTimerMatrix
+                                mov di,0
+                                inc si
+                                cmp si,8d
                                 jne loopTimerMatrix
 
     popa
     ret
     decrementTimer:dec al
                    mov [bx],al
+                   cmp al,0
+                   je markPieceAsItCanMoveLabel
                    jmp continueTimerLoopUpdating
+
+    markPieceAsItCanMoveLabel:call markPieceAsItCanMove
+                              jmp continueTimerLoopUpdating
 updateTimerMatrix endp
 
 
@@ -69,3 +82,49 @@ getPiecePosTimer proc
     add bx,di 
     ret
 getPiecePosTimer endp
+
+markPieceCantMove proc
+pusha
+    mov ax,tempRow
+    mov di,tempColumn
+    lea bx,defGrid
+    mov si,8        
+    mul si          
+    add bx,ax       
+    add bx,di       
+    mov al,pinkEnc
+    mov [bx],al 
+popa
+ret
+markPieceCantMove endp
+
+markPieceAsItCanMove proc
+    pusha
+    mov tempRow,si
+    mov tempColumn,di
+    lea si,stdGrid
+    lea di,defGrid
+    lea bx,initGrid
+
+
+    mov ch,0
+    add si,cx
+    add di,cx
+    add bx,cx
+    mov al,[si]
+    mov [di],al
+
+    mov cl,greenEnc
+    cmp [bx],cl
+    je return9
+    mov [bx],al
+    mov tempColor,al
+
+
+    lea bx,initGrid
+    call updateSquareBackgroundAndPiece
+
+    return9:
+    popa
+    ret
+markPieceAsItCanMove endp

@@ -1,6 +1,6 @@
 .286
-.model small   
-.stack 64                
+.model huge   
+.stack 100                
 .data
 
 wKnight DB 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58
@@ -244,6 +244,7 @@ whiteEnc   db 1
 greyEnc    db 0
 blueEnc    db 2 
 greenEnc   db 3
+pinkEnc    db 4
 
 ;There is three grid matices
 
@@ -306,6 +307,7 @@ whiteColor    db 31
 greyColor     db 27
 blueColor     db 53  
 greenColor    db 51
+pinkColor     db 58
 
 ;arrowPointer represents the current place of the arrow
 arrowPointer dw 7d,0d ;r,c
