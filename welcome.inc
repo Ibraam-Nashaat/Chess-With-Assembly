@@ -1,7 +1,5 @@
 welcome_window proc far 
-mov ax,@data
-mov ds,ax
-;Clean screen
+;Clear screen
 mov ax,0600h
 mov bh,07 
 mov cx,0 

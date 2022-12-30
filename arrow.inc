@@ -5,12 +5,14 @@
 ;   3)checkGridBorders
 ;   4)redrawOldArrowPos
 
-moveArrow proc far
+moveArrow proc
     ;check loop is for getting the key pressed without waiting for it
-    CHECK:  call checkTimer
-            mov ah,1 
-            int 16h
-            jz CHECK 
+    CHECK:  
+        call checkTimer
+        mov ah,1 
+        int 16h
+        jz CHECK 
+
     ;Once we detect that the user pressed a key we need to consume it from the buffer
     ;so we will use the following interrupt
     mov ah,0
