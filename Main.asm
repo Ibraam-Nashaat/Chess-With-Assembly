@@ -336,6 +336,8 @@ game_mode db 'To start the game press F2$'
 end_game db 'To end the program press Esc$'
 msg_name db 'Please enter your name:$'
 msg_startGame db 'Press Enter Key to continue$'
+welcome_msg db 'Welcome: $'
+waiting_msg db 'Waiting Second Player To Join...$'
 mybuffer label byte
 bufferSize db 15
 actualSize db ?
@@ -397,8 +399,8 @@ include utilsPM.inc
 include GenUtil.inc
 include timer.inc
 include modes.inc
-include uart.inc
 include cursor.inc
+include uart.inc
 include welcome.inc
 include chat.inc
 main PROC far

@@ -62,6 +62,24 @@ UART_rec endp
 ;   send "R" signal
 assignColorAndSignal proc
 pusha
+    ;Clear the screen
+    mov ax,3
+    int 10h
+
+    mov pos,0 ;x
+    mov pos+1,0 ;y
+    call setCursorPosition
+
+    printMsg welcome_msg
+    mov pos,9 ;x
+    call setCursorPosition
+    printMsg bufferName
+
+    mov pos,0 ;x
+    mov pos+1,1 ;y
+    call setCursorPosition
+    printMsg waiting_msg
+
     call UART_rec
     cmp rec_bool, 0
     ; First Player 
