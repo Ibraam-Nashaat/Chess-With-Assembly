@@ -383,6 +383,8 @@ row3Print db "0wQ 0wR$"
 
 eatenArray db 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"$"
 
+isBlack db ? ;To be changed with player's assigned color
+
 
 .code
 include Draw.inc

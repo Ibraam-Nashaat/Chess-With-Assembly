@@ -124,23 +124,27 @@ checkGridBorders2 proc
 checkGridBorders2 Endp
 
 isValidPossibleMove proc
-
-    
     mov notEmptyToPlace,0
 
     cmp tempFromPiece, wBishopEnc ;checking if from piece is black
     jl fromPieceIsBlack
 
     fromPieceIsWhite:
-    cmp tempToPiece, emptyEnc
-    je emptySquare
+        cmp isBlack, 1
+        je secondPieceHasSameColor ;Invalid
 
-    cmp tempToPiece, wBishopEnc ;checking if to piece is black
-    jl secondPieceNotSameColor
+        cmp tempToPiece, emptyEnc
+        je emptySquare
 
-    jmp secondPieceHasSameColor
+        cmp tempToPiece, wBishopEnc ;checking if to piece is black
+        jl secondPieceNotSameColor
+
+        jmp secondPieceHasSameColor
 
     fromPieceIsBlack:
+        cmp isBlack, 0
+        je secondPieceHasSameColor ;Invalid 
+
         cmp tempToPiece, emptyEnc
         je emptySquare
 
