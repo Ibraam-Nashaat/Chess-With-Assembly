@@ -18,19 +18,19 @@ moveArrow proc
     mov ah,0
     int 16h 
 
-    cmp ah,11h ;compare the scancode of the the key that we got to that of the W-key
+    cmp ah,48h ;compare the scancode of the the key that we got to that of the Up-key
     je moveUp
 
-    cmp ah,1fh ;compare the scancode of the the key that we got to that of the S-key
+    cmp ah,50h ;compare the scancode of the the key that we got to that of the Down-key
     je moveDown
 
-    cmp ah,20h  ;compare the scancode of the the key that we got to that of the D-key
+    cmp ah,4dh  ;compare the scancode of the the key that we got to that of the Right-key
     je moveRight
 
-    cmp ah,1eh ;compare the scancode of the the key that we got to that of the A-key
+    cmp ah,4bh ;compare the scancode of the the key that we got to that of the Left-key
     je moveLeft
 
-    cmp ah,10h ;compare the scancode of the key that we got to that of the Q-key
+    cmp ah,0fh ;compare the scancode of the key that we got to that of the Tab-key
     je click
 
     cmp ah,3Eh
