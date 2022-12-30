@@ -367,6 +367,9 @@ chatModeYouCursorY db ?
 firstPlayerSignal db "S"
 secondPlayerSignal db "R"
 
+startGameSignal db "G"
+startChatSignal db "C"
+
 whiteWon db "White Won$"
 blackWon db "Black Won$"
 
@@ -427,7 +430,6 @@ main PROC far
 
     cmp cl,gameModeEnc
     je startGame
-
 
     jmp exit
 

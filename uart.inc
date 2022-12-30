@@ -26,6 +26,7 @@ popa
 ret
 UART_init endp
 
+; Sets tra_bool to 1 if we can send a byte
 UART_transmit proc
 pusha
     mov dx , 3FDH ; Line Status Register
@@ -41,6 +42,7 @@ popa
 ret
 UART_transmit endp
 
+; Sets rec_bool to 1 if we can receive a byte
 UART_rec proc
 pusha
     ;Check that Data Ready
@@ -53,6 +55,25 @@ pusha
 popa
 ret
 UART_rec endp
+
+; Sends a byte through serial port
+sendByte macro valueToSend
+push ax
+    mov al, valueToSend
+    mov dx , 3F8H   ; Transmit FirstPlayerSignal
+    out dx , al
+pop ax
+endm 
+
+; Receives a byte from serial port to VALUE
+receiveByte proc
+push ax
+    mov dx , 03F8H
+    in al , dx 
+    mov VALUE , al
+pop ax
+ret
+receiveByte endp
 
 ; Check is first player:
 ;   send byte "S for sent" as a signal
@@ -89,9 +110,8 @@ pusha
         mov isBlack, 1
         
         ; Get the byte in serial
-        mov dx , 03F8H
-        in al , dx 
-        mov VALUE , al
+        call receiveByte
+        mov al, VALUE
         ; Check if it's the right signal from player1
         cmp al, firstPlayerSignal
         jne failedSettingUpColor
@@ -101,18 +121,14 @@ pusha
             cmp tra_bool, 1 ; If I can send Signal
             jne ifSecondPlayerCanSendSignal
 
-        mov al, secondPlayerSignal
-        mov dx , 3F8H   ; Transmit SecondPlayerSignal
-        out dx , al
+        sendByte secondPlayerSignal
 
     jmp finishedSettingUpColor
 
     firstPlayerPath:
         mov isBlack, 0
 
-        mov al, firstPlayerSignal
-        mov dx , 3F8H   ; Transmit FirstPlayerSignal
-        out dx , al
+        sendByte firstPlayerSignal
 
         ifFirstPlayerReceivedSignal:
             call UART_rec
@@ -120,9 +136,8 @@ pusha
             jne ifFirstPlayerReceivedSignal
 
         ; Get the byte in serial
-        mov dx , 03F8H
-        in al , dx 
-        mov VALUE , al
+        call receiveByte
+        mov al, VALUE
         ; Check if it's the right signal from player1
         cmp al, secondPlayerSignal
         je finishedSettingUpColor
