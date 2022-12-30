@@ -17,7 +17,6 @@ startChatMode proc
     call setCursorPosition
     printMsg str2
 
-    call UART_init
     mov tra_bool,0
     mov rec_bool,0
     mov chatModeMeCursorX, 4

@@ -362,6 +362,9 @@ chatModeYouCursorX db ?
 chatModeMeCursorY db ?
 chatModeYouCursorY db ?
 
+firstPlayerSignal db "S"
+secondPlayerSignal db "R"
+
 whiteWon db "White Won$"
 blackWon db "Black Won$"
 
@@ -402,10 +405,15 @@ main PROC far
     mov ax , @data
     mov ds , ax
 
+    call UART_init
+    
+
     call welcome_window
     cmp cl,escEnc
     je exit
 
+    call assignColorAndSignal
+    
     mainMenu:
     mov ah,0
     mov al,03h

@@ -53,3 +53,66 @@ pusha
 popa
 ret
 UART_rec endp
+
+; Check is first player:
+;   send byte "S for sent" as a signal
+;   wait for byte "R for received"  as a signal
+; Check if second player:
+;   check for "S" signal
+;   send "R" signal
+assignColorAndSignal proc
+pusha
+    call UART_rec
+    cmp rec_bool, 0
+    ; First Player 
+    je firstPlayerPath
+    ; Second Player
+    secondPlayerPath:
+        mov isBlack, 1
+        
+        ; Get the byte in serial
+        mov dx , 03F8H
+        in al , dx 
+        mov VALUE , al
+        ; Check if it's the right signal from player1
+        cmp al, firstPlayerSignal
+        jne failedSettingUpColor
+
+        ifSecondPlayerCanSendSignal:
+            call UART_transmit
+            cmp tra_bool, 1 ; If I can send Signal
+            jne ifSecondPlayerCanSendSignal
+
+        mov al, secondPlayerSignal
+        mov dx , 3F8H   ; Transmit SecondPlayerSignal
+        out dx , al
+
+    jmp finishedSettingUpColor
+
+    firstPlayerPath:
+        mov isBlack, 0
+
+        mov al, firstPlayerSignal
+        mov dx , 3F8H   ; Transmit FirstPlayerSignal
+        out dx , al
+
+        ifFirstPlayerReceivedSignal:
+            call UART_rec
+            cmp rec_bool, 1 ; If I can send Signal
+            jne ifFirstPlayerReceivedSignal
+
+        ; Get the byte in serial
+        mov dx , 03F8H
+        in al , dx 
+        mov VALUE , al
+        ; Check if it's the right signal from player1
+        cmp al, secondPlayerSignal
+        je finishedSettingUpColor
+
+    failedSettingUpColor:
+        jmp exit
+
+    finishedSettingUpColor:
+popa
+ret
+assignColorAndSignal endp
