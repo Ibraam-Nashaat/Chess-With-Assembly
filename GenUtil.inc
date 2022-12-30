@@ -7,6 +7,7 @@
 ;   5)setDefaultGridAfterClick
 ;   6)resetDefGridAfter2ndClick
 ;   7)checkClickCount
+;   8)checkGameRequestSignal
 
 ;get the piece pos that we want to redraw
 getPiecePosToDraw proc
@@ -416,3 +417,54 @@ incrementEatenPieces proc
     popa
     ret
 incrementEatenPieces endp
+
+;checkGameRequestSignal proc
+;pusha
+;    call UART_rec
+;    cmp rec_bool, 0
+;    ; First Player 
+;    je firstPlayerGamePath
+
+;    ; Second Player
+;    secondPlayerGamePath:
+;        ; Get the byte in serial
+;        call receiveByte
+;        mov al, VALUE
+
+;        ; Check if it's the right signal from player1
+;        cmp al, startGameSignal
+;        jne failedStartingGame
+
+;        ifSecondPlayerCanSendGameSignal:
+;            call UART_transmit
+;            cmp tra_bool, 1 ; If I can send Signal
+;            jne ifSecondPlayerCanSendGameSignal
+
+;        sendByte startGameSignal
+
+;    jmp finishedStartingGame
+
+;    firstPlayerGamePath:
+;        sendByte startGameSignal
+
+;        ifFirstPlayerReceivedGameSignal:
+;            call UART_rec
+;            cmp rec_bool, 1 ; If I can send Signal
+;            jne ifFirstPlayerReceivedGameSignal
+
+;        ; Get the byte in serial
+;        call receiveByte
+;        mov al, VALUE
+        
+;        ; Check if it's the right signal from player1
+;        cmp al, startGameSignal
+;        je finishedStartingGame
+
+;    failedStartingGame:
+;        popa
+;        jmp exit ;To Be changed to main menu
+
+;    finishedStartingGame:
+;        popa
+;ret
+;checkGameRequestSignal endp
