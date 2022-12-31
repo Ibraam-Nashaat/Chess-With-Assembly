@@ -300,18 +300,19 @@ checkIfKingIsEaten endp
 
 printWinningMessage proc
     mov ah,2
-    mov dx,0319h
+    mov dx,0419h
     mov bx,0
     int 10h
     mov ah,0eh
     xor bx,bx
     mov bl,02h
-    print:  mov al,[di]
-            int 10h
-            inc di
-            mov al,[di]
-            cmp al,"$"
-            jne print
+    print:  
+        mov al,[di]
+        int 10h
+        inc di
+        mov al,[di]
+        cmp al,"$"
+        jne print
     ret
 printWinningMessage endp
 
@@ -320,13 +321,14 @@ initializeGame proc
     lea bx,stdPiecesGrid
     lea di,initPiecePos
     mov cl,0
-    loopPiecesMatrix:           mov al,[bx]
-                                mov [di],al
-                                inc bx
-                                inc di
-                                inc cl
-                                cmp cl,64d
-                                jne loopPiecesMatrix
+    loopPiecesMatrix:          
+        mov al,[bx]
+        mov [di],al
+        inc bx
+        inc di
+        inc cl
+        cmp cl,64d
+        jne loopPiecesMatrix
                              
     popa
     ret
@@ -336,12 +338,13 @@ initializeEatenArray proc
     pusha
     lea bx,eatenArray
     mov cl,0
-    loopEatenArray:             mov al,0
-                                 mov [bx],al
-                                inc bx
-                                inc cl
-                                cmp cl,14d
-                                jne loopEatenArray
+    loopEatenArray:             
+        mov al,0
+        mov [bx],al
+        inc bx
+        inc cl
+        cmp cl,14d
+        jne loopEatenArray
                              
     popa
     ret
