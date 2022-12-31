@@ -28,9 +28,9 @@ mov dx,0105h
 int 10h
 ; get the name
 mov ah,0AH 
-mov dx,offset mybuffer
+mov dx,offset firstPlayerBuffer
 int 21h
-mov si , offset bufferName
+mov si , offset firstPlayerName
 mov dl,[si]
 ;check below Z
 checkATOZ:

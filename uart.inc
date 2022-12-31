@@ -94,7 +94,7 @@ pusha
     printMsg welcome_msg
     mov pos,9 ;x
     call setCursorPosition
-    printMsg bufferName
+    printMsg firstPlayerName
 
     mov pos,0 ;x
     mov pos+1,1 ;y

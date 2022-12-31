@@ -338,10 +338,18 @@ msg_name db 'Please enter your name:$'
 msg_startGame db 'Press Enter Key to continue$'
 welcome_msg db 'Welcome: $'
 waiting_msg db 'Waiting Second Player To Join...$'
-mybuffer label byte
-bufferSize db 15
-actualSize db ?
-bufferName db 15 dup('$')
+
+usernameMaxLength equ 15
+
+firstPlayerBuffer label byte
+firstPlayerBufferSize db usernameMaxLength
+firstPlayerNameSize db ?
+firstPlayerName db 15 dup('$')
+
+secondPlayerBuffer label byte
+secondPlayerBufferSize db usernameMaxLength
+secondPlayerNameSize db ?
+secondPlayerName db 15 dup('$')
 
 modeFlag db ?
 
