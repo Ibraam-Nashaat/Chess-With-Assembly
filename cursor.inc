@@ -37,3 +37,18 @@ mov dx,offset message
 int 21h
 popa
 endm
+
+printNewLine macro
+    mov ah, 02h
+    
+    mov dl, 13d
+    int 21h
+
+    mov dl, 10d
+    int 21h
+endm, printNewLine
+
+printWithNewLine macro msg
+    printMsg msg
+    printNewLine
+endm

@@ -30,7 +30,7 @@ UART_init endp
 UART_transmit proc
 pusha
     mov dx , 3FDH ; Line Status Register
-    In al , dx ;Read Line Status
+    in al , dx ;Read Line Status
 
     AND al , 00100000b
     jz ex1
@@ -75,32 +75,40 @@ pop ax
 ret
 receiveByte endp
 
-; Check is first player:
-;   send byte "S for sent" as a signal
-;   wait for byte "R for received"  as a signal
-; Check if second player:
-;   check for "S" signal
-;   send "R" signal
-assignColorAndSignal proc
+sendCharacterViaSerial PROC NEAR
+    PUSH AX
+    PUSH dx
+    @@SendingName:       
+    mov dx,03FDh        
+    in al,dx
+    TEST al, 00100000b  
+    jz @@SendingName
+    mov dx, 3F8H
+    mov al, sendParameter
+    OUT dx, al
+    POP dx
+    POP AX
+    ret
+sendCharacterViaSerial endp
+
+receiveCharacterFromSerial PROC NEAR
+    PUSH dx
+    PUSH AX  
+    mov dx, 3FDH
+    in al, dx
+    AND al, 1
+    jz exitReceiveChar
+    mov dx, 3F8H
+    in al, dx
+    mov receiveParameter,al
+    exitReceiveChar:
+    POP AX
+    POP dx
+    ret
+receiveCharacterFromSerial endp
+
+assignPiecesColor proc
 pusha
-    ;Clear the screen
-    mov ax,3
-    int 10h
-
-    mov pos,0 ;x
-    mov pos+1,0 ;y
-    call setCursorPosition
-
-    printMsg welcome_msg
-    mov pos,9 ;x
-    call setCursorPosition
-    printMsg firstPlayerName
-
-    mov pos,0 ;x
-    mov pos+1,1 ;y
-    call setCursorPosition
-    printMsg waiting_msg
-
     call UART_rec
     cmp rec_bool, 0
     ; First Player 
@@ -108,44 +116,56 @@ pusha
     ; Second Player
     secondPlayerPath:
         mov isBlack, 1
-        
-        ; Get the byte in serial
-        call receiveByte
-        mov al, VALUE
-        ; Check if it's the right signal from player1
-        cmp al, firstPlayerSignal
-        jne failedSettingUpColor
-
-        ifSecondPlayerCanSendSignal:
-            call UART_transmit
-            cmp tra_bool, 1 ; If I can send Signal
-            jne ifSecondPlayerCanSendSignal
-
-        sendByte secondPlayerSignal
-
-    jmp finishedSettingUpColor
+        jmp finishedSettingUpColor
 
     firstPlayerPath:
         mov isBlack, 0
 
-        sendByte firstPlayerSignal
-
-        ifFirstPlayerReceivedSignal:
-            call UART_rec
-            cmp rec_bool, 1 ; If I can send Signal
-            jne ifFirstPlayerReceivedSignal
-
-        ; Get the byte in serial
-        call receiveByte
-        mov al, VALUE
-        ; Check if it's the right signal from player1
-        cmp al, secondPlayerSignal
-        je finishedSettingUpColor
-
-    failedSettingUpColor:
-        jmp exit
-
     finishedSettingUpColor:
 popa
 ret
-assignColorAndSignal endp
+assignPiecesColor endp
+
+exchangePlayersNames PROC NEAR
+    sendByte startExchangeSignal
+    waitForExchangeSignalFromOtherPlayer:
+    mov dx, 3FDH
+    in al, dx
+    AND al, 1
+    jz waitForExchangeSignalFromOtherPlayer
+    call receiveCharacterFromSerial
+    mov al, startExchangeSignal
+    cmp receiveParameter, al
+    je prepareNames
+    jmp waitForExchangeSignalFromOtherPlayer
+    prepareNames:
+    ;call sendCharacterViaSerial
+    mov si, offset firstPlayerName
+    mov DI, offset secondPlayerName
+    mov cx, 14
+    sendYourName:
+    mov al, [si]
+    mov sendParameter, al
+    call sendCharacterViaSerial
+    inc si
+    checkIfReceivedName:
+    mov dx, 3FDH
+    in al, dx
+    AND al, 1
+    jz checkIfReceivedName
+    call receiveCharacterFromSerial
+    mov al, receiveParameter
+    mov [DI] , al
+    inc DI
+    loop sendYourName
+
+    mov BX, 0
+    getSecondPlayerNameLength:
+    cmp secondPlayerName[BX], '$'
+    je finishGettingOtherPlayerName
+    inc BX
+    jmp getSecondPlayerNameLength
+    finishGettingOtherPlayerName:
+    mov secondPlayerNameSize, Bl
+    ret
+exchangePlayersNames endp

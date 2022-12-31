@@ -339,6 +339,9 @@ msg_startGame db 'Press Enter Key to continue$'
 welcome_msg db 'Welcome: $'
 waiting_msg db 'Waiting Second Player To Join...$'
 
+STATUS_NAME_SENT_MSG db "Your name is sent to the other player$"
+STATUS_ERROR_MSG db "Something Wrong Happened!$"
+
 usernameMaxLength equ 15
 
 firstPlayerBuffer label byte
@@ -372,9 +375,7 @@ chatModeYouCursorX db ?
 chatModeMeCursorY db ?
 chatModeYouCursorY db ?
 
-firstPlayerSignal db "S"
-secondPlayerSignal db "R"
-
+startExchangeSignal db "E"
 startGameSignal db "G"
 startChatSignal db "C"
 
@@ -382,6 +383,7 @@ whiteWon db "White Won$"
 blackWon db "Black Won$"
 
 exitFlag db 0
+
 
 ;initialize pieces grid 
 stdPiecesGrid db   6,3,1,5,2,1,3,6
@@ -401,6 +403,21 @@ eatenArray db 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"$"
 
 isBlack db ? ;To be changed with player's assigned color
 
+sendParameter db ?
+receiveParameter db ?
+
+emptyHorizontalLine DB 80 dup(' '), '$'
+connected_msg DB 'Connected with $'
+sentChatRequestMsg DB 'You Sent A chat Request To $'
+sentGameRequestMsg DB 'You Sent A Game Request To $'
+gotChatRequestMsg DB 'You Received A Chat Request From $'
+gotGameRequestMsg DB 'You Received A Game Request From $'
+
+gameRequestFlag DB 0
+chatRequestFlag DB 0
+inLineCharFlag DB 0
+
+notificationOption DB 0
 
 .code
 include Draw.inc
@@ -419,56 +436,25 @@ main PROC far
     mov ds , ax
 
     call UART_init
-    
 
     call welcome_window
-    cmp cl,escEnc
-    je exit
 
-    call assignColorAndSignal
+    continueToMainScreen:
+    call startMainMenu
+    MOV notificationOption, 1   ; Option1: Welcomes the player
+
+    ; Get Other Player Name
+    handleNotificationSection notificationOption
+
+    call assignPiecesColor
+
+    call exchangePlayersNames
+
+    MOV notificationOption, 2   ; Option2: Print other player name
     
-    mainMenu:
-    mov ah,0
-    mov al,03h
-    int 10h
-
-    call modes
-    cmp cl,chatModeEnc
-    je chatMode
-
-    cmp cl,gameModeEnc
-    je startGame
-
-    jmp exit
-
-    ;call the drawing module to draw the grid and pieces
-    startGame :
-        call initializeGame
-        call initializeEatenArray
-        mov al,0
-        mov exitFlag,al
-        ;Open the graphics mode
-        mov ah,0
-        mov al,13h
-        int 10h
-        call Draw
-        call printEatenPieces
-
-        infiniteLoop: 
-            call moveArrow
-            mov al,exitFlag
-            cmp al,1d
-            je waitPress
-            jmp infiniteLoop
-
-    waitPress:
-        mov ah,0
-        int 16h
-        jmp  mainMenu
-
-    chatMode:
-        call startChatMode
-
+    handleNotificationSection notificationOption
+    
+    call handleMainActions
 
     ;finish the execution and halting the program
     exit: 
