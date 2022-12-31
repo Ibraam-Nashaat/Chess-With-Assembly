@@ -395,9 +395,11 @@ stdPiecesGrid db   6,3,1,5,2,1,3,6
             db   10,10,10,10,10,10,10,10
             db   12,9,7,11,8,7,9,12
 
-row1Print db "0bB 0bK 0bP 0bQ$"
-row2Print db "0bR 0wB 0wK 0wP$"
-row3Print db "0wQ 0wR$"
+blackRow1Msg db "--Black--$"
+whiteRow1Msg db "--White--$"
+row2Print db "0bB 0bK 0bP 0bQ$"
+row3Print db "0bR 0wB 0wK 0wP$"
+row4Print db "0wQ 0wR$"
 
 eatenArray db 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"$"
 

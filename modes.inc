@@ -100,7 +100,7 @@ handleMainActions PROC NEAR
         mov al,13h
         int 10h
         call Draw
-        call printEatenPieces
+        call printGameInfo
 
         infiniteLoop: 
             call moveArrow
