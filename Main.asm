@@ -395,8 +395,8 @@ stdPiecesGrid db   6,3,1,5,2,1,3,6
             db   10,10,10,10,10,10,10,10
             db   12,9,7,11,8,7,9,12
 
-blackRow1Msg db "--Black--$"
-whiteRow1Msg db "--White--$"
+blackRow1Msg db "-----Black-----$"
+whiteRow1Msg db "-----White-----$"
 row2Print db "0bB 0bK 0bP 0bQ$"
 row3Print db "0bR 0wB 0wK 0wP$"
 row4Print db "0wQ 0wR$"
@@ -446,23 +446,23 @@ main PROC far
 
     call welcome_window
 
-    continueToMainScreen:
-      mov ah,0
-    mov al,03h
-    int 10h
-    call startMainMenu
-    MOV notificationOption, 1   ; Option1: Welcomes the player
+    mainMenuBeforeConnection:
+        mov ah,0
+        mov al,03h
+        int 10h
+        call startMainMenu
+        mov notificationOption, 1   ; Option1: Welcomes the player
+        handleNotificationSection notificationOption
+        call assignPiecesColor
+        call exchangePlayersNames
 
-    ; Get Other Player Name
-    handleNotificationSection notificationOption
-
-    call assignPiecesColor
-
-    call exchangePlayersNames
-
-    MOV notificationOption, 2   ; Option2: Print other player name
-    
-    handleNotificationSection notificationOption
+    MainMenuAfterConnection:
+        mov ah,0
+        mov al,03h
+        int 10h
+        call startMainMenu
+        mov notificationOption, 2   ; Option2: Print other player name
+        handleNotificationSection notificationOption
     
      ;press the key
     mov ah,0
@@ -530,7 +530,7 @@ main PROC far
     waitPress:
         mov ah,0
         int 16h
-        call continueToMainScreen
+        call MainMenuAfterConnection
 
     chatMode:
         call startChatMode
