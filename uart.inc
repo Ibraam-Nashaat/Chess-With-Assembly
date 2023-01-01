@@ -188,7 +188,7 @@ pusha
     jmp @waitForExchangeSignal
    
     @IsSend:
-    mov cx,4
+    mov cx,5
     lea si,dataToSend
     lea di,receivedData
 
@@ -211,8 +211,15 @@ pusha
    
    mov al,receivedData
     cmp al,0FFh
-    je @return
+    je checkIfCharWasSend
     call moveReceivedPiece
+
+    checkIfCharWasSend:
+    mov al,receivedData+4
+    cmp al,0FFh
+    je @return
+    mov VALUE,al
+    call printReceivedChar
 
     
 
@@ -223,6 +230,7 @@ pusha
          mov receiveParameter,0
          mov al,0FFh
         mov dataToSend,al
+        mov dataToSend+4,al
 popa
 ret
 handleGameSendAndReceive endp
