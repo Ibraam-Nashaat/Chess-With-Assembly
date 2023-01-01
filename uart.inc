@@ -173,7 +173,7 @@ exchangePlayersNames endp
 handleGameSendAndReceive proc
 pusha
     
-    mov al,2
+    mov al,"%"
     mov sendParameter, al
     call sendMoveViaSerial
 
@@ -183,7 +183,7 @@ pusha
     AND al, 1
     jz @waitForExchangeSignal
     call receiveMoveFromSerial
-    cmp receiveParameter, 2
+    cmp receiveParameter, "%"
     je @IsSend
     jmp @waitForExchangeSignal
    
