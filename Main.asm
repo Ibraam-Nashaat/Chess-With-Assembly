@@ -338,6 +338,7 @@ msg_name db 'Please enter your name:$'
 msg_startGame db 'Press Enter Key to continue$'
 welcome_msg db 'Welcome: $'
 waiting_msg db 'Waiting Second Player To Join...$'
+chatModeExitMsg db 'To Leave the chat press F3$'
 
 STATUS_NAME_SENT_MSG db "Your name is sent to the other player$"
 STATUS_ERROR_MSG db "Something Wrong Happened!$"

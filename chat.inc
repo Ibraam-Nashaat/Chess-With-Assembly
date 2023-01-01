@@ -37,13 +37,10 @@ scrollLowerPart proc
     mov dl, 79
     int 10h
 
-    mov ah, 03
-    mov bh, 0
-    int 10h
-    dec dh
+    call getCursorPosition
+    dec pos+1
+    call setCursorPosition
 
-    mov ah, 2
-    int 10h
     pop ax
     ret
 scrollLowerPart ENDP 
@@ -61,6 +58,12 @@ startChatMode proc
 
     printMsg rr
     printMsg firstPlayerName
+
+    mov pos,0
+    mov pos+1,23
+    call setCursorPosition
+    printMsg rr
+    printMsg chatModeExitMsg
 
     mov pos,0
     mov pos+1,0
