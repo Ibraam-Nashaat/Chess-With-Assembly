@@ -172,37 +172,26 @@ exchangePlayersNames endp
 
 handleGameSendAndReceive proc
 pusha
-    @IsReceive:
-    call receiveMoveFromSerial
-    mov ah,receiveParameter
-    cmp ah,0
-    je @IsSend
-
+    
     mov al,2
     mov sendParameter, al
     call sendMoveViaSerial
 
-    mov cx,4
-    lea si,receivedData
-    @Receive:
+    @waitForExchangeSignal:
+    mov dx, 3FDH
+    in al, dx
+    AND al, 1
+    jz @waitForExchangeSignal
     call receiveMoveFromSerial
-    mov al, receiveParameter
-    mov [si] , al
-    inc si
-    loop @Receive    
+    cmp receiveParameter, 2
+    jne @return
 
-    call moveReceivedPiece
 
     @IsSend:
     mov ah,isThereDataToSend
     cmp ah,0
-    je @return
+    je @IsReceive
 
-    call receiveMoveFromSerial
-    mov ah,receiveParameter
-    cmp ah,2
-    je @IsSend
-    
     mov cx,4
     lea si,dataToSend
     @Send:
@@ -212,10 +201,35 @@ pusha
     inc si
     loop @Send
 
+    @IsReceive:
+    call receiveMoveFromSerial
+    mov ah,receiveParameter
+    cmp ah,0
+    je @return
+
+
+    
+    mov cx,4
+    lea si,receivedData
+    @Receive:
+    mov dx, 3FDH
+    in al, dx
+    AND al, 1
+    jz @Receive
+    call receiveMoveFromSerial
+    mov al, receiveParameter
+    mov [si] , al
+    inc si
+    loop @Receive    
+
+    call moveReceivedPiece
+
+    
+
 
  @return:mov al,0
          mov sendParameter, al
-         call sendMoveViaSerial
+       ;  call sendMoveViaSerial
          mov isThereDataToSend,0
          mov receiveParameter,0
 popa
