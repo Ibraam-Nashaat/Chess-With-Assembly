@@ -1,9 +1,9 @@
 inititializeChat proc
 pusha
     mov chatModeMeCursorY,05h
-    mov chatModeYouCursorY,09h
+    mov chatModeYouCursorY,0eh
     mov chatModeMeCursorX,1Ch
-    mov chatModeYouCursorX,1Ch
+    mov chatModeYouCursorX,1dh
 
     mov pos,19h
     mov pos+1,0dh

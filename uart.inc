@@ -211,9 +211,10 @@ pusha
    
    mov al,receivedData
     cmp al,0FFh
-    je @return
+    je checkIfCharWasSend
     call moveReceivedPiece
 
+    checkIfCharWasSend:
     mov al,receivedData+4
     cmp al,0FFh
     je @return
