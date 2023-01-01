@@ -29,7 +29,7 @@ UART_init endp
 ; Sets tra_bool to 1 if we can send a byte
 UART_transmit proc
 pusha
-    mov dx , 3FDH ; Line Status Register
+    mov dx , 3fdh ; Line Status Register
     in al , dx ;Read Line Status
 
     and al , 00100000b
@@ -46,7 +46,7 @@ UART_transmit endp
 UART_rec proc
 pusha
     ;Check that Data Ready
-    mov dx , 3FDH		; Line Status Register
+    mov dx , 3fdh		; Line Status Register
     in al , dx 
     and al , 1
     jz ex2
@@ -56,18 +56,11 @@ popa
 ret
 UART_rec endp
 
-clearBuffer proc 
-    push ax
-    mov ah,0
-    int 16h      
-    pop ax
-clearBuffer endp
-
 ; Sends a byte through serial port
 sendByte macro valueToSend
 push ax
     mov al, valueToSend
-    mov dx , 3F8H   ; Transmit FirstPlayerSignal
+    mov dx , 3f8h   ; Transmit FirstPlayerSignal
     out dx , al
 pop ax
 endm 
@@ -82,35 +75,42 @@ pop ax
 ret
 receiveByte endp
 
-sendCharacterViaSerial proc NEAR
-    push AX
+; Send when allowed (Wait until allowed)
+sendCharacterViaSerial proc
+    push ax
     push dx
-    @@SendingName:       
-    mov dx,03FDh        
-    in al,dx
-    TEST al, 00100000b  
-    jz @@SendingName
-    mov dx, 3F8H
+
+    checkIfCanSend:       
+        mov dx,03FDh
+        in al,dx
+        TEST al, 00100000b
+        jz checkIfCanSend
+    mov dx, 3f8h
     mov al, sendParameter
-    OUT dx, al
+    out dx, al
+
     pop dx
-    pop AX
+    pop ax
     ret
 sendCharacterViaSerial endp
 
-receiveCharacterFromSerial proc NEAR
+; receive character if there is one
+receiveCharacterFromSerial proc 
     push dx
-    push AX  
-    mov dx, 3FDH
+    push ax
+
+    mov dx, 3fdh
     in al, dx
     and al, 1
     jz exitReceiveChar
-    mov dx, 3F8H
+
+    mov dx, 3f8h
     in al, dx
     mov receiveParameter,al
+
     exitReceiveChar:
-    pop AX
-    pop dx
+        pop ax
+        pop dx
     ret
 receiveCharacterFromSerial endp
 
@@ -133,47 +133,54 @@ popa
 ret
 assignPiecesColor endp
 
-exchangePlayersNames proc NEAR
+exchangePlayersNames proc 
+    ; Send Signal to start exchanging names
     sendByte startExchangeSignal
+
+    ; Wait the other player to resend the same signal
     waitForExchangeSignalFromOtherPlayer:
-    mov dx, 3FDH
-    in al, dx
-    and al, 1
-    jz waitForExchangeSignalFromOtherPlayer
+        mov dx, 3fdh
+        in al, dx
+        and al, 1
+        jz waitForExchangeSignalFromOtherPlayer
+
+    ; Get the character the other player sent in serial
     call receiveCharacterFromSerial
     mov al, startExchangeSignal
     cmp receiveParameter, al
+    ; If the signal is right I send my name the receive the other's
     je prepareNames
+
+    ; If we get another signal we wait until he sends the right one
     jmp waitForExchangeSignalFromOtherPlayer
     prepareNames:
-    ;call sendCharacterViaSerial
-    mov si, offset firstPlayerName
-    mov DI, offset secondPlayerName
-    mov cx, 14
-    sendYourName:
-    mov al, [si]
-    mov sendParameter, al
-    call sendCharacterViaSerial
-    inc si
-    checkIfReceivedName:
-    mov dx, 3FDH
-    in al, dx
-    and al, 1
-    jz checkIfReceivedName
-    call receiveCharacterFromSerial
-    mov al, receiveParameter
-    mov [DI] , al
-    inc DI
-    loop sendYourName
+        mov si, offset firstPlayerName
+        mov di, offset secondPlayerName
+        mov cx, 14
 
-    mov BX, 0
-    getSecondPlayerNameLength:
-    cmp secondPlayerName[BX], '$'
-    je finishGettingOtherPlayerName
-    inc BX
-    jmp getSecondPlayerNameLength
-    finishGettingOtherPlayerName:
-    mov secondPlayerNameSize, Bl
+    mov al, 0
+    mov secondPlayerNameSize, al
+
+    ; Send my name and get other player's name  
+    exchangeOperation:
+        ; Si loops on my name to send it
+        mov al, [si]
+        mov sendParameter, al
+        call sendCharacterViaSerial
+        inc si
+        checkIfReceivedName:
+            mov dx, 3fdh
+            in al, dx
+            and al, 1
+            jz checkIfReceivedName
+
+        call receiveCharacterFromSerial
+        mov al, receiveParameter
+        ; di loops on other variable to save it
+        mov [di] , al
+        inc di
+        inc secondPlayerNameSize
+    loop exchangeOperation
     ret
 exchangePlayersNames endp
 
@@ -185,7 +192,7 @@ pusha
     call sendMoveViaSerial
 
     @waitForExchangeSignal:
-    mov dx, 3FDH
+    mov dx, 3fdh
     in al, dx
     and al, 1
     jz @waitForExchangeSignal
@@ -206,7 +213,7 @@ pusha
     call sendMoveViaSerial
     inc si
     @Receive:
-    mov dx, 3FDH
+    mov dx, 3fdh
     in al, dx
     and al, 1
     jz @Receive
@@ -251,11 +258,11 @@ handleGameSendAndReceive endp
 receiveMoveFromSerial proc
     push dx
     push AX  
-    mov dx, 3FDH
+    mov dx, 3fdh
     in al, dx
     and al, 1
     jz exitReceiveMove
-    mov dx, 3F8H
+    mov dx, 3f8h
     in al, dx
     mov receiveParameter,al
     exitReceiveMove:
@@ -272,7 +279,7 @@ sendMoveViaSerial proc
     in al,dx
     TEST al, 00100000b  
     jz @@SendingMove
-    mov dx, 3F8H
+    mov dx, 3f8h
     mov al, sendParameter
     OUT dx, al
     pop dx

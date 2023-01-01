@@ -1,5 +1,5 @@
-startMainMenu PROC NEAR
-       MOV BH, 0
+startMainMenu proc
+       mov bh, 0
 
        ;move cursor to 25,09
        mov ah,2
@@ -8,9 +8,9 @@ startMainMenu PROC NEAR
        mov dh,09
        int 10h
 
-       MOV AH, 09H
-       MOV DX, OFFSET chatting_mode
-       INT 21H
+       mov ah, 09H
+       mov dx, OFFSET chatting_mode
+       int 21h
 
        ;move cursor to 25,11
        mov ah,2
@@ -19,9 +19,9 @@ startMainMenu PROC NEAR
        mov dh,11
        int 10h
 
-       MOV AH, 09H
-       MOV DX, OFFSET game_mode
-       INT 21H
+       mov ah, 09H
+       mov dx, OFFSET game_mode
+       int 21h
 
        ;move cursor to 25,12
        mov ah,2
@@ -30,25 +30,25 @@ startMainMenu PROC NEAR
        mov dh,13
        int 10h
 
-       MOV AH, 09H
-       MOV DX, OFFSET end_game
-       INT 21H
+       mov ah, 09H
+       mov dx, OFFSET end_game
+       int 21h
 
-       MOV AH, 02
-       MOV BH, 0
-       MOV DH, 20
-       MOV DL, 0
-       INT 10H
+       mov ah, 02
+       mov bh, 0
+       mov dh, 20
+       mov dl, 0
+       int 10h
 
-       MOV AH, 09H
-       MOV DX, OFFSET rr
-       INT 21H
+       mov ah, 09H
+       mov dx, OFFSET rr
+       int 21h
 
        RET
 startMainMenu ENDP
 
 handleNotificationSection macro Option
-    LOCAL emptyMessageSection, welcomeOption,sentGameRequestOption,sentChatRequestOption,gotChatRequestOption,gotGameRequestOption,END
+    LOCAL emptyMessageSection, welcomeOption, noConnectionMainMenuChoice
     pusha
 
     mov dh,21
@@ -58,7 +58,7 @@ handleNotificationSection macro Option
         mov bh, 0
         mov dh, 21
         mov dl, 0
-        int 10H
+        int 10h
         
         mov ah, 09H
         printMsg emptyHorizontalLine
@@ -73,7 +73,7 @@ handleNotificationSection macro Option
     
     mov ah, 02
     mov dl, 0
-    int 10H
+    int 10h
 
     mov ah, 09H
     printMsg waiting_msg
@@ -81,60 +81,14 @@ handleNotificationSection macro Option
     
     welcomeOption:
     cmp Option, 2
-    jne sentChatRequestOption
+    jne noConnectionMainMenuChoice
     mov ah, 02
     mov dl, 0
-    int 10H
+    int 10h
     
-    mov ah, 09H
     printMsg connected_msg
     printMsg secondPlayerName
-    inc dh
 
-    sentChatRequestOption:
-    cmp Option, 3
-    jne sentGameRequestOption
-    mov ah, 02
-    mov dl, 0
-    int 10H
-
-    printMsg sentChatRequestMsg
-    printMsg secondPlayerName
-    inc dh
-
-    sentGameRequestOption:
-    cmp Option, 4
-    jne gotChatRequestOption
-    mov ah, 02
-    mov dl, 0
-    int 10H
-
-    printMsg sentGameRequestMsg
-    printMsg secondPlayerName
-    inc dh
-    
-    gotChatRequestOption:
-    cmp Option, 5
-    jne gotGameRequestOption
-    mov ah, 02
-    mov dl, 0
-    int 10H
-
-    printMsg gotChatRequestMsg
-    printMsg secondPlayerName
-    inc dh
-    
-    gotGameRequestOption:
-    cmp Option, 6
-    jne END
-    mov ah, 02
-    mov dl, 0
-    int 10H
-
-    printMsg gotGameRequestMsg
-    printMsg secondPlayerName
-    inc dh
-
-    END:
+    noConnectionMainMenuChoice:
     popa
 ENDM handleNotificationSection
