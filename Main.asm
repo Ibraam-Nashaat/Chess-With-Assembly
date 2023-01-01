@@ -361,6 +361,7 @@ gameModeEnc equ 1
 escEnc  equ 2
 
 rr db 80 dup('-'),'$'
+rrInlineChat db 15 dup('-'),'$'
 pos db ?,?
 rec_msg db ?    
 rec_bool db ?
@@ -438,6 +439,7 @@ include cursor.inc
 include uart.inc
 include welcome.inc
 include chat.inc
+include inChat.inc
 main PROC far
     mov ax , @data
     mov ds , ax
@@ -518,6 +520,7 @@ main PROC far
         int 10h
         call Draw
         call printGameInfo
+        call inititializeChat
      ;   call moveReceivedPiece
 
         infiniteLoop: 
