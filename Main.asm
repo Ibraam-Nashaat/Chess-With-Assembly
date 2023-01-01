@@ -447,6 +447,9 @@ main PROC far
     call welcome_window
 
     continueToMainScreen:
+      mov ah,0
+    mov al,03h
+    int 10h
     call startMainMenu
     MOV notificationOption, 1   ; Option1: Welcomes the player
 
@@ -461,7 +464,76 @@ main PROC far
     
     handleNotificationSection notificationOption
     
-    call handleMainActions
+     ;press the key
+    mov ah,0
+    int 16h
+    ;conditions
+    ;F1
+    mov bl,3Bh
+    cmp ah,bl
+    jz setChattingMode
+    ;F2
+    mov bl,3Ch
+    cmp ah,bl
+    jz setGameMode
+    ;ESC
+    mov bl,01
+    cmp ah,bl
+    jz setEsc
+
+    mov cl,escEnc
+    jmp continueToModeCheck
+
+    setChattingMode:
+        mov cl,chatModeEnc
+        jmp continueToModeCheck
+
+    setGameMode:
+        mov cl,gameModeEnc
+        jmp continueToModeCheck
+
+    setEsc:
+        mov cl,escEnc
+        jmp continueToModeCheck
+    
+    continueToModeCheck:
+    cmp cl,chatModeEnc
+    je chatMode
+
+    cmp cl,gameModeEnc
+    je startGame
+
+    jmp exit
+
+    ;call the drawing module to draw the grid and pieces
+    startGame :
+        mov receiveParameter,1
+        call initializeGame
+        call initializeEatenArray
+        mov al,0
+        mov exitFlag,al
+        ;Open the graphics mode
+        mov ah,0
+        mov al,13h
+        int 10h
+        call Draw
+        call printGameInfo
+     ;   call moveReceivedPiece
+
+        infiniteLoop: 
+            call moveArrow
+            mov al,exitFlag
+            cmp al,1d
+            je waitPress
+            jmp infiniteLoop
+
+    waitPress:
+        mov ah,0
+        int 16h
+        call continueToMainScreen
+
+    chatMode:
+        call startChatMode
 
     ;finish the execution and halting the program
     exit: 
