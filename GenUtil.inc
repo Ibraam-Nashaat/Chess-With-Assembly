@@ -256,6 +256,22 @@ checkAvailbleMov proc
         call updateSquareBackgroundAndPiece
 
 
+        lea di,dataToSend
+        mov ax,clickedPieceRow
+        mov [di],al
+        inc di
+        mov ax,clickedPieceCol
+        mov [di],al
+        inc di
+        mov ax,arrowPointer
+        mov [di],al
+        inc di
+        mov ax,arrowPointer+2
+        mov [di],al
+        inc di
+
+
+
         ;update the clicked piece pos with blue Background in order for the next proc to recolor it
         mov ax,clickedPieceRow ;storing the row number
         mov di,clickedPieceCol;storing the column number
