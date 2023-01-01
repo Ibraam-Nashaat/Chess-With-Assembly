@@ -91,6 +91,7 @@ handleMainActions PROC NEAR
 
     ;call the drawing module to draw the grid and pieces
     startGame :
+        mov receiveParameter,1
         call initializeGame
         call initializeEatenArray
         mov al,0
@@ -101,6 +102,7 @@ handleMainActions PROC NEAR
         int 10h
         call Draw
         call printGameInfo
+     ;   call moveReceivedPiece
 
         infiniteLoop: 
             call moveArrow

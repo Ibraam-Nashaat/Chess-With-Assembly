@@ -421,6 +421,12 @@ inLineCharFlag DB 0
 
 notificationOption DB 0
 
+dataToSend db 0,0,1,1,0
+
+receivedData db 0,0,0,0,0
+
+isThereDataToSend db 1
+
 .code
 include Draw.inc
 include arrow.inc
