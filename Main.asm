@@ -427,6 +427,8 @@ receivedData db 0,0,0,0,0
 
 isThereDataToSend db 1
 
+receiveFlag db "$"
+
 .code
 include Draw.inc
 include arrow.inc

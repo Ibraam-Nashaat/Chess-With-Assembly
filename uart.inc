@@ -184,44 +184,56 @@ pusha
     jz @waitForExchangeSignal
     call receiveMoveFromSerial
     cmp receiveParameter, 2
-    jne @return
-
+    je @IsSend
+    jmp @waitForExchangeSignal
+   
 
     @IsSend:
+    mov cx,4
+    lea si,dataToSend
+    lea di,receivedData
+
     mov ah,isThereDataToSend
     cmp ah,0
     je @IsReceive
 
-    mov cx,4
-    lea si,dataToSend
+    mov al, "$"
+    mov sendParameter, al
+    call sendMoveViaSerial
+    inc si
+
+    @IsReceive:
+    call receiveMoveFromSerial
+    mov al, receiveParameter
+    cmp al,"$"
+    jne @Send
+
+    mov receiveFlag,al
+
+
     @Send:
+    mov ah,isThereDataToSend
+    cmp ah,0
+    je @Receive
     mov al, [si]
     mov sendParameter, al
     call sendMoveViaSerial
     inc si
-    loop @Send
-
-    @IsReceive:
-    call receiveMoveFromSerial
-    mov ah,receiveParameter
-    cmp ah,0
-    je @return
-
-
-    
-    mov cx,4
-    lea si,receivedData
     @Receive:
+    cmp receiveFlag,"$"
+    jne skip
     mov dx, 3FDH
     in al, dx
     AND al, 1
     jz @Receive
     call receiveMoveFromSerial
     mov al, receiveParameter
-    mov [si] , al
-    inc si
-    loop @Receive    
-
+    mov [di] , al
+    inc di
+   skip: loop @send    
+   
+    cmp receiveFlag,"$"
+    jne @return
     call moveReceivedPiece
 
     
@@ -232,6 +244,7 @@ pusha
        ;  call sendMoveViaSerial
          mov isThereDataToSend,0
          mov receiveParameter,0
+         mov receiveFlag,0
 popa
 ret
 handleGameSendAndReceive endp
