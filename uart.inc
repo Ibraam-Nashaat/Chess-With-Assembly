@@ -262,6 +262,7 @@ sendMoveViaSerial endp
 
 moveReceivedPiece proc
 pusha
+        
         mov ah,0
         mov al,receivedData
         mov ch,0
@@ -273,6 +274,17 @@ pusha
         mov fromPieceEnc,cl
         mov cl,emptyEnc
         mov [bx],cl
+
+
+        mov ax,tempRow
+        mov di,tempColumn
+        lea bx,stdGrid
+        mov si,8        
+        mul si          
+        add bx,ax       
+        add bx,di       
+        mov al,[bx]
+        mov tempColor,al  
         call updateSquareBackgroundAndPiece
 
        
@@ -290,6 +302,18 @@ pusha
         call printGameInfo
         call checkIfKingIsEaten
         mov [bx],cl
+
+        
+
+        mov ax,tempRow
+        mov di,tempColumn
+        lea bx,stdGrid
+        mov si,8        
+        mul si          
+        add bx,ax       
+        add bx,di       
+        mov al,[bx]
+        mov tempColor,al  
         call updateSquareBackgroundAndPiece
 
                  
