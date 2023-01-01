@@ -1,26 +1,77 @@
+scrollUpperPart proc 
+    push ax
+
+    mov ah, 6
+    mov al, 1
+    mov bh, 7
+
+    mov ch, 1 ;(1,0)
+    mov cl, 0
+
+    mov dh, 12;(12,79)
+    mov dl, 79
+    int 10h
+
+    mov ah, 03
+    mov bh, 0
+    int 10h
+    dec dh
+
+    mov ah, 2
+    int 10h
+    pop ax
+    ret
+scrollUpperPart ENDP 
+
+scrollLowerPart proc 
+    push ax
+    
+    mov ah, 6
+    mov al, 1
+    mov bh, 7
+    
+    mov ch, 15 ;(15, 0)
+    mov cl, 0
+
+    mov dh, 22 ;(22, 79)
+    mov dl, 79
+    int 10h
+
+    mov ah, 03
+    mov bh, 0
+    int 10h
+    dec dh
+
+    mov ah, 2
+    int 10h
+    pop ax
+    ret
+scrollLowerPart ENDP 
+
 startChatMode proc
     ; clearing the screen
     mov ax,3
     int 10h
 
-    mov chatModeMeCursorY,0
-    mov chatModeYouCursorY,13
+    mov chatModeMeCursorY,1
+    mov chatModeYouCursorY,15
     mov pos,0
-    mov pos+1,12
+    mov pos+1,13
     call setCursorPosition
 
     printMsg rr
-    printMsg str1
+    printMsg firstPlayerName
 
     mov pos,0
     mov pos+1,0
     call setCursorPosition
-    printMsg str2
+    printMsg secondPlayerName
 
     mov tra_bool,0
     mov rec_bool,0
-    mov chatModeMeCursorX, 4
-    mov chatModeYouCursorX, 4
+
+    mov chatModeMeCursorX, 0
+    mov chatModeYouCursorX, 0
 
     chatOuterLoop:
     ;; check if we have to receive something
@@ -53,12 +104,21 @@ startChatMode proc
         jmp continueToTransmit
 
         print_character1:
-            printCharacter VALUE
-            call getCursorPosition
-            mov bh,pos
-            mov chatModeYouCursorX,bh
-            mov bh,pos+1
-            mov chatModeYouCursorY,bh
+
+            checkChatModeYouY:
+            cmp chatModeYouCursorY, 23
+            jl printYouChar
+
+            scrollYouPart:
+                call scrollLowerPart
+            
+            printYouChar:
+                printCharacter VALUE
+                call getCursorPosition
+                mov bh,pos
+                mov chatModeYouCursorX,bh
+                mov bh,pos+1
+                mov chatModeYouCursorY,bh
     popa
 
 
