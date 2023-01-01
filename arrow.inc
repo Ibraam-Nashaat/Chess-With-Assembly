@@ -9,6 +9,10 @@ moveArrow proc
     ;check loop is for getting the key pressed without waiting for it
     CHECK:  
         call checkTimer
+        call handleGameSendAndReceive
+         mov al,exitFlag
+        cmp al,1d
+        je exitGame
         mov ah,1 
         int 16h
         jz CHECK 
@@ -32,11 +36,12 @@ moveArrow proc
 
     cmp ah,0fh ;compare the scancode of the key that we got to that of the Tab-key
     je click
-
     cmp ah,3Eh
     je exitGame
-
     ret
+    exitGame:mov al,1d
+            mov exitFlag,al
+            ret
     moveUp:
         mov ax,arrowPointer 
         dec ax               ;To move the arrowPointer up we will need to dec the row number
@@ -48,7 +53,6 @@ moveArrow proc
         mov ax,tempNewArrowptr
         mov arrowPointer,ax  ;update the arrowPointer position with the new position
         jmp updateGrid      ;jmp to updateGrid reDraw the grid and the pieces
-
     moveDown:
         mov ax,arrowPointer
         inc ax
@@ -73,7 +77,6 @@ moveArrow proc
         mov ax,tempNewArrowptr
         mov arrowPointer+2,ax
         jmp updateGrid
-
     moveLeft: 
         mov ax,arrowPointer+2
         dec ax
@@ -85,19 +88,16 @@ moveArrow proc
         mov ax,tempNewArrowptr
         mov arrowPointer+2,ax
         jmp updateGrid
-    
     click:
-        call checkClickCount 
+        call checkClickCount
+        cmp exitFlag,1
+        je lastCall
         ret
-
+        lastCall:call handleGameSendAndReceive
     updateGrid: 
         call redrawNewArrowPos
     return:  ret
 
-
-    exitGame:mov al,1d
-            mov exitFlag,al
-            ret
 moveArrow ENDP
 
 ;Update the grid matrix (initGrid) which contains the colors of the square background

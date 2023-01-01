@@ -169,3 +169,155 @@ exchangePlayersNames PROC NEAR
     mov secondPlayerNameSize, Bl
     ret
 exchangePlayersNames endp
+
+handleGameSendAndReceive proc
+pusha
+    
+    mov al,"%"
+    mov sendParameter, al
+    call sendMoveViaSerial
+
+    @waitForExchangeSignal:
+    mov dx, 3FDH
+    in al, dx
+    AND al, 1
+    jz @waitForExchangeSignal
+    call receiveMoveFromSerial
+    cmp receiveParameter, "%"
+    je @IsSend
+    jmp @waitForExchangeSignal
+   
+    @IsSend:
+    mov cx,4
+    lea si,dataToSend
+    lea di,receivedData
+
+
+    @Send:
+    mov al, [si]
+    mov sendParameter, al
+    call sendMoveViaSerial
+    inc si
+    @Receive:
+    mov dx, 3FDH
+    in al, dx
+    AND al, 1
+    jz @Receive
+    call receiveMoveFromSerial
+    mov al, receiveParameter
+    mov [di] , al
+    inc di
+    loop @Send    
+   
+   mov al,receivedData
+    cmp al,0FFh
+    je @return
+    call moveReceivedPiece
+
+    
+
+
+ @return:mov al,0FFh
+         mov sendParameter, al
+       ;  call sendMoveViaSerial
+         mov receiveParameter,0
+         mov al,0FFh
+        mov dataToSend,al
+popa
+ret
+handleGameSendAndReceive endp
+
+receiveMoveFromSerial proc
+    PUSH dx
+    PUSH AX  
+    mov dx, 3FDH
+    in al, dx
+    AND al, 1
+    jz exitReceiveMove
+    mov dx, 3F8H
+    in al, dx
+    mov receiveParameter,al
+    exitReceiveMove:
+    POP AX
+    POP dx
+    ret
+receiveMoveFromSerial endp
+
+sendMoveViaSerial proc
+    PUSH AX
+    PUSH dx
+    @@SendingMove:       
+    mov dx,03FDh        
+    in al,dx
+    TEST al, 00100000b  
+    jz @@SendingMove
+    mov dx, 3F8H
+    mov al, sendParameter
+    OUT dx, al
+    POP dx
+    POP AX
+    ret
+sendMoveViaSerial endp
+
+
+moveReceivedPiece proc
+pusha
+        
+        mov ah,0
+        mov al,receivedData
+        mov ch,0
+        mov cl,receivedData+1
+        mov di,cx
+        mov tempRow,ax
+        mov tempColumn,di
+        call getPiecePosToDraw
+        mov fromPieceEnc,cl
+        mov cl,emptyEnc
+        mov [bx],cl
+
+
+        mov ax,tempRow
+        mov di,tempColumn
+        lea bx,stdGrid
+        mov si,8        
+        mul si          
+        add bx,ax       
+        add bx,di       
+        mov al,[bx]
+        mov tempColor,al  
+        call updateSquareBackgroundAndPiece
+
+       
+
+        mov ah,0
+        mov al,receivedData+2
+        mov ch,0
+        mov cl,receivedData+3
+        mov di,cx
+        mov tempRow,ax
+        mov tempColumn,di
+        call getPiecePosToDraw
+        call incrementEatenPieces
+        mov cl,fromPieceEnc
+        call printGameInfo
+        call checkIfKingIsEaten
+        mov [bx],cl
+
+        
+
+        mov ax,tempRow
+        mov di,tempColumn
+        lea bx,stdGrid
+        mov si,8        
+        mul si          
+        add bx,ax       
+        add bx,di       
+        mov al,[bx]
+        mov tempColor,al  
+        call updateSquareBackgroundAndPiece
+
+                 
+  popa
+  ret
+
+moveReceivedPiece endp

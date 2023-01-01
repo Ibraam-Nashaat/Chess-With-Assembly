@@ -395,8 +395,8 @@ stdPiecesGrid db   6,3,1,5,2,1,3,6
             db   10,10,10,10,10,10,10,10
             db   12,9,7,11,8,7,9,12
 
-blackRow1Msg db "--Black--$"
-whiteRow1Msg db "--White--$"
+blackRow1Msg db "-----Black-----$"
+whiteRow1Msg db "-----White-----$"
 row2Print db "0bB 0bK 0bP 0bQ$"
 row3Print db "0bR 0wB 0wK 0wP$"
 row4Print db "0wQ 0wR$"
@@ -421,6 +421,11 @@ inLineCharFlag DB 0
 
 notificationOption DB 0
 
+dataToSend db 0FFh,0,0,0,0
+
+receivedData db 0,0,0,0,0
+
+
 .code
 include Draw.inc
 include arrow.inc
@@ -441,22 +446,94 @@ main PROC far
 
     call welcome_window
 
-    continueToMainScreen:
-    call startMainMenu
-    MOV notificationOption, 1   ; Option1: Welcomes the player
+    mainMenuBeforeConnection:
+        mov ah,0
+        mov al,03h
+        int 10h
+        call startMainMenu
+        mov notificationOption, 1   ; Option1: Welcomes the player
+        handleNotificationSection notificationOption
+        call assignPiecesColor
+        call exchangePlayersNames
 
-    ; Get Other Player Name
-    handleNotificationSection notificationOption
-
-    call assignPiecesColor
-
-    call exchangePlayersNames
-
-    MOV notificationOption, 2   ; Option2: Print other player name
+    MainMenuAfterConnection:
+        mov ah,0
+        mov al,03h
+        int 10h
+        call startMainMenu
+        mov notificationOption, 2   ; Option2: Print other player name
+        handleNotificationSection notificationOption
     
-    handleNotificationSection notificationOption
+     ;press the key
+    mov ah,0
+    int 16h
+    ;conditions
+    ;F1
+    mov bl,3Bh
+    cmp ah,bl
+    jz setChattingMode
+    ;F2
+    mov bl,3Ch
+    cmp ah,bl
+    jz setGameMode
+    ;ESC
+    mov bl,01
+    cmp ah,bl
+    jz setEsc
+
+    mov cl,escEnc
+    jmp continueToModeCheck
+
+    setChattingMode:
+        mov cl,chatModeEnc
+        jmp continueToModeCheck
+
+    setGameMode:
+        mov cl,gameModeEnc
+        jmp continueToModeCheck
+
+    setEsc:
+        mov cl,escEnc
+        jmp continueToModeCheck
     
-    call handleMainActions
+    continueToModeCheck:
+    cmp cl,chatModeEnc
+    je chatMode
+
+    cmp cl,gameModeEnc
+    je startGame
+
+    jmp exit
+
+    ;call the drawing module to draw the grid and pieces
+    startGame :
+        mov receiveParameter,1
+        call initializeGame
+        call initializeEatenArray
+        mov al,0
+        mov exitFlag,al
+        ;Open the graphics mode
+        mov ah,0
+        mov al,13h
+        int 10h
+        call Draw
+        call printGameInfo
+     ;   call moveReceivedPiece
+
+        infiniteLoop: 
+            call moveArrow
+            mov al,exitFlag
+            cmp al,1d
+            je waitPress
+            jmp infiniteLoop
+
+    waitPress:
+        mov ah,0
+        int 16h
+        call MainMenuAfterConnection
+
+    chatMode:
+        call startChatMode
 
     ;finish the execution and halting the program
     exit: 
