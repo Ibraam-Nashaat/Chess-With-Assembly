@@ -3,7 +3,7 @@ scrollInLineUpperPart proc
 
     mov ah, 6
     mov al, 1
-    mov bh, 7
+    mov bh, 0
 
     mov ch, 06h
     mov cl, 19h
@@ -13,7 +13,7 @@ scrollInLineUpperPart proc
     int 10h
 
     call getCursorPosition
-    mov al, 12
+    mov al, 0ch
     mov pos+1, al
     call setCursorPosition
 
@@ -37,7 +37,7 @@ scrollInLineLowerPart proc
 
     call getCursorPosition
 
-    mov al, 22
+    mov al, 17h
     mov pos+1, al
     call setCursorPosition
 
@@ -124,6 +124,14 @@ pusha
 
 
         @print_character2:
+            checkInLineChatModeMeY:
+                cmp chatModeMeCursorY, 0dh
+                jl printMeInLineChar
+
+            scrollMeInLinePart:
+                call scrollInLineUpperPart
+
+            printMeInLineChar:
             printCharacter VALUE
             mov al,VALUE
             mov dataToSend+4,al
