@@ -446,7 +446,6 @@ main PROC far
     mov ds , ax
 
     call UART_init
-
     call welcome_window
 
     mainMenuBeforeConnection:

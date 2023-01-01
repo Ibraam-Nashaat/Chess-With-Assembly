@@ -10,7 +10,7 @@ moveArrow proc
     CHECK:  
         call checkTimer
         call handleGameSendAndReceive
-         mov al,exitFlag
+        mov al,exitFlag
         cmp al,1d
         je exitGame
         mov ah,1 

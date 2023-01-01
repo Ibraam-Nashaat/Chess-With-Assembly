@@ -32,7 +32,7 @@ pusha
     mov dx , 3FDH ; Line Status Register
     in al , dx ;Read Line Status
 
-    AND al , 00100000b
+    and al , 00100000b
     jz ex1
     mov tra_bool,1;indication
 
@@ -48,7 +48,7 @@ pusha
     ;Check that Data Ready
     mov dx , 3FDH		; Line Status Register
     in al , dx 
-    AND al , 1
+    and al , 1
     jz ex2
     mov rec_bool,1
     ex2:
@@ -82,9 +82,9 @@ pop ax
 ret
 receiveByte endp
 
-sendCharacterViaSerial PROC NEAR
-    PUSH AX
-    PUSH dx
+sendCharacterViaSerial proc NEAR
+    push AX
+    push dx
     @@SendingName:       
     mov dx,03FDh        
     in al,dx
@@ -93,24 +93,24 @@ sendCharacterViaSerial PROC NEAR
     mov dx, 3F8H
     mov al, sendParameter
     OUT dx, al
-    POP dx
-    POP AX
+    pop dx
+    pop AX
     ret
 sendCharacterViaSerial endp
 
-receiveCharacterFromSerial PROC NEAR
-    PUSH dx
-    PUSH AX  
+receiveCharacterFromSerial proc NEAR
+    push dx
+    push AX  
     mov dx, 3FDH
     in al, dx
-    AND al, 1
+    and al, 1
     jz exitReceiveChar
     mov dx, 3F8H
     in al, dx
     mov receiveParameter,al
     exitReceiveChar:
-    POP AX
-    POP dx
+    pop AX
+    pop dx
     ret
 receiveCharacterFromSerial endp
 
@@ -133,12 +133,12 @@ popa
 ret
 assignPiecesColor endp
 
-exchangePlayersNames PROC NEAR
+exchangePlayersNames proc NEAR
     sendByte startExchangeSignal
     waitForExchangeSignalFromOtherPlayer:
     mov dx, 3FDH
     in al, dx
-    AND al, 1
+    and al, 1
     jz waitForExchangeSignalFromOtherPlayer
     call receiveCharacterFromSerial
     mov al, startExchangeSignal
@@ -158,7 +158,7 @@ exchangePlayersNames PROC NEAR
     checkIfReceivedName:
     mov dx, 3FDH
     in al, dx
-    AND al, 1
+    and al, 1
     jz checkIfReceivedName
     call receiveCharacterFromSerial
     mov al, receiveParameter
@@ -187,7 +187,7 @@ pusha
     @waitForExchangeSignal:
     mov dx, 3FDH
     in al, dx
-    AND al, 1
+    and al, 1
     jz @waitForExchangeSignal
     call receiveMoveFromSerial
     cmp receiveParameter, "%"
@@ -208,7 +208,7 @@ pusha
     @Receive:
     mov dx, 3FDH
     in al, dx
-    AND al, 1
+    and al, 1
     jz @Receive
     call receiveMoveFromSerial
     mov al, receiveParameter
@@ -243,24 +243,24 @@ ret
 handleGameSendAndReceive endp
 
 receiveMoveFromSerial proc
-    PUSH dx
-    PUSH AX  
+    push dx
+    push AX  
     mov dx, 3FDH
     in al, dx
-    AND al, 1
+    and al, 1
     jz exitReceiveMove
     mov dx, 3F8H
     in al, dx
     mov receiveParameter,al
     exitReceiveMove:
-    POP AX
-    POP dx
+    pop AX
+    pop dx
     ret
 receiveMoveFromSerial endp
 
 sendMoveViaSerial proc
-    PUSH AX
-    PUSH dx
+    push AX
+    push dx
     @@SendingMove:       
     mov dx,03FDh        
     in al,dx
@@ -269,8 +269,8 @@ sendMoveViaSerial proc
     mov dx, 3F8H
     mov al, sendParameter
     OUT dx, al
-    POP dx
-    POP AX
+    pop dx
+    pop AX
     ret
 sendMoveViaSerial endp
 
