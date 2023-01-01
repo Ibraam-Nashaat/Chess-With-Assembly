@@ -56,6 +56,13 @@ popa
 ret
 UART_rec endp
 
+clearBuffer proc 
+    push ax
+    mov ah,0
+    int 16h      
+    pop ax
+clearBuffer endp
+
 ; Sends a byte through serial port
 sendByte macro valueToSend
 push ax

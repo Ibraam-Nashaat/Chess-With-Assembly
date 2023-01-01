@@ -77,6 +77,7 @@ startChatMode proc
     mov chatModeYouCursorX, 0
 
     chatOuterLoop:
+
     ;; check if we have to receive something
     call UART_rec
     cmp rec_bool,1
@@ -142,6 +143,13 @@ startChatMode proc
     int 21h 
     jz existTransmit
     mov tra_bool,0
+
+    cmp al, 27
+    jne notEscapeChatMode
+
+    jmp mainMenuAfterConnection
+
+    notEscapeChatMode:
     cmp al,13
     jne print_character2
 
@@ -179,5 +187,5 @@ startChatMode proc
         mov al,0
 
     existTransmit:
-    jmp chatOuterLoop
+        jmp chatOuterLoop
 startChatMode endp

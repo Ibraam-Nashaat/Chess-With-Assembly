@@ -338,7 +338,7 @@ msg_name db 'Please enter your name:$'
 msg_startGame db 'Press Enter Key to continue$'
 welcome_msg db 'Welcome: $'
 waiting_msg db 'Waiting Second Player To Join...$'
-chatModeExitMsg db 'To Leave the chat press F3$'
+chatModeExitMsg db 'To Leave the chat press ESC$'
 
 STATUS_NAME_SENT_MSG db "Your name is sent to the other player$"
 STATUS_ERROR_MSG db "Something Wrong Happened!$"
@@ -459,7 +459,7 @@ main PROC far
         call assignPiecesColor
         call exchangePlayersNames
 
-    MainMenuAfterConnection:
+    mainMenuAfterConnection:
         mov ah,0
         mov al,03h
         int 10h
@@ -534,7 +534,7 @@ main PROC far
     waitPress:
         mov ah,0
         int 16h
-        call MainMenuAfterConnection
+        call mainMenuAfterConnection
 
     chatMode:
         call startChatMode
