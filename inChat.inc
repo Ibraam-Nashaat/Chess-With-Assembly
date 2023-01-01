@@ -1,9 +1,56 @@
+scrollInLineUpperPart proc 
+    push ax
+
+    mov ah, 6
+    mov al, 1
+    mov bh, 7
+
+    mov ch, 06h
+    mov cl, 19h
+
+    mov dh, 0ch
+    mov dl, 39
+    int 10h
+
+    call getCursorPosition
+    mov al, 12
+    mov pos+1, al
+    call setCursorPosition
+
+    pop ax
+    ret
+scrollInLineUpperPart ENDP 
+
+scrollInLineLowerPart proc 
+    push ax
+    
+    mov ah, 6
+    mov al, 1
+    mov bh, 0
+    
+    mov ch, 0fh
+    mov cl, 19h
+
+    mov dh, 17h
+    mov dl, 39
+    int 10h
+
+    call getCursorPosition
+
+    mov al, 22
+    mov pos+1, al
+    call setCursorPosition
+
+    pop ax
+    ret
+scrollInLineLowerPart ENDP 
+
 inititializeChat proc
 pusha
-    mov chatModeMeCursorY,05h
-    mov chatModeYouCursorY,0eh
-    mov chatModeMeCursorX,1Ch
-    mov chatModeYouCursorX,1dh
+    mov chatModeMeCursorY,06h ; (06->0c)
+    mov chatModeYouCursorY,0fh; (0f-> 17)
+    mov chatModeMeCursorX,19h
+    mov chatModeYouCursorX,19h
 
     mov pos,19h
     mov pos+1,0dh
@@ -38,6 +85,14 @@ pusha
 
 
         @print_character1:
+            checkInLineChatModeYouY:
+                cmp chatModeYouCursorY, 18h
+                jl printYouInLineChar
+
+            scrollYouInLinePart:
+                call scrollInLineLowerPart
+
+            printYouInLineChar:
             printCharacter VALUE
             call getCursorPosition
             mov bh,pos
