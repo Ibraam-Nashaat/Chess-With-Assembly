@@ -47,8 +47,8 @@ scrollInLineLowerPart ENDP
 
 inititializeChat proc
 pusha
-    mov chatModeMeCursorY,06h ; (06->0c)
-    mov chatModeYouCursorY,0fh; (0f-> 17)
+    mov chatModeMeCursorY,06h
+    mov chatModeYouCursorY,0fh
     mov chatModeMeCursorX,19h
     mov chatModeYouCursorX,19h
 
@@ -83,6 +83,8 @@ pusha
         cmp VALUE,13
         je return17
 
+        cmp VALUE,08
+        je return17
 
         @print_character1:
             checkInLineChatModeYouY:
@@ -122,6 +124,8 @@ pusha
         cmp VALUE,13
         je return18
 
+        cmp VALUE,08
+        je return17
 
         @print_character2:
             checkInLineChatModeMeY:
