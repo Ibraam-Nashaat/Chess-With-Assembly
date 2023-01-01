@@ -12,13 +12,11 @@ scrollUpperPart proc
     mov dl, 79
     int 10h
 
-    mov ah, 03
-    mov bh, 0
-    int 10h
-    dec dh
+    call getCursorPosition
+    mov al, 12
+    mov pos+1, al
+    call setCursorPosition
 
-    mov ah, 2
-    int 10h
     pop ax
     ret
 scrollUpperPart ENDP 
@@ -38,7 +36,9 @@ scrollLowerPart proc
     int 10h
 
     call getCursorPosition
-    dec pos+1
+
+    mov al, 22
+    mov pos+1, al
     call setCursorPosition
 
     pop ax
@@ -107,10 +107,9 @@ startChatMode proc
         jmp continueToTransmit
 
         print_character1:
-
             checkChatModeYouY:
-            cmp chatModeYouCursorY, 23
-            jl printYouChar
+                cmp chatModeYouCursorY, 23
+                jl printYouChar
 
             scrollYouPart:
                 call scrollLowerPart
@@ -158,12 +157,20 @@ startChatMode proc
     jmp existTransmit
 
     print_character2:
-        printCharacter al
-        call getCursorPosition
-        mov bh,pos
-        mov chatModeMeCursorX,bh
-        mov bh,pos+1
-        mov chatModeMeCursorY,bh
+        checkChatModeMeY:
+            cmp chatModeMeCursorY, 13
+            jl printMeChar
+
+        scrollMePart:
+            call scrollUpperPart
+        
+        printMeChar:
+            printCharacter al
+            call getCursorPosition
+            mov bh,pos
+            mov chatModeMeCursorX,bh
+            mov bh,pos+1
+            mov chatModeMeCursorY,bh
         pusha
             ;If empty put the VALUE in Transmit data register
             mov dx , 3F8H		; Transmit data register
