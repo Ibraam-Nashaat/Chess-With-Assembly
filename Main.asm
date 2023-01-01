@@ -425,7 +425,9 @@ notificationOption DB 0
 
 dataToSend db 0FFh,0,0,0,0FFh
 
-receivedData db 0,0,0,0,0
+receivedData db 0,0,0,0,0,0
+
+exitFlagFromOtherSide db 0
 
 
 .code
@@ -514,6 +516,7 @@ main PROC far
         call initializeEatenArray
         mov al,0
         mov exitFlag,al
+        mov exitFlagFromOtherSide,al
         ;Open the graphics mode
         mov ah,0
         mov al,13h
