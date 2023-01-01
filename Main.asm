@@ -422,7 +422,7 @@ inLineCharFlag DB 0
 
 notificationOption DB 0
 
-dataToSend db 0FFh,0,0,0,0
+dataToSend db 0FFh,0,0,0,0FFh
 
 receivedData db 0,0,0,0,0
 

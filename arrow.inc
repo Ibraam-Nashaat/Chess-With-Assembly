@@ -35,9 +35,12 @@ moveArrow proc
     je moveLeft
 
     cmp ah,0fh ;compare the scancode of the key that we got to that of the Tab-key
-    je click
+    je tempClick
     cmp ah,3Eh
     je exitGame
+
+    mov VALUE,al
+    call printTransmitterChar
     ret
     exitGame:mov al,1d
             mov exitFlag,al
@@ -65,7 +68,6 @@ moveArrow proc
         mov arrowPointer,ax
         jmp updateGrid
 
-
     moveRight: 
         mov ax,arrowPointer+2
         inc ax
@@ -77,6 +79,7 @@ moveArrow proc
         mov ax,tempNewArrowptr
         mov arrowPointer+2,ax
         jmp updateGrid
+        tempClick:jmp click
     moveLeft: 
         mov ax,arrowPointer+2
         dec ax
