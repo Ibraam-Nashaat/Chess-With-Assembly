@@ -13,6 +13,9 @@ moveArrow proc
         mov al,exitFlag
         cmp al,1d
         je exitGame
+        mov al,exitFlagFromOtherSide
+        cmp al,1d
+        je exitBasedOnOtherSide
         mov ah,1 
         int 16h
         jz CHECK 
@@ -32,7 +35,7 @@ moveArrow proc
     je moveRight
 
     cmp ah,4bh ;compare the scancode of the the key that we got to that of the Left-key
-    je moveLeft
+    je tempMoveLeft
 
     cmp ah,0fh ;compare the scancode of the key that we got to that of the Tab-key
     je tempClick
@@ -42,31 +45,39 @@ moveArrow proc
     mov VALUE,al
     call printTransmitterChar
     ret
-    exitGame:mov al,1d
+    exitGame:
+            mov al,1d
             mov exitFlag,al
+            mov dataToSend,"#"
+            call handleGameSendAndReceive
             ret
+    exitBasedOnOtherSide:mov al,1d
+                         mov exitFlag,al
+                        ret
     moveUp:
         mov ax,arrowPointer 
         dec ax               ;To move the arrowPointer up we will need to dec the row number
         mov tempNewArrowptr,ax ;We will store it temporarily because we will need it later
         call checkGridBorders ;check that the new position of arrowPointer is within the grid range
         cmp ch,0              
-        je return            ;if the new arrowPosition is out of range we won't do anything so we would return
+        je tempReturn            ;if the new arrowPosition is out of range we won't do anything so we would return
         call redrawOldArrowPos;To redraw the old ArrowPosition with its default color in the grid
         mov ax,tempNewArrowptr
         mov arrowPointer,ax  ;update the arrowPointer position with the new position
-        jmp updateGrid      ;jmp to updateGrid reDraw the grid and the pieces
+        jmp tempUpdateGrid      ;jmp to updateGrid reDraw the grid and the pieces
     moveDown:
         mov ax,arrowPointer
         inc ax
         mov tempNewArrowptr,ax
         call checkGridBorders
         cmp ch,0
-        je return
+        je tempReturn
         call redrawOldArrowPos
         mov ax,tempNewArrowptr
         mov arrowPointer,ax
-        jmp updateGrid
+        jmp tempUpdateGrid
+                    tempReturn:jmp return
+                    tempMoveLeft:jmp moveLeft
 
     moveRight: 
         mov ax,arrowPointer+2
@@ -74,12 +85,14 @@ moveArrow proc
         mov tempNewArrowptr,ax
         call checkGridBorders
         cmp ch,0
-        je return
+        je tempReturn
         call redrawOldArrowPos
         mov ax,tempNewArrowptr
         mov arrowPointer+2,ax
-        jmp updateGrid
+        jmp tempUpdateGrid
         tempClick:jmp click
+            tempUpdateGrid:jmp updateGrid
+
     moveLeft: 
         mov ax,arrowPointer+2
         dec ax
@@ -97,6 +110,10 @@ moveArrow proc
         je lastCall
         ret
         lastCall:call handleGameSendAndReceive
+                mov al,1d
+                 mov exitFlag,al
+                mov dataToSend,"#"
+                call handleGameSendAndReceive
     updateGrid: 
         call redrawNewArrowPos
     return:  ret

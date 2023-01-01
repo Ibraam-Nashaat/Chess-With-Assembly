@@ -216,11 +216,14 @@ pusha
     inc di
     loop @Send    
    
-   mov al,receivedData
+    mov al,receivedData
+    cmp al,"#"
+    je @OtherSideExited
+
     cmp al,0FFh
     je checkIfCharWasSend
     call moveReceivedPiece
-
+ 
     checkIfCharWasSend:
     mov al,receivedData+4
     cmp al,0FFh
@@ -228,7 +231,10 @@ pusha
     mov VALUE,al
     call printReceivedChar
 
-    
+    jmp @return
+
+    @OtherSideExited:mov al,1d
+                     mov exitFlagFromOtherSide,al
 
 
  @return:mov al,0FFh
