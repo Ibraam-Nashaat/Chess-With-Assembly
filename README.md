@@ -14,12 +14,16 @@
 
 ## How to run
 - The program requires two PCs connected through a serial port.
+- In `singleChess.conf`,`Chess-COM1.conf`and `Chess-COM2.conf` change the directory to your current directory.
+
+<img src="assets/config.png" >
+
 - To open the program you can either:
     - Run `RunSingle.bat` on both PCs.
     - Run `RunMulti.bat` on one PC if you would like to open both screens on the same PC to try it.
 - The user must enter a username that starts with a letter and is not more than 15 characters long. 
-
 <img src="assets/Name.png" >
+
 
 - After both users have entered their names, the main screen will appear, showing a list of available functionalities and how to navigate to each of them.
 <img src="assets/Menu.png" >
@@ -37,7 +41,7 @@
 <img src="assets/Game.png" >
 
 ### Notification Bar
-- The top right part of the screen shows the color assignment of the user (black or white), who won the game (black or white) and the eaten pieces during the game.
+- The top right part of the screen shows the color assignment of the user (black or white), which player won the game (black or white) and the eaten pieces during the game.
 - The abbreviations of the eaten pieces are:
     - Black Bishop (bB)
     - Black Knight (bK)
