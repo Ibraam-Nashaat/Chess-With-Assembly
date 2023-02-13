@@ -13,7 +13,9 @@
 - Serial port connector to connect both PCs (ex: [Serial to Ethernet Connector ](https://www.serial-over-ethernet.com/))
 
 ## How to run
-- The program requires two PCs connected through a serial port.
+- The program requires two PCs connected through a serial port:
+    - To open the game on two different PCs, open the **Serial to Ethernet Connector** and open a client connection on one PC and a Server connection on the other PC.
+    - To open the game on the same PC, open the **Serial to Ethernet Connector** and open a client connection and a Server connection on the same PC.
 - In `singleChess.conf`,`Chess-COM1.conf`and `Chess-COM2.conf` change the directory to your current directory.
 
 <img src="assets/config.png" >
@@ -53,6 +55,16 @@
     - White Pawn (wP)
     - White Queen (wQ)
     - White Rook (wR)
+
+### How to Play
+- To move the cursor to reach the required piece, press `Up`,`Down`,`Left` and `Right` arrows. 
+- To choose the piece, press `Tab` to highlight the available moves.
+- Press `Tab` again to move the piece. 
+- To exit the game before it ends, press `F4` two times.
+- To use the inline chatting while you play, use any other key.
+
+
+
 
 
 
